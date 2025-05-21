@@ -1,0 +1,14 @@
+{
+  "readme": "Project file for XDbg Plugin Loader.",
+  "plugins":[
+    {
+      "working_folder": "/Users/br/Dev/glfw_xp_host/cmake-build-debug",
+      "plugin_file": "/Users/br/Dev/gz_core/cmake-build-debug/src/examples/09_avionics_device/gz_avionics_device.xpl"
+    },
+    {
+      "working_folder": "/Users/br/Dev/glfw_xp_host/cmake-build-debug",
+      "plugin_file": "/Users/br/Dev/gz_core/cmake-build-debug/src/examples/08_avionics_device_gl/gz_avionics_device_gl.xpl"
+    }
+
+  ]
+}
