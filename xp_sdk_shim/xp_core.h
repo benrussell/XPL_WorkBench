@@ -18,6 +18,22 @@ extern "C" {
 [[maybe_unused]] void XPLMGetSystemPath( char* outBuff );
 
 
+
+
+[[maybe_unused]] int XPLMGetMyID( void );
+
+[[maybe_unused]] void XPLMGetPluginInfo( 
+    int pluginId,
+    char* outName,
+    char* outFilePath,
+    char* outSignature,
+    char* outDescription
+);
+
+
+
+
+
 } //extern "C"
 
 
