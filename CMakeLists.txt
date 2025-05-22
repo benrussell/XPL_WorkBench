@@ -156,6 +156,7 @@ set( XP_SHIM_SRC
         ${SHIM_FOL}shim_XPLMDataAccess.cpp ${SHIM_FOL}shim_XPLMDataAccess.h
         ${SHIM_FOL}shim_XPLMDisplay.cpp ${SHIM_FOL}shim_XPLMDisplay.h
         ${SHIM_FOL}shim_XPLMGraphics.cpp ${SHIM_FOL}shim_XPLMGraphics.h
+        ${SHIM_FOL}shim_XPLMPlanes.cpp ${SHIM_FOL}shim_XPLMPlanes.h
         ${SHIM_FOL}shim_XPLMProcessing.cpp ${SHIM_FOL}shim_XPLMProcessing.h
         ${SHIM_FOL}shim_XPLMUtilities.cpp ${SHIM_FOL}shim_XPLMUtilities.h
 

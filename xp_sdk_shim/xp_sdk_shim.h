@@ -12,6 +12,7 @@
 #include "shim_XPLMDataAccess.h"
 #include "shim_XPLMDisplay.h"
 #include "shim_XPLMGraphics.h"
+#include "shim_XPLMPlanes.h"
 #include "shim_XPLMProcessing.h"
 #include "shim_XPLMUtilities.h"
 
