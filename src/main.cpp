@@ -20,22 +20,29 @@
 
 
 
-void load_xpl( std::string plug_name ){
 
-	std::cout << "Looking for xpl\n";
-	//const std::string root_folder = "/Users/br/Dev/gz_core/cmake-build-debug/src/examples/";
-    const std::string root_folder = "/home/br/Dev/gz_core/cmake-build-debug/src/examples/";
 
-	std::string fname = root_folder + plug_name;
+// void load_xpl( std::string plug_name ){
+//  // This fn is broken because it forces a cwd change.
+//  // README: Use WinBox->load_plugin() defined in WinContent.h //FIXME: refac these filenames and class names.
 
-	std::cout << "------ loading xpl -----\n";
+// 	std::cout << "Looking for xpl\n";
+// 	//const std::string root_folder = "/Users/br/Dev/gz_core/cmake-build-debug/src/examples/";
+//     const std::string root_folder = "/home/br/Dev/gz_core/cmake-build-debug/src/examples/";
 
-	Plugin* p = new Plugin(fname);
-	XPHost::m_vecPlugins.push_back(p);
+// 	std::string fname = root_folder + plug_name;
 
-	std::cout << "New Plugin* at addr: " << std::to_string((size_t)p) << "\n";
+// 	std::cout << "------ loading xpl -----\n";
 
-}
+// 	Plugin* p = new Plugin(fname);
+// 	XPHost::m_vecPlugins.push_back(p);
+
+// 	std::cout << "New Plugin* at addr: " << std::to_string((size_t)p) << "\n";
+
+// }
+
+
+
 
 
 #include <iostream>
@@ -49,11 +56,12 @@ std::string global_path_when_started;
 
 
 
+const char* glob_recent_projects_filename = "recent_projects.json";
+
 void load_recent_projects() {
 	std::cout << "Loading recent projects..\n";
-	const std::string filename = ".XDbg_recent_projects.json";
-
-	std::ifstream f(filename);
+	
+	std::ifstream f(glob_recent_projects_filename);
 	if( f ){
 		nlohmann::json data = nlohmann::json::parse(f);
 		for (auto pfname: data["recent"]) {
@@ -70,9 +78,7 @@ void load_recent_projects() {
 void save_recent_projects(){
 	std::cout << "Saving recent projects list..\n";
 
-	const std::string filename = ".XDbg_recent_projects.json";
-
-
+	
 	nlohmann::json json;
 	nlohmann::json json_arr = nlohmann::json::array();
 
@@ -85,7 +91,7 @@ void save_recent_projects(){
 
 
 	std::ofstream myfile;
-	myfile.open (filename);
+	myfile.open(glob_recent_projects_filename);
 	myfile << json.dump(1,'\t');
 	myfile.close();
 
@@ -95,18 +101,37 @@ void save_recent_projects(){
 
 
 
-int main(void)
+int main(int argc, char** argv)
 {
 
 
 	// We need to call this code AFTER ImGui init so that the .ini file
 	// is loaded correctly from same folder as XPDbg
-	if( true )
 	{
 		namespace fs = std::filesystem;
 
+		// cwd into ~/.XPL_PluginWorkBench   // FIXME: Windows?
 		try {
-			// Get and report the current working directory
+			const char* home_env = std::getenv("HOME");
+			if (!home_env) {
+				std::cerr << "Error: HOME environment variable not set." << std::endl;
+				return -1;
+			}
+			const std::string folder = std::string(home_env) + "/.XPL_WorkBench";
+			std::cout << "Config folder: ["<< folder <<"]\n";
+
+			fs::current_path(folder);
+		//	std::cout << "Changed working directory to: " << folder << std::endl;
+
+		} catch (const fs::filesystem_error &e) {
+			std::cerr << "Error changing working directory: " << e.what() << std::endl;
+			return -1;
+		}
+
+
+
+		try {
+			// report and store the cwd where we loaded from.
 			global_path_when_started = fs::current_path();
 			std::cout << "Current working directory: " << global_path_when_started << std::endl;
 		}
@@ -119,10 +144,28 @@ int main(void)
 	}
 
 
+
+
+	// Pull argv into a vector<string>
+	std::vector<std::string> args;
+	for (int i = 0; i < argc; ++i) {
+		args.emplace_back(argv[i]);
+	}
+
+	if( args.size() > 1 ){
+		std::cout << "Loading xpl: " << args[1] << "\n";
+	}
+
+
+
+
+
+
 	load_recent_projects();
 
 
 	drp::init(); //dref pool
+
 
 #if 0
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -193,13 +236,12 @@ int main(void)
 
 
 
-#if 0
-	// load plugins after GL starts
-	load_xpl("08_avionics_device_gl/gz_avionics_device_gl.xpl");
 
-//	load_xpl("08_avionics_device_gl/gz_avionics_device_gl.xpl");
-	load_xpl("09_avionics_device/gz_avionics_device.xpl");
-#endif
+	if( args.size() > 1 ){
+		std::cout << "Loading xpl: " << args[1] << "\n";
+		box->load_plugin( args[1] );
+	}
+
 
 	//nvg doesnt load yet
 
