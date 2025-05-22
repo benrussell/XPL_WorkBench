@@ -71,7 +71,7 @@ public:
 		m_pluginFilename = fname;
 
 
-		std::cout << "\nPlugin* addr: " << std::to_string((size_t)this) <<  "\n";
+		printf("\nPlugin ctor/ Plugin* addr: %p\n", this);
 		std::cout<<"Loading:["<< fname << "]\n";
 
 
@@ -98,7 +98,7 @@ public:
 			throw std::runtime_error( sLoadError );
 
 		}else{
-			std::cout << " loaded plugin, instance addr: " << std::to_string((size_t)this) <<  "\n";
+			printf(" loaded plugin, instance addr: %p\n", this);
 
 			char name[512];
 			char desc[512];
@@ -243,6 +243,8 @@ public:
 
 
 					//std::cout << "flcb fn addr: " << (size_t)cb.params.callbackFunc << "\n";
+					//printf("flcb_fn addr: %p\n", cb.params.callbackFunc);
+
 					auto params = cb.params;
 //					XPLMFlightLoop_f)(
 //						float                inElapsedSinceLastCall,
@@ -270,6 +272,7 @@ public:
 			}else
 			if( cb.interval_secs < 0.0 ){
 				std::cout<<"cb.interval in frames - not called.\n";
+				//FIXME: need a flag to turn this one off.
 
 
 			}else{
@@ -302,7 +305,8 @@ public:
 			auto cb_params = m_vecFlightLoops[target];
 
 			std::cout << "Plugin::setr_flcb: \n";
-			std::cout << " p: " << std::to_string((size_t)&cb_params.params) << "\n";
+			//std::cout << " p: " << std::to_string((size_t)&cb_params.params) << "\n";
+			printf(" params: %p\n", &cb_params.params);
 			std::cout << " int: " << std::to_string(cb_params.interval_secs) << "\n";
 			std::cout << " rel: " << std::to_string(cb_params.relative_to_now) << "\n";
 
@@ -321,7 +325,7 @@ public:
 	size_t register_flcb( XPLMCreateFlightLoop_t p ){
 
 		std::cout << "Plugin::register_flcb: \n";
-		std::cout << " p: " << std::to_string((size_t)&p) << "\n";
+		printf(" p: %p\n", &p);
 
 		cb_params_t flcb;
 		flcb.params = p;

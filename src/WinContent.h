@@ -164,8 +164,8 @@ public:
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
 
-			std::cout << "  Plugin* addr: " << std::to_string((size_t) p) << "\n";
-
+			printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
+			
 		}catch (const std::runtime_error& e) {
 			std::cerr << "Caught a runtime_error: " << e.what() << std::endl;
 			m_sErrorMessage = e.what();
@@ -601,7 +601,7 @@ public:
 			ImGui::Begin("Message", &m_displayErrorMessage);
 			{
 				ImGui::Indent();
-				ImGui::Text("");
+				ImGui::Text("_");
 				// Set the width for wrapping
 				float wrap_width = ImGui::GetWindowWidth() - 30.f;
 
