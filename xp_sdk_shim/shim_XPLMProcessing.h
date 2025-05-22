@@ -47,7 +47,7 @@ extern "C" {
 
 [[maybe_unused]] float XPLMGetElapsedTime();
 
-[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t loop_params );
+[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t* loop_params );
 
 [[maybe_unused]] void XPLMDestroyFlightLoop();
 

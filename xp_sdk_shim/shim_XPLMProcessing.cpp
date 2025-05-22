@@ -10,14 +10,18 @@
 
 
 
-[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t loop_params ){
+[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t* loop_params ){
+
+	printf(" loop_params ptr: %p\n", loop_params);
+	
+
     std::cout << "XPLMCreateFlightLoop\n";
-//    std::cout << " " << loop_params.structSize << "\n";
-//    std::cout << " " << loop_params.phase << "\n";
-//    std::cout << " " << loop_params.callbackFunc << "\n";
-//    std::cout << " " << loop_params.refcon << "\n";
+	printf(" sz: %i\n", loop_params->structSize);
+	printf(" phase: %i\n", loop_params->phase);
+	printf(" cbf: %p\n", loop_params->callbackFunc);
+	printf(" refcon: %p\n", loop_params->refcon);
 	if( target_plugin ){
-		return (void*)target_plugin->register_flcb( loop_params );
+		return (void*)target_plugin->register_flcb( *loop_params );
 	}else{
 		std::cout<<" XPLMCreateFlightLoop failed; bad plugin ptr\n";
 	}
