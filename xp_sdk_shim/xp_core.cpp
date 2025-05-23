@@ -15,21 +15,29 @@
 [[maybe_unused]] void XPLMEnableFeature( const char* feature_name ){
 	if( strcmp(feature_name, "XPLM_USE_NATIVE_PATHS") != 0 ){
 		// mute the native paths request as thats all we support
-		std::cout << "WorkBench: !XPLMEnableFeature: " << feature_name << "\n";
+		std::cout << "xplwb/ ! XPLMEnableFeature: " << feature_name << "\n";
 	}
 }
 
 
 [[maybe_unused]] void XPLMGetMouseLocationGlobal(){
-
+	std::cout << "xplwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
 }
 
 //DISPLAY
 
 
+
+
+
+
+
+
+
 [[maybe_unused]] void XPLMGetSystemPath( char* outBuff ){
 //	std::cout << "!XPLMGetSystemPath..\n";
-	snprintf( outBuff, 512, "/fake/x-plane/path" ); //FIXME:
+	// snprintf( outBuff, 512, "/fake/x-plane/path" ); //FIXME:
+	snprintf( outBuff, 512, "/media/br/MintyData/br/X-Plane 12" ); //FIXME:
 }
 
 
@@ -58,8 +66,7 @@
 
 	if( outFilePath ){
 		//set
-		///home/br/Dev/wasm/wasm_xpl/examples/wasm_plugin_basic/build/lin_64/foo.xpl
-		snprintf(outFilePath,256,"/fake_xp/Aircraft/test/plugins/wasm_xpl/lin_64/plugin.xpl");
+		snprintf(outFilePath,256,"/home/br/Dev/wasm/wasm_xpl/build_lin/xpl/libwasm_xpl_plugin.so");
 	}
 
 	if( outSignature ){

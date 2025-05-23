@@ -64,15 +64,15 @@ public:
 //		++XPHost::m_plugin_id_ctr;
 //		m_plugin_id = XPHost::m_plugin_id_ctr;
 
-		std::cout<<"Plugin constructor: saving cwd\n";
+		std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
 		namespace fs = std::filesystem;
 
 		m_workingFolder = fs::current_path();
 		m_pluginFilename = fname;
 
 
-		printf("\nPlugin ctor/ Plugin* addr: %p\n", this);
-		std::cout<<"Loading:["<< fname << "]\n";
+		printf("\nxplwb/ Plugin ctor/ Plugin* addr: %p\n", this);
+		std::cout<<"xplwb/ Loading:["<< fname << "]\n";
 
 
 		m_timer.start();
@@ -83,11 +83,11 @@ public:
 //		dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL);
 
 		//target_plugin = this;
-		std::cout<<"save plugin ctx\n";
+		std::cout<<"xplwb/ save plugin ctx\n";
 		this->takeContext();
 
 		//works ok on mac
-		std::cout<<"---calling dlopen\n";
+		std::cout<<"xplwb/ ---calling dlopen\n";
 		dlh = dlopen(fname.c_str(), RTLD_NOW);
 
 		if( dlh == nullptr ){
@@ -98,27 +98,27 @@ public:
 			throw std::runtime_error( sLoadError );
 
 		}else{
-			printf(" loaded plugin, instance addr: %p\n", this);
+			printf("xplwb/  loaded plugin, instance addr: %p\n", this);
 
 			char name[512];
 			char desc[512];
 			char sig[512];
 
-			std::cout<<"---Calling XPluginStart()\n";
+			std::cout<<"xplwb/ ---Calling XPluginStart()\n";
 			int (*fptr_start)(char*,char*,char*);
 			fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPluginStart" );
 			if( fptr_start ) {
 				(*fptr_start)(name, sig, desc);
-				std::cout << "\tname: " << name << "\n";
-				std::cout << "\t sig: " << sig << "\n";
-				std::cout << "\tdesc: " << desc << "\n";
+				std::cout << "xplwb/ \tname: " << name << "\n";
+				std::cout << "xplwb/ \t sig: " << sig << "\n";
+				std::cout << "xplwb/ \tdesc: " << desc << "\n";
 
 				m_pluginName = name;
 				m_pluginSig = sig;
 				m_pluginDesc = desc;
 
 
-				std::cout << "Calling XPluginEnable()\n";
+				std::cout << "xplwb/ Calling XPluginEnable()\n";
 				int (*fptr_enable)();
 				fptr_enable = (int (*)()) dlsym(dlh, "XPluginEnable");
 				(*fptr_enable)();
@@ -139,17 +139,17 @@ public:
 	~Plugin(){
 //		--XPHost::m_plugin_id_ctr;
 
-		std::cout<<"~Plugin()\n";
+		std::cout<<"xplwb/ ~Plugin()\n";
 
 		//target_plugin = this;
 		this->takeContext();
 
-		std::cout<<"Calling XPluginDisable()\n";
+		std::cout<<"xplwb/ Calling XPluginDisable()\n";
 		int (*fptr_disable)();
 		fptr_disable = (int (*)())dlsym( dlh, "XPluginDisable" );
 		(*fptr_disable)();
 
-		std::cout<<"Calling XPluginStop()\n";
+		std::cout<<"xplwb/ Calling XPluginStop()\n";
 		int (*fptr_stop)();
 		fptr_stop = (int (*)())dlsym( dlh, "XPluginStop" );
 		(*fptr_stop)();
@@ -174,7 +174,7 @@ public:
 			delete cmd;
 		}
 
-		std::cout << "Calling dlclose\n\n";
+		std::cout << "xplwb/ Calling dlclose\n\n";
 		dlclose( dlh );
 
 	}
@@ -271,7 +271,7 @@ public:
 
 			}else
 			if( cb.interval_secs < 0.0 ){
-				std::cout<<"cb.interval in frames - not called.\n";
+				std::cout<<"xplwb/ cb.interval in frames - not called.\n";
 				//FIXME: need a flag to turn this one off.
 
 
@@ -293,39 +293,39 @@ public:
 	void flcb_set( XPLMFlightLoopID id, float interval, int rel_now ){
 
 		auto target = (size_t)id-1;
-		std::cout<< "flcb_set: " << target << "\n";
-		std::cout<<"    size: "<< m_vecFlightLoops.size() << "\n";
-		std::cout<<"  size-1: "<< m_vecFlightLoops.size()-1 << "\n";
+		std::cout<< "xplwb/ flcb_set: " << target << "\n";
+		std::cout<<"xplwb/     size: "<< m_vecFlightLoops.size() << "\n";
+		std::cout<<"xplwb/   size-1: "<< m_vecFlightLoops.size()-1 << "\n";
 		if( target > m_vecFlightLoops.size()-1 ){
-			std::cout<< "flcb_set: invalid target\n";
+			std::cout<< "xplwb/ flcb_set: invalid target\n";
 			return;
 		}else{
-			std::cout << "  flcb_set, found target\n";
+			std::cout << "xplwb/   flcb_set, found target\n";
 
 			auto cb_params = m_vecFlightLoops[target];
 
-			std::cout << "Plugin::setr_flcb: \n";
+			std::cout << "xplwb/ Plugin::setr_flcb: \n";
 			//std::cout << " p: " << std::to_string((size_t)&cb_params.params) << "\n";
-			printf(" params: %p\n", &cb_params.params);
-			std::cout << " int: " << std::to_string(cb_params.interval_secs) << "\n";
-			std::cout << " rel: " << std::to_string(cb_params.relative_to_now) << "\n";
+			printf("xplwb/  params: %p\n", &cb_params.params);
+			std::cout << "xplwb/  int: " << std::to_string(cb_params.interval_secs) << "\n";
+			std::cout << "xplwb/  rel: " << std::to_string(cb_params.relative_to_now) << "\n";
 
 			cb_params.interval_secs = interval;
 			cb_params.interval_millis = (double)cb_params.interval_secs * 1000.0;
 			cb_params.relative_to_now = rel_now;
 
-			std::cout<<"  push cb_params back into vec\n";
+			std::cout<<"xplwb/   push cb_params back into vec\n";
 			m_vecFlightLoops[target] = cb_params;
 		}
 
-		std::cout<<"flcb_set returning..\n";
+		std::cout<<"xplwb/ flcb_set returning..\n";
 	}
 
 
 	size_t register_flcb( XPLMCreateFlightLoop_t p ){
 
-		std::cout << "Plugin::register_flcb: \n";
-		printf(" p: %p\n", &p);
+		std::cout << "xplwb/ Plugin::register_flcb: \n";
+		printf("xplwb/  p: %p\n", &p);
 
 		cb_params_t flcb;
 		flcb.params = p;
