@@ -160,10 +160,10 @@ set( XP_SHIM_SRC
         ${SHIM_FOL}shim_XPLMProcessing.cpp ${SHIM_FOL}shim_XPLMProcessing.h
         ${SHIM_FOL}shim_XPLMUtilities.cpp ${SHIM_FOL}shim_XPLMUtilities.h
 
-        src/Plugin.cpp src/Plugin.h
+        src/Plugin.h
         src/XPHost.cpp src/XPHost.h
-        src/WinContent.cpp src/WinContent.h
-        src/AvionicsHost.cpp src/AvionicsHost.h
+        src/WinContent.h
+        src/AvionicsHost.h
         src/GuiAvionicsDevice.h
 
         third_party/timer/src/Timer.cpp
@@ -172,17 +172,17 @@ set( XP_SHIM_SRC
         #stb image uses a weird macro to generate symbols
 #        third_party/stb_image/stb_image.h
 
-        src/GuiDatarefs.cpp src/GuiDatarefs.h
-        src/xpCmdCustom.cpp src/xpCmdCustom.h
+        src/GuiDatarefs.h
+        src/xpCmdCustom.h
         src/GuiPlugins.cpp src/GuiPlugins.h
         src/GuiRecentProjects.cpp src/GuiRecentProjects.h
         src/GuiTextures.cpp src/GuiTextures.h
-        src/GuiTextureInspector.cpp src/GuiTextureInspector.h
+        src/GuiTextureInspector.h
 
-        src/GuiShaderTest.cpp src/GuiShaderTest.h 
+        src/GuiShaderTest.h 
         src/imgui_common.h 
-        src/FBO.cpp src/FBO.h
-        src/main
+        src/FBO.h
+        src/main.cpp
         )
 
 
