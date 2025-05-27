@@ -58,8 +58,8 @@ std::string global_path_when_started;
 
 const char* glob_recent_projects_filename = "recent_projects.json";
 
-void load_recent_projects() {
-	std::cout << "Loading recent projects..\n";
+void load_recent_projects_list() {
+	std::cout << "xplwb/ Loading recent projects list.. \n";
 	
 	std::ifstream f(glob_recent_projects_filename);
 	if( f ){
@@ -76,7 +76,7 @@ void load_recent_projects() {
 
 
 void save_recent_projects(){
-	std::cout << "Saving recent projects list..\n";
+	std::cout << "xplwb/ Saving recent projects list..\n";
 
 	
 	nlohmann::json json;
@@ -105,12 +105,10 @@ int main(int argc, char** argv)
 {
 
 
-	// We need to call this code AFTER ImGui init so that the .ini file
-	// is loaded correctly from same folder as XPDbg
 	{
 		namespace fs = std::filesystem;
 
-		// cwd into ~/.XPL_PluginWorkBench   // FIXME: Windows?
+		std::cout << "xplwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
 		try {
 			const char* home_env = std::getenv("HOME");
 			if (!home_env) {
@@ -118,7 +116,7 @@ int main(int argc, char** argv)
 				return -1;
 			}
 			const std::string folder = std::string(home_env) + "/.XPL_WorkBench";
-			std::cout << "Config folder: ["<< folder <<"]\n";
+			std::cout << "xplwb/ folder: ["<< folder <<"]\n";
 
 			fs::current_path(folder);
 		//	std::cout << "Changed working directory to: " << folder << std::endl;
@@ -133,7 +131,7 @@ int main(int argc, char** argv)
 		try {
 			// report and store the cwd where we loaded from.
 			global_path_when_started = fs::current_path();
-			std::cout << "Current working directory: " << global_path_when_started << std::endl;
+			//std::cout << "xplwb/ Current working directory: " << global_path_when_started << std::endl;
 		}
 		catch (const fs::filesystem_error &e) {
 			std::cerr << "Filesystem error: " << e.what() << std::endl;
@@ -161,7 +159,7 @@ int main(int argc, char** argv)
 
 
 
-	load_recent_projects();
+	load_recent_projects_list();
 
 
 	drp::init(); //dref pool
@@ -180,94 +178,88 @@ int main(int argc, char** argv)
 #endif
 
 	/* Initialize the library */
-	if (!glfwInit())
+	if (!glfwInit()){
 		return -1;
+	}
 
 
-// this is our base gui window.
+	// this is our GL context creation window. it will be immediately destroyed.
 
-	std::cout << " Get Monitor Bounds..\n";
+	// std::cout << " Get Monitor Bounds..\n";
 	auto monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-	std::cout << " Creating window on primary monitor.\n";
 	/* Create a windowed mode window and its OpenGL context */
-
 	int os_win_width = mode->width;// - 50;
 	int os_win_height = mode->height;// - 50;
-	std::cout << "  size: " << os_win_width << "," << os_win_height << "\n";
+	std::cout << "xplwb/ Creating window on primary monitor: ";
+	std::cout << " size: " << os_win_width << "," << os_win_height << "\n";
 
 
 	int width=640;
 	int height=480;
 	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench", NULL, NULL);
 
-	if (!mwinh)
-	{
-		glfwTerminate();
-		throw std::runtime_error("glfw Window Create Failed.");
-	}
-
-	glfwMakeContextCurrent( mwinh );
-
+		if (!mwinh)
+		{
+			glfwTerminate();
+			throw std::runtime_error("xplwb/ glfw Window Create Failed.");
+		}
+		glfwMakeContextCurrent( mwinh );
 
 
-	glewInit();
-	glewExperimental = GL_TRUE; // Ensure modern OpenGL functions are loaded
-	if (glewInit() != GLEW_OK) {
-		std::cerr << "Failed to initialize GLEW" << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
+		glewInit();
+		glewExperimental = GL_TRUE; // Ensure modern OpenGL functions are loaded
+		if (glewInit() != GLEW_OK) {
+			std::cerr << "xplwb/ Failed to initialize GLEW" << std::endl;
+			exit(EXIT_FAILURE);
+		}
 
 	//we have created a GL context, we can drop this now.
 	glfwDestroyWindow( mwinh );
 
 
+
 	// this MUST be after GL init.
 	auto box = new WinBox(os_win_width,os_win_height);
+	// multiple windows can be created.
 	window_pool.push_back(box);
 
-/*
-	// this MUST be after GL init.
-	auto box = new WinBox(os_win_width,os_win_height);
-	window_pool.push_back(box);
-*/
 
 
 
-
+	// we review our args list after we have loaded all our gui and assets, etc
 	if( args.size() > 1 ){
 		std::cout << "Loading xpl: " << args[1] << "\n";
 		box->load_plugin( args[1] );
 	}
 
 
-	//nvg doesnt load yet
+
+	
+	//nanovg doesnt load yet........ does this app use it? plugins?
 
 
+	//remove fps limits/lock?
+	//glfwSwapInterval(0);
 
-//	glfwSwapInterval(0);
 
 	//windows that dont get closed get put into this vector
 	std::vector<WinBox*> keepers;
-
+	//loop will exit when all windows are closed.
 	while(true){
-		//loop will exit when all windows are closed.
-
-
+	
 		//std::cout << "running flcbs\n";
 		for( const auto p: XPHost::m_vecPlugins ){
 			p->run_flcbs();
 		}
 
 
-
-
+		//loop over child windows and drive their events
 		for( auto window: window_pool ){
 			auto win_h = window->m_winh;
 
-				window->OnCallDraw();
+				window->OnCallDraw(); //FIXME: this event call sig is meh.
 
 			/* Poll for and process events */
 			glfwPollEvents();
@@ -281,18 +273,18 @@ int main(int argc, char** argv)
 
 		} //loop window pool
 
+		//cleanup window instances
 		window_pool.swap(keepers);
 		keepers.clear();
 
 
 		//check if all windows have been closed
 		if( window_pool.empty() ){
-			std::cout << "Window pool is empty.\n";
+			std::cout << "xplwb/ Window pool is empty; cleanup and exit.\n";
 
 			save_recent_projects();
 
 			glfwTerminate();
-
 			exit(0);
 		}
 
