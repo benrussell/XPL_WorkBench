@@ -147,7 +147,9 @@ void GuiPlugins::draw(){
 				for( auto& flcb: p->m_vecFlightLoops ){
 
 					std::string id = "_id" + std::to_string(fl_ctr);
-					std::string flcb_lab = "[" + std::to_string(fl_ctr) + "] " + std::to_string((size_t)flcb.params.callbackFunc) + ": " + std::to_string(flcb.profile_ms);
+					char flcbLabel[256];
+					std::snprintf(flcbLabel, sizeof(flcbLabel), "flcb_ptr[%zu] %p: %f", fl_ctr, flcb.params.refcon, flcb.profile_ms);
+					std::string flcb_lab = flcbLabel;
 					if(ImGui::TreeNodeEx(id.c_str(), 0, "%s",flcb_lab.c_str())){
 						ImGui::Checkbox("pause", &flcb.m_paused);
 
@@ -169,7 +171,7 @@ void GuiPlugins::draw(){
 					}
 //					ImGui::PopID();
 
-
+					++fl_ctr;
 				}
 
 				ImGui::TreePop();
