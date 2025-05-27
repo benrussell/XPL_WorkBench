@@ -117,9 +117,19 @@ public:
 		ImGui::SetCurrentContext(imguiContext);
 		ImGuiIO &io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 		//	ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_winh, true);
 		ImGui_ImplOpenGL2_Init();
+
+		//ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->Clear();
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/Roboto-Regular.ttf", 18.0f);
+		if (!io.FontDefault) {
+			std::cerr << "Error: Could not load font 'Roboto-Regular.ttf'" << std::endl;
+		}
+		ImGui_ImplOpenGL2_CreateFontsTexture();
+
 #endif
 
 
