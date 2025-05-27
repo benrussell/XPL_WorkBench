@@ -26,7 +26,7 @@
 
 
 class Plugin;
-extern Plugin* target_plugin;
+extern Plugin* global_target_plugin;
 
 
 class Plugin {
@@ -60,13 +60,14 @@ public:
 	Timer m_timer;
 
 
+
+
 	Plugin( std::string fname ){
 //		++XPHost::m_plugin_id_ctr;
 //		m_plugin_id = XPHost::m_plugin_id_ctr;
 
 		std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
 		namespace fs = std::filesystem;
-
 		m_workingFolder = fs::current_path();
 		m_pluginFilename = fname;
 
@@ -82,33 +83,35 @@ public:
 		//linux?
 //		dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL);
 
-		//target_plugin = this;
-		std::cout<<"xplwb/ save plugin ctx\n";
+		//global_target_plugin = this;
+		std::cout<<"xplwb/ Plugin->takeContext()\n"; //this switches folders and ...stuff?
 		this->takeContext();
 
 		//works ok on mac
-		std::cout<<"xplwb/ ---calling dlopen\n";
+		//std::cout<<"xplwb/ ---calling dlopen\n";
 		dlh = dlopen(fname.c_str(), RTLD_NOW);
 
 		if( dlh == nullptr ){
 			std::string sLoadError = dlerror();
-//			std::cout << " error:[" << dlerror() << "\n";
-//			fprintf(stderr, "Error loading %s: %s\n", fname.c_str(), dlerror());
-
-			throw std::runtime_error( sLoadError );
+			throw std::runtime_error( sLoadError ); //we capture this for GUI display
 
 		}else{
-			printf("xplwb/  loaded plugin, instance addr: %p\n", this);
+			printf("xplwb/  loaded dylib; dlh: %p\n", dlh);
 
-			char name[512];
+			char name[512]; //FIXME: x-plane SDK docs say 256??
 			char desc[512];
 			char sig[512];
 
-			std::cout<<"xplwb/ ---Calling XPluginStart()\n";
+			snprintf( name, 256, "XPL_WB Name" );
+			snprintf( desc, 256, "XPL_WB Description" );
+			snprintf( sig, 256, "XPL_WB Signature" );
+			
+
+			std::cout<<"xplwb/ dlh->XPluginStart()\n";
 			int (*fptr_start)(char*,char*,char*);
 			fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPluginStart" );
 			if( fptr_start ) {
-				(*fptr_start)(name, sig, desc);
+				int plugin_started = (*fptr_start)(name, sig, desc);
 				std::cout << "xplwb/ \tname: " << name << "\n";
 				std::cout << "xplwb/ \t sig: " << sig << "\n";
 				std::cout << "xplwb/ \tdesc: " << desc << "\n";
@@ -118,17 +121,31 @@ public:
 				m_pluginDesc = desc;
 
 
-				std::cout << "xplwb/ Calling XPluginEnable()\n";
-				int (*fptr_enable)();
-				fptr_enable = (int (*)()) dlsym(dlh, "XPluginEnable");
-				(*fptr_enable)();
+				if( plugin_started ){
+					std::cout << "xplwb/ dlh->XPluginEnable()\n";
+					int (*fptr_enable)();
+					fptr_enable = (int (*)()) dlsym(dlh, "XPluginEnable");
+					
+					int plugin_enabled = (*fptr_enable)();
+
+					if( ! plugin_enabled ){
+						// update Plugin* (this) status vars to show that plugin is disabled.
+						std::cout << "xplwb/ dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
+					}
+
+
+				}else{
+					// update Plugin* (this) status vars to show that plugin refused to start.
+					std::cout << "xplwb/ dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
+				}
+				
 			}else{
 				std::string msg = "[" + fname + "]\n" + "Could not find XPluginStart";
 				throw std::runtime_error( msg );
 			}
 
 			//reset to null when we're done calling into the plugin
-			//target_plugin = nullptr;
+			//global_target_plugin = nullptr;
 			this->releaseContext();
 
 		} //dlopen worked
@@ -141,7 +158,7 @@ public:
 
 		std::cout<<"xplwb/ ~Plugin()\n";
 
-		//target_plugin = this;
+		//global_target_plugin = this;
 		this->takeContext();
 
 		std::cout<<"xplwb/ Calling XPluginDisable()\n";
@@ -154,7 +171,7 @@ public:
 		fptr_stop = (int (*)())dlsym( dlh, "XPluginStop" );
 		(*fptr_stop)();
 
-		//target_plugin = nullptr;
+		//global_target_plugin = nullptr;
 		this->releaseContext();
 
 
@@ -182,7 +199,7 @@ public:
 
 
 	void takeContext(){
-		target_plugin = this; // inside takeContext()
+		global_target_plugin = this; // inside takeContext()
 
 		m_workingFolder_BeforeContextSwitch = std::filesystem::current_path();
 		std::filesystem::current_path(m_workingFolder);
@@ -193,7 +210,7 @@ public:
 	}
 
 	void releaseContext(){
-		target_plugin = nullptr; //inside releaseContext()
+		global_target_plugin = nullptr; //inside releaseContext()
 		std::filesystem::current_path(m_workingFolder_BeforeContextSwitch);
 		//std::cout<<"###### release Ctx: " << m_workingFolder_BeforeContextSwitch << "\n";
 	}
@@ -221,7 +238,7 @@ public:
 
 
 	void run_flcbs(){
-		//target_plugin = this;
+		//global_target_plugin = this;
 		this->takeContext();
 
 //		std::cout<<"plugin->run_flcbs()\n";
@@ -285,7 +302,7 @@ public:
 
 		} //loop flcb vec for this plugin
 
-		//target_plugin = nullptr;
+		//global_target_plugin = nullptr;
 		this->releaseContext();
 	}
 

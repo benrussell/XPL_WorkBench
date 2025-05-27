@@ -197,7 +197,7 @@ void       XPLMDestroyAvionics(
 
 [[maybe_unused]] void XPLMCreateAvionicsEx( void* params ){
     std::cout << "!XPLMCreateAvionicsEx\n";
-    std::cout<< "  target_plugin: " << std::to_string((size_t)target_plugin) << "\n";
+    std::cout<< "  global_target_plugin: " << std::to_string((size_t)global_target_plugin) << "\n";
 
     auto p = (XPLMCreateAvionics_t*)params;
 	std::cout<<" avionics device id: " << p->deviceID << "\n";
@@ -207,15 +207,15 @@ void       XPLMDestroyAvionics(
 	std::cout<<" av: width,height: " << p->screenWidth << ", " << p->screenWidth << "\n";
 	std::cout<<" av: offset x,y: " << p->screenOffsetX << ", " << p->screenOffsetY << "\n";
 
-	if( target_plugin ){
+	if( global_target_plugin ){
 		std::cout<<"  saving deets.\n";
 		auto av_host = new AvionicsHost{p};
-		target_plugin->m_vecAvionicsHost.push_back( av_host );
+		global_target_plugin->m_vecAvionicsHost.push_back( av_host );
 
 		auto gui_av = new GuiAvionicsDevice();
 		gui_av->m_dev = av_host;
-		gui_av->m_plugin = target_plugin;
-		target_plugin->m_vecGuiAv.push_back( gui_av );
+		gui_av->m_plugin = global_target_plugin;
+		global_target_plugin->m_vecGuiAv.push_back( gui_av );
 
 
 	}else{

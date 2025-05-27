@@ -12,7 +12,7 @@
 
 #include "../src/Plugin.h"
 class Plugin;
-extern Plugin* target_plugin;
+extern Plugin* global_target_plugin;
 
 
 //alias for SDK compat

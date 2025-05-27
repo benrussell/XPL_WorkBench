@@ -20,8 +20,8 @@
 	printf(" phase: %i\n", loop_params->phase);
 	printf(" cbf: %p\n", loop_params->callbackFunc);
 	printf(" refcon: %p\n", loop_params->refcon);
-	if( target_plugin ){
-		return (void*)target_plugin->register_flcb( *loop_params );
+	if( global_target_plugin ){
+		return (void*)global_target_plugin->register_flcb( *loop_params );
 	}else{
 		std::cout<<" XPLMCreateFlightLoop failed; bad plugin ptr\n";
 	}
@@ -51,12 +51,12 @@
 //    std::cout << " " << inInterval << "\n";
 //    std::cout << " " << inRelativeToNow << "\n";
 
-	if( target_plugin ){
+	if( global_target_plugin ){
 		//FIXME: this is going to fail?
-		target_plugin->flcb_set( inFlightLoopID, inInterval, inRelativeToNow );
+		global_target_plugin->flcb_set( inFlightLoopID, inInterval, inRelativeToNow );
 
 	}else{
-		std::cout << "  XPLMScheduleFlightLoop failed: bad target_plugin ptrn\n";
+		std::cout << "  XPLMScheduleFlightLoop failed: bad global_target_plugin ptrn\n";
 	}
 
 

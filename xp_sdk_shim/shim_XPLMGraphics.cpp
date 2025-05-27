@@ -21,7 +21,7 @@
     glGenTextures( count, textures );
 
     for( auto x=0; x<count; ++x ){
-		target_plugin->m_vecTextures.push_back( textures[x] );
+		global_target_plugin->m_vecTextures.push_back( textures[x] );
 	}
 
 }

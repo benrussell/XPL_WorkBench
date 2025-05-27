@@ -28,7 +28,7 @@ void GuiPlugins::draw(){
 
 			ImGui::Text("id: %zu", p->m_plugin_id);
 
-			ImGui::Text("ptr: %zu", (size_t)p);
+			ImGui::Text("ptr: %p", (size_t)p);
 			ImGui::Text("name: %s", p->m_pluginName.c_str());
 			ImGui::Text("desc: %s", p->m_pluginDesc.c_str());
 			ImGui::Text(" sig: %s", p->m_pluginSig.c_str());

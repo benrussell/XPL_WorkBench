@@ -5,7 +5,7 @@
 #include "XPHost.h"
 
 // Set to the active plugin we're about to fire callbacks for.
-Plugin* target_plugin{};
+Plugin* global_target_plugin{};
 
 GuiDatarefs XPHost::gui_Datarefs;
 

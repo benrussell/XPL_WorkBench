@@ -14,7 +14,7 @@
 
 
 //class Plugin;
-extern Plugin* target_plugin;
+extern Plugin* global_target_plugin;
 
 
 void XPLMDebugString( const char* msg ){
@@ -108,14 +108,14 @@ XPLMCommandRef XPLMCreateCommand(
 		const char *         inDescription){
 	std::cout<<"XPLMCreateCommand:[" << inName << "]\n"; // [" << inDescription << "]\n";
 
-	if( target_plugin ){
+	if( global_target_plugin ){
 		auto cmd = new xpCmdCustom( inName, inDescription );
-		target_plugin->m_vecCommands.push_back( cmd );
+		global_target_plugin->m_vecCommands.push_back( cmd );
 
 		return cmd;
 
 	}else{
-		std::cerr << "  target_plugin is nullptr\n";
+		std::cerr << "  global_target_plugin is nullptr\n";
 	}
 
 	return nullptr;
