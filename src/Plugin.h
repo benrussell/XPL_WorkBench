@@ -325,45 +325,43 @@ public:
 	void flcb_set( XPLMFlightLoopID id, float interval, int rel_now ){
 
 		auto target = (size_t)id-1;
-		std::cout<< "xplwb/ flcb_set: " << target << "\n";
-		std::cout<<"xplwb/     size: "<< m_vecFlightLoops.size() << "\n";
-		std::cout<<"xplwb/   size-1: "<< m_vecFlightLoops.size()-1 << "\n";
+		// std::cout<< "xplwb/ flcb_set: " << target << "\n";
+		// std::cout<<"xplwb/     size: "<< m_vecFlightLoops.size() << "\n";
+		// std::cout<<"xplwb/   size-1: "<< m_vecFlightLoops.size()-1 << "\n";
 		if( target > m_vecFlightLoops.size()-1 ){
 			std::cout<< "xplwb/ flcb_set: invalid target\n";
 			return;
 		}else{
-			std::cout << "xplwb/   flcb_set, found target\n";
-
+			// std::cout << "xplwb/   flcb_set, found target\n";
 			auto cb_params = m_vecFlightLoops[target];
 
-			std::cout << "xplwb/ Plugin::setr_flcb: \n";
 			//std::cout << " p: " << std::to_string((size_t)&cb_params.params) << "\n";
-			printf("xplwb/  params: %p\n", &cb_params.params);
-			std::cout << "xplwb/  int: " << std::to_string(cb_params.interval_secs) << "\n";
-			std::cout << "xplwb/  rel: " << std::to_string(cb_params.relative_to_now) << "\n";
+			// printf("xplwb/  params: %p\n", &cb_params.params);
+			// std::cout << "xplwb/    interval: " << std::to_string(cb_params.interval_secs) << "\n";
+			// std::cout << "xplwb/  rel to now: " << std::to_string(cb_params.relative_to_now) << "\n";
 
 			cb_params.interval_secs = interval;
 			cb_params.interval_millis = (double)cb_params.interval_secs * 1000.0;
 			cb_params.relative_to_now = rel_now;
 
-			std::cout<<"xplwb/   push cb_params back into vec\n";
+			// /std::cout<<"xplwb/   push cb_params back into vec\n";
 			m_vecFlightLoops[target] = cb_params;
 		}
 
-		std::cout<<"xplwb/ flcb_set returning..\n";
+		//std::cout<<"xplwb/ flcb_set returning..\n";
 	}
 
 
 	size_t register_flcb( XPLMCreateFlightLoop_t p ){
 
-		std::cout << "xplwb/ Plugin::register_flcb: \n";
-		printf("xplwb/  p: %p\n", &p);
+		//std::cout << "xplwb/ Plugin::register_flcb:\n";
+		//printf("xplwb/  param ptr: %p\n", &p);
 
 		cb_params_t flcb;
 		flcb.params = p;
-		flcb.interval_secs=-99.f;
+		flcb.interval_secs=0.f;
 		flcb.interval_millis = flcb.interval_secs * 1000.0;
-		flcb.relative_to_now=9;
+		flcb.relative_to_now=0;
 
 		m_vecFlightLoops.push_back( flcb );
 		return m_vecFlightLoops.size();

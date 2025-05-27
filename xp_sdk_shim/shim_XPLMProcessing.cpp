@@ -12,14 +12,13 @@
 
 [[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t* loop_params ){
 
-	printf(" loop_params ptr: %p\n", loop_params);
+	// printf(" loop_params ptr: %p\n", loop_params);
 	
-
-    std::cout << "XPLMCreateFlightLoop\n";
-	printf(" sz: %i\n", loop_params->structSize);
-	printf(" phase: %i\n", loop_params->phase);
-	printf(" cbf: %p\n", loop_params->callbackFunc);
-	printf(" refcon: %p\n", loop_params->refcon);
+    // std::cout << "XPLMCreateFlightLoop\n";
+	// printf(" sz: %i\n", loop_params->structSize);
+	// printf(" phase: %i\n", loop_params->phase);
+	// printf(" cbf: %p\n", loop_params->callbackFunc);
+	// printf(" refcon: %p\n", loop_params->refcon);
 	if( global_target_plugin ){
 		return (void*)global_target_plugin->register_flcb( *loop_params );
 	}else{
@@ -31,11 +30,11 @@
 
 
 [[maybe_unused]] void XPLMDestroyFlightLoop(){
-    std::cout << "!XPLMDestroyFlightLoop\n";
+    std::cout << "XPLMDestroyFlightLoop - NOOP!\n";
 }
 
 [[maybe_unused]] void XPLMRegisterFlightLoop(){
-    std::cout << "!XPLMRegisterFlightLoop\n";
+    std::cout << "XPLMRegisterFlightLoop - NOOP!\n";
 }
 
 
@@ -46,7 +45,7 @@
         XPLMFlightLoopID     inFlightLoopID,
         float                inInterval,
         int                  inRelativeToNow){
-    std::cout << "XPLMScheduleFlightLoop\n";
+    // std::cout << "XPLMScheduleFlightLoop\n";
 //    std::cout << " " << inFlightLoopID << "\n";
 //    std::cout << " " << inInterval << "\n";
 //    std::cout << " " << inRelativeToNow << "\n";
@@ -60,7 +59,7 @@
 	}
 
 
-	std::cout<<"  XPLMScheduleFlightLoop: ret\n";
+	// std::cout<<"  XPLMScheduleFlightLoop: ret\n";
 
 }
 
