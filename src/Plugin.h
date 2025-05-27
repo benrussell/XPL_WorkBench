@@ -33,6 +33,9 @@ class Plugin {
 private:
 	void* dlh;
 
+	public:
+	static size_t plugin_id_ctr;
+
 public:
 
 	std::string m_workingFolder{};
@@ -63,8 +66,8 @@ public:
 
 
 	Plugin( std::string fname ){
-//		++XPHost::m_plugin_id_ctr;
-//		m_plugin_id = XPHost::m_plugin_id_ctr;
+		++plugin_id_ctr;
+		m_plugin_id = plugin_id_ctr;
 
 		std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
 		namespace fs = std::filesystem;
@@ -356,6 +359,10 @@ public:
 
 
 };
+
+
+
+
 
 
 #endif //GLFW_XP_HOST_PLUGIN_H

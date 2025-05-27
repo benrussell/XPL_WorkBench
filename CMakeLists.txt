@@ -172,6 +172,7 @@ set( XP_SHIM_SRC
         #stb image uses a weird macro to generate symbols
 #        third_party/stb_image/stb_image.h
 
+        src/StaticDefs.cpp
         src/GuiDatarefs.h
         src/xpCmdCustom.h
         src/GuiPlugins.cpp src/GuiPlugins.h
