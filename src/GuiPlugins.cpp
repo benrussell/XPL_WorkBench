@@ -27,7 +27,7 @@ void GuiPlugins::draw(){
 		if( ImGui::TreeNodeEx( sNodeLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ){
 
 			ImGui::Text("id: %zu", p->m_plugin_id);
-
+			ImGui::Text("en: %b", p->m_plugin_is_enabled);
 			ImGui::Text("ptr: %p", (void*)p);
 			ImGui::Text("name: %s", p->m_pluginName.c_str());
 			ImGui::Text("desc: %s", p->m_pluginDesc.c_str());

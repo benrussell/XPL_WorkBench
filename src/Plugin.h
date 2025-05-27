@@ -31,7 +31,7 @@ extern Plugin* global_target_plugin;
 
 class Plugin {
 private:
-	void* dlh;
+	void* m_dlh;
 
 	public:
 	static size_t plugin_id_ctr;
@@ -58,7 +58,11 @@ public:
 	std::vector<int> m_vecTextures;
 
 	size_t m_plugin_id;
+	int m_plugin_start_ret_val=0;
+	int m_plugin_enable_ret_val=0;
 
+	bool m_plugin_is_enabled = false;
+	
 
 	Timer m_timer;
 
@@ -83,16 +87,16 @@ public:
 		std::cout<<"xplwb/ calling dlopen(" << fname << ")\n";
 		std::cout<<"xplwb/ ---begin xpl static init---\n";
 		dlerror(); //clear errors.
-		//dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL); //FIXME: linux? reopen cleaner?
-		dlh = dlopen(fname.c_str(), RTLD_NOW);
+		//m_dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL); //FIXME: linux? reopen cleaner?
+		m_dlh = dlopen(fname.c_str(), RTLD_NOW);
 
-		if( dlh == nullptr ){
+		if( m_dlh == nullptr ){
 			std::string sLoadError = dlerror();
 			throw std::runtime_error( sLoadError ); //we capture this for GUI display
 
 		}else{
 			std::cout<<"xplwb/ ----end xpl static init---\n";
-			printf("xplwb/  loaded dylib; dlh: %p\n", dlh);
+			printf("xplwb/  loaded dylib; m_dlh: %p\n", m_dlh);
 
 			char name[512]; //FIXME: x-plane SDK docs say 256??
 			char desc[512];
@@ -103,9 +107,9 @@ public:
 			snprintf( sig, 256, "XPL_WB Signature" );
 			
 
-			std::cout<<"xplwb/ dlh["<< m_plugin_id <<"]->XPluginStart()\n";
+			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"]->XPluginStart()\n";
 			int (*fptr_start)(char*,char*,char*);
-			fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPluginStart" );
+			fptr_start = (int (*)(char*,char*,char*))dlsym( m_dlh, "XPluginStart" ); //FIXME: replace with fn sig typedef
 			if( fptr_start ) {
 				int plugin_started = (*fptr_start)(name, sig, desc);
 				std::cout << "xplwb/ \tret name: " << name << "\n";
@@ -116,23 +120,29 @@ public:
 				m_pluginSig = sig;
 				m_pluginDesc = desc;
 
+				m_plugin_start_ret_val = plugin_started;
 
 				if( plugin_started ){
-					std::cout << "xplwb/ dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
+					std::cout << "xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
 					int (*fptr_enable)();
-					fptr_enable = (int (*)()) dlsym(dlh, "XPluginEnable");
+					fptr_enable = (int (*)()) dlsym(m_dlh, "XPluginEnable"); //FIXME: replace with fn sig typedef
 					
 					int plugin_enabled = (*fptr_enable)();
+					m_plugin_enable_ret_val = plugin_enabled;
 
 					if( ! plugin_enabled ){
 						// update Plugin* (this) status vars to show that plugin is disabled.
-						std::cout << "xplwb/ dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
-					}
+						std::cout << "xplwb/ m_dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
+						m_plugin_is_enabled = false;
 
+					}else{
+						m_plugin_is_enabled = true;
+
+					}
 
 				}else{
 					// update Plugin* (this) status vars to show that plugin refused to start.
-					std::cout << "xplwb/ dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
+					std::cout << "xplwb/ m_dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
 				}
 				
 			}else{
@@ -157,15 +167,24 @@ public:
 		//global_target_plugin = this;
 		this->takeContext();
 
-		std::cout<<"xplwb/ Calling XPluginDisable()\n";
-		int (*fptr_disable)();
-		fptr_disable = (int (*)())dlsym( dlh, "XPluginDisable" );
-		(*fptr_disable)();
 
-		std::cout<<"xplwb/ Calling XPluginStop()\n";
-		int (*fptr_stop)();
-		fptr_stop = (int (*)())dlsym( dlh, "XPluginStop" );
-		(*fptr_stop)();
+		if( m_plugin_is_enabled ){
+			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginDisable()\n";
+			void (*fptr_disable)();
+			fptr_disable = (void (*)())dlsym( m_dlh, "XPluginDisable" ); //FIXME: replace with fn sig typedef
+			(*fptr_disable)();
+		}
+		
+
+		if( m_plugin_start_ret_val ){
+			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop()\n";
+			void (*fptr_stop)();
+			fptr_stop = (void (*)())dlsym( m_dlh, "XPluginStop" ); //FIXME: replace with fn sig typedef
+			(*fptr_stop)();
+		}else{
+			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop - skipped. Plugin refused to start.\n";
+		}
+		
 
 		//global_target_plugin = nullptr;
 		this->releaseContext();
@@ -188,7 +207,7 @@ public:
 		}
 
 		std::cout << "xplwb/ Calling dlclose\n\n";
-		dlclose( dlh );
+		dlclose( m_dlh );
 
 	}
 
