@@ -66,32 +66,24 @@ public:
 
 
 	Plugin( std::string fname ){
-		++plugin_id_ctr;
-		m_plugin_id = plugin_id_ctr;
+		m_plugin_id = ++plugin_id_ctr;
 
-		std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
+		//std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
 		namespace fs = std::filesystem;
 		m_workingFolder = fs::current_path();
 		m_pluginFilename = fname;
 
-
-		printf("\nxplwb/ Plugin ctor/ Plugin* addr: %p\n", this);
-		std::cout<<"xplwb/ Loading:["<< fname << "]\n";
-
-
 		m_timer.start();
 
-
-		dlerror(); //clear errors.
-		//linux?
-//		dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL);
-
 		//global_target_plugin = this;
-		std::cout<<"xplwb/ Plugin->takeContext()\n"; //this switches folders and ...stuff?
+		//std::cout<<"xplwb/ Plugin->takeContext()\n"; //this switches folders and ...stuff?
 		this->takeContext();
 
 		//works ok on mac
-		//std::cout<<"xplwb/ ---calling dlopen\n";
+		std::cout<<"xplwb/ calling dlopen(" << fname << ")\n";
+		std::cout<<"xplwb/ ---begin xpl static init---\n";
+		dlerror(); //clear errors.
+		//dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL); //FIXME: linux? reopen cleaner?
 		dlh = dlopen(fname.c_str(), RTLD_NOW);
 
 		if( dlh == nullptr ){
@@ -99,6 +91,7 @@ public:
 			throw std::runtime_error( sLoadError ); //we capture this for GUI display
 
 		}else{
+			std::cout<<"xplwb/ ----end xpl static init---\n";
 			printf("xplwb/  loaded dylib; dlh: %p\n", dlh);
 
 			char name[512]; //FIXME: x-plane SDK docs say 256??
@@ -110,14 +103,14 @@ public:
 			snprintf( sig, 256, "XPL_WB Signature" );
 			
 
-			std::cout<<"xplwb/ dlh->XPluginStart()\n";
+			std::cout<<"xplwb/ dlh["<< m_plugin_id <<"]->XPluginStart()\n";
 			int (*fptr_start)(char*,char*,char*);
 			fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPluginStart" );
 			if( fptr_start ) {
 				int plugin_started = (*fptr_start)(name, sig, desc);
-				std::cout << "xplwb/ \tname: " << name << "\n";
-				std::cout << "xplwb/ \t sig: " << sig << "\n";
-				std::cout << "xplwb/ \tdesc: " << desc << "\n";
+				std::cout << "xplwb/ \tret name: " << name << "\n";
+				std::cout << "xplwb/ \tret sig: " << sig << "\n";
+				std::cout << "xplwb/ \tret desc: " << desc << "\n";
 
 				m_pluginName = name;
 				m_pluginSig = sig;
@@ -125,7 +118,7 @@ public:
 
 
 				if( plugin_started ){
-					std::cout << "xplwb/ dlh->XPluginEnable()\n";
+					std::cout << "xplwb/ dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
 					int (*fptr_enable)();
 					fptr_enable = (int (*)()) dlsym(dlh, "XPluginEnable");
 					

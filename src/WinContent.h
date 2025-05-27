@@ -170,15 +170,15 @@ public:
 
 
 	void load_plugin( const std::string& fname ){
-		std::cout << "xplwb/ winbox->load_plugin(" << fname << ")\n";
+		//std::cout << "xplwb/ winbox->load_plugin(" << fname << ")\n";
 		try {
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
 
-			printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
+			//printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
 			
 		}catch (const std::runtime_error& e) {
-			std::cerr << "Caught a runtime_error: " << e.what() << std::endl;
+			std::cerr << "xplwb/ load_plugin/ runtime_error: " << e.what() << std::endl;
 			m_sErrorMessage = e.what();
 			m_displayErrorMessage = true;
 		}
