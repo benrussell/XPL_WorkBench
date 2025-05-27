@@ -102,7 +102,7 @@ public:
 		if (!m_winh)
 		{
 			glfwTerminate();
-			throw std::runtime_error("glfw Window Create Failed.");
+			throw std::runtime_error("xplwb/ WinBox/ glfw Window Create Failed.");
 		}
 
 		glfwMakeContextCurrent( m_winh );
@@ -140,6 +140,7 @@ public:
 		//setup the texture inspector on click handler
 		//so it opens the tex inspector and focus' the clicked
 		//tex_id
+		//uses a lambda to capture [this]
 		GuiTextures::openImageInspector = [this]( int tex_id ){
 			m_texInspector.m_bDraw = true;
 			m_texInspector.m_showTexId = tex_id;
@@ -169,7 +170,7 @@ public:
 
 
 	void load_plugin( const std::string& fname ){
-		std::cout << "----------- load_plugin()://[" << fname << "] ---------\n";
+		std::cout << "xplwb/ winbox->load_plugin(" << fname << ")\n";
 		try {
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
@@ -186,7 +187,7 @@ public:
 
 
 	void load_project( const std::string& filename ){
-		std::cout << "load_json_prj: [" << filename << "]\n";
+		std::cout << "xplwb/ load_json_prj: [" << filename << "]\n";
 
 
 		m_lastProjectFilename = filename;
@@ -207,7 +208,7 @@ public:
 
 
 		//unload our plugins!
-		std::cout<<"----- unloading plugins -------\n";
+		std::cout<<"xplwb/ ----- unloading plugins -------\n";
 		for( auto p: XPHost::m_vecPlugins ){
 			delete p;
 		}
@@ -219,35 +220,30 @@ public:
 		std::ifstream f( filename );
 		nlohmann::json data = nlohmann::json::parse(f);
 
-		for( auto prec: data["plugins"] ){
-			std::cout<<" prj cwd: " << prec["working_folder"] << "\n";
-			std::cout<<" prj xpl: " << prec["plugin_file"] << "\n";
-
+		for( auto project_plugin: data["plugins"] ){
+			std::cout<<"xplwb/  project_plugin folder: " << project_plugin["working_folder"] << "\n";
+			std::cout<<"xplwb/  project_plugin    xpl: " << project_plugin["plugin_file"] << "\n";
 
 			try{
 				namespace fs = std::filesystem;
-
 				std::string cwd = fs::current_path();
 
 				//jump to folder, eg, /X-Plane 12/
-				fs::current_path( prec["working_folder"] );
+				fs::current_path( project_plugin["working_folder"] );
 
 					//load the plugin file, does not need to be in cwd
 					//path can be absolute or relative.
-					load_plugin( std::string(prec["plugin_file"]) );
+					load_plugin( std::string(project_plugin["plugin_file"]) );
 
 				//jump back to folder that XDbg was launched in
 				fs::current_path( cwd );
 
 
-
 			}catch (const std::runtime_error& e) {
-				std::cerr << "Caught a runtime_error: " << e.what() << std::endl;
+				std::cerr << "xplwb/ Caught a runtime_error: " << e.what() << std::endl;
 			}
 
-
-
-		}
+		} //loop project plugins
 
 	} //load_project()
 
