@@ -102,7 +102,7 @@ public:
 		if (!m_winh)
 		{
 			glfwTerminate();
-			throw std::runtime_error("xplwb/ WinBox/ glfw Window Create Failed.");
+			throw std::runtime_error("xwb/ WinBox/ glfw Window Create Failed.");
 		}
 
 		glfwMakeContextCurrent( m_winh );
@@ -170,7 +170,7 @@ public:
 
 
 	void load_plugin( const std::string& fname ){
-		//std::cout << "xplwb/ winbox->load_plugin(" << fname << ")\n";
+		//std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
 		try {
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
@@ -178,7 +178,7 @@ public:
 			//printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
 			
 		}catch (const std::runtime_error& e) {
-			std::cerr << "xplwb/ load_plugin/ runtime_error: " << e.what() << std::endl;
+			std::cerr << "xwb/ load_plugin/ runtime_error: " << e.what() << std::endl;
 			m_sErrorMessage = e.what();
 			m_displayErrorMessage = true;
 		}
@@ -187,7 +187,7 @@ public:
 
 
 	void load_project( const std::string& filename ){
-		std::cout << "xplwb/ load_json_prj: [" << filename << "]\n";
+		std::cout << "xwb/ load_json_prj: [" << filename << "]\n";
 
 
 		m_lastProjectFilename = filename;
@@ -208,7 +208,7 @@ public:
 
 
 		//unload our plugins!
-		std::cout<<"xplwb/ ----- unloading plugins -------\n";
+		std::cout<<"xwb/ ----- unloading plugins -------\n";
 		for( auto p: XPHost::m_vecPlugins ){
 			delete p;
 		}
@@ -221,8 +221,8 @@ public:
 		nlohmann::json data = nlohmann::json::parse(f);
 
 		for( auto project_plugin: data["plugins"] ){
-			std::cout<<"xplwb/  project_plugin folder: " << project_plugin["working_folder"] << "\n";
-			std::cout<<"xplwb/  project_plugin    xpl: " << project_plugin["plugin_file"] << "\n";
+			std::cout<<"xwb/  project_plugin folder: " << project_plugin["working_folder"] << "\n";
+			std::cout<<"xwb/  project_plugin    xpl: " << project_plugin["plugin_file"] << "\n";
 
 			try{
 				namespace fs = std::filesystem;
@@ -240,7 +240,7 @@ public:
 
 
 			}catch (const std::runtime_error& e) {
-				std::cerr << "xplwb/ Caught a runtime_error: " << e.what() << std::endl;
+				std::cerr << "xwb/ Caught a runtime_error: " << e.what() << std::endl;
 			}
 
 		} //loop project plugins

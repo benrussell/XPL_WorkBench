@@ -72,7 +72,7 @@ public:
 	Plugin( std::string fname ){
 		m_plugin_id = ++plugin_id_ctr;
 
-		//std::cout<<"xplwb/ Plugin constructor: saving cwd\n";
+		//std::cout<<"xwb/ Plugin constructor: saving cwd\n";
 		namespace fs = std::filesystem;
 		m_workingFolder = fs::current_path();
 		m_pluginFilename = fname;
@@ -80,12 +80,12 @@ public:
 		m_timer.start();
 
 		//global_target_plugin = this;
-		//std::cout<<"xplwb/ Plugin->takeContext()\n"; //this switches folders and ...stuff?
+		//std::cout<<"xwb/ Plugin->takeContext()\n"; //this switches folders and ...stuff?
 		this->takeContext();
 
 		//works ok on mac
-		std::cout<<"xplwb/ calling dlopen(" << fname << ")\n";
-		std::cout<<"xplwb/ ---begin xpl static init---\n";
+		std::cout<<"xwb/ calling dlopen(" << fname << ")\n";
+		std::cout<<"xwb/ ---begin xpl static init---\n";
 		dlerror(); //clear errors.
 		//m_dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL); //FIXME: linux? reopen cleaner?
 		m_dlh = dlopen(fname.c_str(), RTLD_NOW);
@@ -95,8 +95,8 @@ public:
 			throw std::runtime_error( sLoadError ); //we capture this for GUI display
 
 		}else{
-			std::cout<<"xplwb/ ----end xpl static init---\n";
-			printf("xplwb/  loaded dylib; m_dlh: %p\n", m_dlh);
+			std::cout<<"xwb/ ----end xpl static init---\n";
+			printf("xwb/  loaded dylib; m_dlh: %p\n", m_dlh);
 
 			char name[512]; //FIXME: x-plane SDK docs say 256??
 			char desc[512];
@@ -107,14 +107,14 @@ public:
 			snprintf( sig, 256, "XPL_WB Signature" );
 			
 
-			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"]->XPluginStart()\n";
+			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"]->XPluginStart()\n";
 			int (*fptr_start)(char*,char*,char*);
 			fptr_start = (int (*)(char*,char*,char*))dlsym( m_dlh, "XPluginStart" ); //FIXME: replace with fn sig typedef
 			if( fptr_start ) {
 				int plugin_started = (*fptr_start)(name, sig, desc);
-				std::cout << "xplwb/ \tret name: " << name << "\n";
-				std::cout << "xplwb/ \tret sig: " << sig << "\n";
-				std::cout << "xplwb/ \tret desc: " << desc << "\n";
+				std::cout << "xwb/ \tret name: " << name << "\n";
+				std::cout << "xwb/ \tret sig: " << sig << "\n";
+				std::cout << "xwb/ \tret desc: " << desc << "\n";
 
 				m_pluginName = name;
 				m_pluginSig = sig;
@@ -123,7 +123,7 @@ public:
 				m_plugin_start_ret_val = plugin_started;
 
 				if( plugin_started ){
-					std::cout << "xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
+					std::cout << "xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
 					int (*fptr_enable)();
 					fptr_enable = (int (*)()) dlsym(m_dlh, "XPluginEnable"); //FIXME: replace with fn sig typedef
 					
@@ -132,7 +132,7 @@ public:
 
 					if( ! plugin_enabled ){
 						// update Plugin* (this) status vars to show that plugin is disabled.
-						std::cout << "xplwb/ m_dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
+						std::cout << "xwb/ m_dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
 						m_plugin_is_enabled = false;
 
 					}else{
@@ -142,7 +142,7 @@ public:
 
 				}else{
 					// update Plugin* (this) status vars to show that plugin refused to start.
-					std::cout << "xplwb/ m_dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
+					std::cout << "xwb/ m_dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
 				}
 				
 			}else{
@@ -162,14 +162,14 @@ public:
 	~Plugin(){
 //		--XPHost::m_plugin_id_ctr;
 
-		std::cout<<"xplwb/ ~Plugin()\n";
+		std::cout<<"xwb/ ~Plugin()\n";
 
 		//global_target_plugin = this;
 		this->takeContext();
 
 
 		if( m_plugin_is_enabled ){
-			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginDisable()\n";
+			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginDisable()\n";
 			void (*fptr_disable)();
 			fptr_disable = (void (*)())dlsym( m_dlh, "XPluginDisable" ); //FIXME: replace with fn sig typedef
 			(*fptr_disable)();
@@ -177,12 +177,12 @@ public:
 		
 
 		if( m_plugin_start_ret_val ){
-			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop()\n";
+			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop()\n";
 			void (*fptr_stop)();
 			fptr_stop = (void (*)())dlsym( m_dlh, "XPluginStop" ); //FIXME: replace with fn sig typedef
 			(*fptr_stop)();
 		}else{
-			std::cout<<"xplwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop - skipped. Plugin refused to start.\n";
+			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop - skipped. Plugin refused to start.\n";
 		}
 		
 
@@ -206,7 +206,7 @@ public:
 			delete cmd;
 		}
 
-		std::cout << "xplwb/ Calling dlclose\n\n";
+		std::cout << "xwb/ Calling dlclose\n\n";
 		dlclose( m_dlh );
 
 	}
@@ -286,7 +286,12 @@ public:
 					auto xp_delta = (float)(delta / 1000.0); //x-plane SDK specifies decimal seconds.
 
 					const double dFLCBStart = m_timer.getElapsedTimeInMilliSec();
-					const float retVal = (*params.callbackFunc)( xp_delta, 0.0, cb.m_callCounter, params.refcon );
+					const float retVal = (*params.callbackFunc)( 
+						xp_delta, 
+						0.0, //FIXME: this needs to be fixed.
+						cb.m_callCounter, 
+						params.refcon 
+						);
 					const double dFLCBStop = m_timer.getElapsedTimeInMilliSec();
 
 					cb.profile_ms = dFLCBStop - dFLCBStart;
@@ -303,7 +308,7 @@ public:
 
 			}else
 			if( cb.interval_secs < 0.0 ){
-				std::cout<<"xplwb/ cb.interval in frames - not called.\n";
+				std::cout<<"xwb/ cb.interval in frames - not called.\n";
 				//FIXME: need a flag to turn this one off.
 
 
@@ -325,37 +330,37 @@ public:
 	void flcb_set( XPLMFlightLoopID id, float interval, int rel_now ){
 
 		auto target = (size_t)id-1;
-		// std::cout<< "xplwb/ flcb_set: " << target << "\n";
-		// std::cout<<"xplwb/     size: "<< m_vecFlightLoops.size() << "\n";
-		// std::cout<<"xplwb/   size-1: "<< m_vecFlightLoops.size()-1 << "\n";
+		// std::cout<< "xwb/ flcb_set: " << target << "\n";
+		// std::cout<<"xwb/     size: "<< m_vecFlightLoops.size() << "\n";
+		// std::cout<<"xwb/   size-1: "<< m_vecFlightLoops.size()-1 << "\n";
 		if( target > m_vecFlightLoops.size()-1 ){
-			std::cout<< "xplwb/ flcb_set: invalid target\n";
+			std::cout<< "xwb/ flcb_set: invalid target\n";
 			return;
 		}else{
-			// std::cout << "xplwb/   flcb_set, found target\n";
+			// std::cout << "xwb/   flcb_set, found target\n";
 			auto cb_params = m_vecFlightLoops[target];
 
 			//std::cout << " p: " << std::to_string((size_t)&cb_params.params) << "\n";
-			// printf("xplwb/  params: %p\n", &cb_params.params);
-			// std::cout << "xplwb/    interval: " << std::to_string(cb_params.interval_secs) << "\n";
-			// std::cout << "xplwb/  rel to now: " << std::to_string(cb_params.relative_to_now) << "\n";
+			// printf("xwb/  params: %p\n", &cb_params.params);
+			// std::cout << "xwb/    interval: " << std::to_string(cb_params.interval_secs) << "\n";
+			// std::cout << "xwb/  rel to now: " << std::to_string(cb_params.relative_to_now) << "\n";
 
 			cb_params.interval_secs = interval;
 			cb_params.interval_millis = (double)cb_params.interval_secs * 1000.0;
 			cb_params.relative_to_now = rel_now;
 
-			// /std::cout<<"xplwb/   push cb_params back into vec\n";
+			// /std::cout<<"xwb/   push cb_params back into vec\n";
 			m_vecFlightLoops[target] = cb_params;
 		}
 
-		//std::cout<<"xplwb/ flcb_set returning..\n";
+		//std::cout<<"xwb/ flcb_set returning..\n";
 	}
 
 
 	size_t register_flcb( XPLMCreateFlightLoop_t p ){
 
-		//std::cout << "xplwb/ Plugin::register_flcb:\n";
-		//printf("xplwb/  param ptr: %p\n", &p);
+		//std::cout << "xwb/ Plugin::register_flcb:\n";
+		//printf("xwb/  param ptr: %p\n", &p);
 
 		cb_params_t flcb;
 		flcb.params = p;

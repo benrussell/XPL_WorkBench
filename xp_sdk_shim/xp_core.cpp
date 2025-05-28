@@ -15,13 +15,13 @@
 [[maybe_unused]] void XPLMEnableFeature( const char* feature_name ){
 	if( strcmp(feature_name, "XPLM_USE_NATIVE_PATHS") != 0 ){
 		// mute the native paths request as thats all we support
-		std::cout << "xplwb/ XPLMEnableFeature: NO OP: " << feature_name << "\n";
+		std::cout << "xwb/ XPLMEnableFeature: NO OP: " << feature_name << "\n";
 	}
 }
 
 
 [[maybe_unused]] void XPLMGetMouseLocationGlobal(){
-	std::cout << "xplwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
+	std::cout << "xwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
 }
 
 //DISPLAY
@@ -68,7 +68,7 @@
 		//set
 		//snprintf(outFilePath,256,"/home/br/Dev/wasm/wasm_host_xpl/build/xpl/libwasm_xpl_plugin.so");
 		
-		printf("xplwb/ dyn resolved xpl filename! - yay!\n");
+		printf("xwb/ dyn resolved xpl filename! - yay!\n");
 		snprintf(outFilePath,256,
 			"%s",
 			global_target_plugin->m_pluginFilename.c_str()

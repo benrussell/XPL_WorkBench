@@ -10,18 +10,18 @@
     char* outFileName,
     char* outPath
 ){
-    std::cout << "xplwb/ XPLMGetNthAircraftModel: " << inIndex << " \n";
+    std::cout << "xwb/ XPLMGetNthAircraftModel: " << inIndex << " \n";
 
 
     if( ! outFileName ){
-        std::cout << "xplwb/   outFileName is nullptr\n";
+        std::cout << "xwb/   outFileName is nullptr\n";
     }else{
         snprintf( outFileName, 256, "Cessna_172.acf" );
     }
     
 
     if( ! outPath ){
-        std::cout << "xplwb/   outPath is nullptr\n";
+        std::cout << "xwb/   outPath is nullptr\n";
     }else{
         snprintf( outPath, 512, "Aircraft/Laminar Research/Cessna 172 SP" );
     }

@@ -59,7 +59,7 @@ std::string global_path_when_started;
 const char* glob_recent_projects_filename = "recent_projects.json";
 
 void load_recent_projects_list() {
-	std::cout << "xplwb/ Loading recent projects list.. \n";
+	std::cout << "xwb/ Loading recent projects list.. \n";
 	
 	std::ifstream f(glob_recent_projects_filename);
 	if( f ){
@@ -76,7 +76,7 @@ void load_recent_projects_list() {
 
 
 void save_recent_projects(){
-	std::cout << "xplwb/ Saving recent projects list..\n";
+	std::cout << "xwb/ Saving recent projects list..\n";
 
 	
 	nlohmann::json json;
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 	{
 		namespace fs = std::filesystem;
 
-		std::cout << "xplwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
+		std::cout << "xwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
 		try {
 			const char* home_env = std::getenv("HOME");
 			if (!home_env) {
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 				return -1;
 			}
 			const std::string folder = std::string(home_env) + "/.XPL_WorkBench";
-			std::cout << "xplwb/ folder: ["<< folder <<"]\n";
+			std::cout << "xwb/ folder: ["<< folder <<"]\n";
 
 			fs::current_path(folder);
 		//	std::cout << "Changed working directory to: " << folder << std::endl;
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 		try {
 			// report and store the cwd where we loaded from.
 			global_path_when_started = fs::current_path();
-			//std::cout << "xplwb/ Current working directory: " << global_path_when_started << std::endl;
+			//std::cout << "xwb/ Current working directory: " << global_path_when_started << std::endl;
 		}
 		catch (const fs::filesystem_error &e) {
 			std::cerr << "Filesystem error: " << e.what() << std::endl;
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
 	/* Create a windowed mode window and its OpenGL context */
 	int os_win_width = mode->width;// - 50;
 	int os_win_height = mode->height;// - 50;
-	std::cout << "xplwb/ Creating window on primary monitor: ";
+	std::cout << "xwb/ Creating window on primary monitor: ";
 	std::cout << " size: " << os_win_width << "," << os_win_height << "\n";
 
 
@@ -203,7 +203,7 @@ int main(int argc, char** argv)
 		if (!mwinh)
 		{
 			glfwTerminate();
-			throw std::runtime_error("xplwb/ glfw Window Create Failed.");
+			throw std::runtime_error("xwb/ glfw Window Create Failed.");
 		}
 		glfwMakeContextCurrent( mwinh );
 
@@ -211,7 +211,7 @@ int main(int argc, char** argv)
 		glewInit();
 		glewExperimental = GL_TRUE; // Ensure modern OpenGL functions are loaded
 		if (glewInit() != GLEW_OK) {
-			std::cerr << "xplwb/ Failed to initialize GLEW" << std::endl;
+			std::cerr << "xwb/ Failed to initialize GLEW" << std::endl;
 			exit(EXIT_FAILURE);
 		}
 
@@ -280,7 +280,7 @@ int main(int argc, char** argv)
 
 		//check if all windows have been closed
 		if( window_pool.empty() ){
-			std::cout << "xplwb/ Window pool is empty; cleanup and exit.\n";
+			std::cout << "xwb/ Window pool is empty; cleanup and exit.\n";
 
 			save_recent_projects();
 
