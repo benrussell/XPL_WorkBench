@@ -305,12 +305,19 @@ public:
 
 				if(ImGui::MenuItem("Open Project..", nullptr, false, true)){
 					fileDialog_OpenProject.SetTitle("Choose Project");
-					fileDialog_OpenProject.SetTypeFilters({ ".json",".*",".yak-json" });
+					fileDialog_OpenProject.SetTypeFilters({ ".json",".*",".xwb-json" });
 					fileDialog_OpenProject.Open();
 				}
 
 
 				ImGui::Separator();
+
+
+				if( ImGui::MenuItem("Reload Project", "F5") ){
+					if( ! m_lastProjectFilename.empty() ){
+						load_project( m_lastProjectFilename );
+					}
+				}
 
 				if( ImGui::BeginMenu("Recent Projects") ){
 					if(XPHost::m_vecRecentProjects.empty()){
@@ -342,33 +349,43 @@ public:
 
 
 
-			if(ImGui::BeginMenu("View")){
+			if(ImGui::BeginMenu("Tools")){
 
-				if( ImGui::MenuItem("Reload Project", "F5") ){
-					if( ! m_lastProjectFilename.empty() ){
-						load_project( m_lastProjectFilename );
-					}
+				if(ImGui::MenuItem("Shader Harness", nullptr, m_shaderTest->m_bDraw, true)){
+					m_shaderTest->m_bDraw = ! m_shaderTest->m_bDraw;
 				}
 
 
-				if(ImGui::BeginMenu("Avionics Devices")) {
+				if(ImGui::MenuItem("Textures", nullptr, GuiTextures::m_bDraw, true)){
+					GuiTextures::m_bDraw = ! GuiTextures::m_bDraw;
+				}
 
+				if(ImGui::MenuItem("Texture Inspector", nullptr, m_texInspector.m_bDraw, true)){
+					m_texInspector.m_bDraw = ! m_texInspector.m_bDraw;
+				}
+
+
+				ImGui::EndMenu();
+
+			}
+
+
+			if(ImGui::BeginMenu("View")){
+
+				if(ImGui::BeginMenu("Avionics Devices")) {
 					if( XPHost::m_vecPlugins.empty() ){
 						ImGui::MenuItem("No plugins.");
 					}
 
 					for( auto p: XPHost::m_vecPlugins ){
-						if(ImGui::BeginMenu( p->m_pluginName.c_str() )) {
-
-							if( p->m_vecAvionicsHost.empty() ){
-								 ImGui::MenuItem("No devices.");
+						if( ! p->m_vecAvionicsHost.empty() ){						
+							if(ImGui::BeginMenu( p->m_pluginName.c_str() )) {
+								for( auto dev: p->m_vecAvionicsHost ){
+									//FIXME: needs click handler to show window for dev
+									ImGui::MenuItem( dev->m_deviceId.c_str() );
+								}
+								ImGui::EndMenu();
 							}
-
-							for( auto dev: p->m_vecAvionicsHost ){
-								//FIXME: needs click handler to show window for dev
-								ImGui::MenuItem( dev->m_deviceId.c_str() );
-							}
-							ImGui::EndMenu();
 						}
 					}
 					ImGui::EndMenu();
@@ -382,35 +399,17 @@ public:
 					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
 				}
 
-				if(ImGui::MenuItem("Textures", nullptr, GuiTextures::m_bDraw, true)){
-					GuiTextures::m_bDraw = ! GuiTextures::m_bDraw;
-				}
-
-				if(ImGui::MenuItem("Texture Inspector", nullptr, m_texInspector.m_bDraw, true)){
-					m_texInspector.m_bDraw = ! m_texInspector.m_bDraw;
-				}
-
-				if(ImGui::MenuItem("__XPLMDebugString", nullptr, XPHost::gui_Plugins.win_open, true)){
-					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
-				}
-
-
 				if(ImGui::MenuItem("Recent Projects", nullptr, GuiRecentProjects::m_bDraw, true)){
 					GuiRecentProjects::m_bDraw = ! GuiRecentProjects::m_bDraw;
 				}
-
 
 				if(ImGui::MenuItem("Message", nullptr, m_displayErrorMessage, true)){
 					m_displayErrorMessage = ! m_displayErrorMessage;
 				}
 
-
-
-				if(ImGui::MenuItem("Shader Harness", nullptr, m_shaderTest->m_bDraw, true)){
-					m_shaderTest->m_bDraw = ! m_shaderTest->m_bDraw;
+				if(ImGui::MenuItem("XPLMDebugString Log", nullptr, XPHost::gui_Plugins.win_open, true)){
+					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
 				}
-
-
 
 
 				ImGui::Separator();
