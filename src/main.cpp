@@ -144,20 +144,6 @@ int main(int argc, char** argv)
 
 
 
-	// Pull argv into a vector<string>
-	std::vector<std::string> args;
-	for (int i = 0; i < argc; ++i) {
-		args.emplace_back(argv[i]);
-	}
-
-	if( args.size() > 1 ){
-		std::cout << "Loading xpl: " << args[1] << "\n";
-	}
-
-
-
-
-
 
 	load_recent_projects_list();
 
@@ -228,9 +214,17 @@ int main(int argc, char** argv)
 
 
 
+
+
+	// Pull argv into a vector<string>
+	std::vector<std::string> args;
+	for (int i = 0; i < argc; ++i) {
+		args.emplace_back(argv[i]);
+	}
+
 	// we review our args list after we have loaded all our gui and assets, etc
 	if( args.size() > 1 ){
-		std::cout << "Loading xpl: " << args[1] << "\n";
+		std::cout << "xwb/ cmd line xpl: " << args[1] << "\n";
 		box->load_plugin( args[1] );
 	}
 
