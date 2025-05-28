@@ -85,7 +85,7 @@ public:
 
 		//works ok on mac
 		std::cout<<"xwb/ calling dlopen(" << fname << ")\n";
-		std::cout<<"xwb/ ---begin xpl static init---\n";
+			std::cout<<"xwb/ --- xpl static init / begin ---\n";
 		dlerror(); //clear errors.
 		//m_dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL); //FIXME: linux? reopen cleaner?
 		m_dlh = dlopen(fname.c_str(), RTLD_NOW);
@@ -95,7 +95,7 @@ public:
 			throw std::runtime_error( sLoadError ); //we capture this for GUI display
 
 		}else{
-			std::cout<<"xwb/ ----end xpl static init---\n";
+			std::cout<<"xwb/ --- xpl static init / end   ---\n";
 			printf("xwb/  loaded dylib; m_dlh: %p\n", m_dlh);
 
 			char name[512]; //FIXME: x-plane SDK docs say 256??
