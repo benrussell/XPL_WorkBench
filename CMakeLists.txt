@@ -164,6 +164,7 @@ set( XP_SHIM_SRC
         src/XPHost.cpp src/XPHost.h
         src/WinContent.h
         src/AvionicsHost.h
+        src/DrawCallbackHost.h
         src/GuiAvionicsDevice.h
 
         third_party/timer/src/Timer.cpp

@@ -13,6 +13,8 @@
 
 #include "../src/WinContent.h"
 #include "../src/AvionicsHost.h"
+#include "../src/DrawCallbackHost.h"
+
 
 #include "shim_XPLMDisplay.h"
 
@@ -253,3 +255,41 @@ void       XPLMDestroyAvionics(
 	}
 
 }
+
+
+
+
+
+
+
+[[maybe_unused]] int XPLMRegisterDrawCallback( 
+ 		XPLMDrawCallback_f   inCallback,
+		XPLMDrawingPhase     inPhase,
+		int                  inWantsBefore,
+		void *               inRefcon){
+
+			//create a draw callback wrapper instance
+			DrawCallbackHost* dcbh = 
+				new DrawCallbackHost(
+					inCallback,
+					inPhase,
+					inWantsBefore,
+					inRefcon
+				);
+
+			global_target_plugin->m_vecDrawCallbackHost.emplace_back( dcbh );
+
+			return 1;
+		}
+
+
+
+[[maybe_unused]] int        XPLMUnregisterDrawCallback(
+					XPLMDrawCallback_f   inCallback,
+					XPLMDrawingPhase     inPhase,
+					int                  inWantsBefore,
+					void *               inRefcon){
+					std::cout << "xwb/ XPLMUnregisterDrawCallback - NOOP\n";
+					//ret 1 if the cb was found, ret 0 if it was not.
+					return 0;
+					};

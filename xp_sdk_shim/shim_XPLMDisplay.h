@@ -266,6 +266,48 @@ void       XPLMDestroyAvionics(
 
 
 
+
+
+
+
+
+enum XPLMDrawingPhase{
+	xplm_Phase_Panel=40,
+	xplm_Phase_Window=45
+};
+
+typedef int (* XPLMDrawCallback_f)(
+                         XPLMDrawingPhase     inPhase,
+                         int                  inIsBefore,
+                         void *               inRefcon);
+
+
+// ret 1 for cb register success					
+int 		XPLMRegisterDrawCallback( 
+ 		XPLMDrawCallback_f   inCallback,
+		XPLMDrawingPhase     inPhase,
+		int                  inWantsBefore,
+		void *               inRefcon);
+
+
+int        XPLMUnregisterDrawCallback(
+                         XPLMDrawCallback_f   inCallback,
+                         XPLMDrawingPhase     inPhase,
+                         int                  inWantsBefore,
+                         void *               inRefcon);
+
+
+
+
+
+
+
+
+
+
+
+
+
 } //extern "C"
 
 #endif //GLFW_XP_HOST_SHIM_XPLMDISPLAY_H

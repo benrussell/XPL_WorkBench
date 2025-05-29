@@ -27,7 +27,7 @@ void GuiPlugins::draw(){
 		if( ImGui::TreeNodeEx( sNodeLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ){
 
 			ImGui::Text("id: %zu", p->m_plugin_id);
-			ImGui::Text("en: %b", p->m_plugin_is_enabled);
+			ImGui::Text("en: %i", p->m_plugin_is_enabled);
 			ImGui::Text("ptr: %p", (void*)p);
 			ImGui::Text("name: %s", p->m_pluginName.c_str());
 			ImGui::Text("desc: %s", p->m_pluginDesc.c_str());
@@ -134,6 +134,18 @@ void GuiPlugins::draw(){
 					//ImGui::Text( "id: %s", dev->m_deviceId.c_str() );
 					ImGui::Text( "dev_ptr: %zu", (size_t)av_gui->m_dev );
 
+				}
+
+				ImGui::TreePop();
+			}
+
+
+			const std::string sLabDrawCbs = "draw_cbs [" + std::to_string(p->m_vecDrawCallbackHost.size()) + "]";
+			if( ImGui::TreeNode(sLabDrawCbs.c_str()) ){
+
+				for( auto drawcb: p->m_vecDrawCallbackHost ){
+					//ImGui::Text( "id: %s", dev->m_deviceId.c_str() );
+					ImGui::Text( "instance: %p", &drawcb );
 				}
 
 				ImGui::TreePop();

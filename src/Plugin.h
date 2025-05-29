@@ -15,6 +15,7 @@
 #include "../xp_sdk_shim/shim_XPLMProcessing.h"
 
 #include "AvionicsHost.h"
+#include "DrawCallbackHost.h"
 #include "GuiAvionicsDevice.h"
 #include "xpCmdCustom.h"
 
@@ -49,6 +50,8 @@ public:
 
 	std::vector<AvionicsHost*> m_vecAvionicsHost;
 	std::vector<GuiAvionicsDevice*> m_vecGuiAv;
+
+	std::vector<DrawCallbackHost*> m_vecDrawCallbackHost;
 
 	struct cb_params_t;
 	std::vector<cb_params_t> m_vecFlightLoops; //FIXME should be *
@@ -188,6 +191,11 @@ public:
 
 		//global_target_plugin = nullptr;
 		this->releaseContext();
+
+
+		for( auto host: m_vecDrawCallbackHost ){
+			delete host;
+		}
 
 
 		for( auto host: m_vecAvionicsHost ){
