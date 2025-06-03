@@ -175,7 +175,8 @@ public:
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
 
-            XPHost::m_vecRecentPlugins.push_back( fname );
+            XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
+            //XPHost::m_vecRecentPlugins.push_back( fname );
 
 			//printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
 			
@@ -191,9 +192,7 @@ public:
 	void load_project( const std::string& filename ){
 		std::cout << "xwb/ load_json_prj: [" << filename << "]\n";
 
-
 		m_lastProjectFilename = filename;
-
 
 		// this snippet will add the project name to our recents list
 		bool store_prj = true;
@@ -203,7 +202,7 @@ public:
 			}
 		}
 		if( store_prj ){
-			XPHost::m_vecRecentProjects.push_back(filename);
+            XPHost::m_vecRecentProjects.insert(XPHost::m_vecRecentProjects.begin(), filename);
 		}
 
 
@@ -310,16 +309,33 @@ public:
                     }
 
                     for( const auto& fn: XPHost::m_vecRecentPlugins ){
-                        if(ImGui::MenuItem(fn.c_str())){
-                            std::cout<<"menu/file/open recent plugin/[" << fn << "]\n";
-                            load_plugin( fn );
+                        if( fn != "" ){
+                            if(ImGui::MenuItem(fn.c_str())){
+                                std::cout<<"menu/file/open recent plugin/[" << fn << "]\n";
+                                load_plugin( fn );
+                            }
                         }
+
                     }
 
                     ImGui::EndMenu();
                 }
 
-				ImGui::Separator();
+
+
+                if(ImGui::MenuItem("Unload all Plugins..", nullptr, false, true)){
+                    //unload our plugins!
+                    std::cout<<"xwb/ ----- unloading plugins -------\n";
+                    for( auto p: XPHost::m_vecPlugins ){
+                        delete p;
+                    }
+                    XPHost::m_vecPlugins.clear();
+                }
+
+
+
+
+                ImGui::Separator();
 
 
 
