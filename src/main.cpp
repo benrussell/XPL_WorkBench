@@ -57,6 +57,26 @@ std::string global_path_when_started;
 
 
 const char* glob_recent_projects_filename = "recent_projects.json";
+const char* glob_recent_plugins_filename = "recent_plugins.json";
+
+
+
+void load_recent_plugins_list() {
+    std::cout << "xwb/ Loading recent plugins list.. \n";
+
+    std::ifstream f(glob_recent_plugins_filename);
+    if( f ){
+        nlohmann::json data = nlohmann::json::parse(f);
+        for (auto pfname: data["recent"]) {
+            XPHost::m_vecRecentPlugins.push_back( pfname );
+
+        } //loop recents
+
+    }
+
+
+}
+
 
 void load_recent_projects_list() {
 	std::cout << "xwb/ Loading recent projects list.. \n";
@@ -73,6 +93,32 @@ void load_recent_projects_list() {
 
 
 }
+
+
+
+
+void save_recent_plugins(){
+    std::cout << "xwb/ Saving recent plugins list..\n";
+
+
+    nlohmann::json json;
+    nlohmann::json json_arr = nlohmann::json::array();
+
+    for( auto pfname: XPHost::m_vecRecentPlugins ){
+        json_arr.push_back( pfname );
+    }
+
+    //blueprint record
+    json["recent"] = json_arr;
+
+
+    std::ofstream myfile;
+    myfile.open(glob_recent_plugins_filename);
+    myfile << json.dump(1,'\t');
+    myfile.close();
+
+}
+
 
 
 void save_recent_projects(){
@@ -146,6 +192,7 @@ int main(int argc, char** argv)
 
 
 	load_recent_projects_list();
+    load_recent_plugins_list();
 
 
 	drp::init(); //dref pool
@@ -277,6 +324,7 @@ int main(int argc, char** argv)
 			std::cout << "xwb/ Window pool is empty; cleanup and exit.\n";
 
 			save_recent_projects();
+            save_recent_plugins();
 
 			glfwTerminate();
 			exit(0);

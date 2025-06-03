@@ -37,8 +37,10 @@ public:
 	static GuiPlugins gui_Plugins;
 
 	static std::vector<std::string> m_vecRecentProjects;
+    static std::vector<std::string> m_vecRecentPlugins;
 
-	static std::vector<std::string> m_vecLog;
+
+    static std::vector<std::string> m_vecLog;
 
 
 

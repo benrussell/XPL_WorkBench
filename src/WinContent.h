@@ -175,6 +175,8 @@ public:
 			Plugin *p = new Plugin(fname);
 			XPHost::m_vecPlugins.push_back(p);
 
+            XPHost::m_vecRecentPlugins.push_back( fname );
+
 			//printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
 			
 		}catch (const std::runtime_error& e) {
@@ -289,10 +291,9 @@ public:
 	void menu_TitlebarMenu(){
 		if( ImGui::BeginMainMenuBar() ){
 			if(ImGui::BeginMenu("File")){
-				if(ImGui::MenuItem("Open X-Plane Plugin..", nullptr, false, true)){
+				if(ImGui::MenuItem("Open Plugin..", nullptr, false, true)){
 					fileDialog_Open.SetTitle("Choose X-Plane Plugin");
 					fileDialog_Open.SetTypeFilters({ ".xpl",".so",".dylib",".dll" });
-
 #if 0
 					namespace fs = std::filesystem;
 					fs::path newCwd = fs::current_path();
@@ -303,21 +304,30 @@ public:
 				}
 
 
-				if(ImGui::MenuItem("Open Project..", nullptr, false, true)){
-					fileDialog_OpenProject.SetTitle("Choose Project");
-					fileDialog_OpenProject.SetTypeFilters({ ".json",".*",".xwb-json" });
-					fileDialog_OpenProject.Open();
-				}
+                if( ImGui::BeginMenu("Recent Plugins") ){
+                    if(XPHost::m_vecRecentPlugins.empty()){
+                        ImGui::Separator();
+                    }
 
+                    for( const auto& fn: XPHost::m_vecRecentPlugins ){
+                        if(ImGui::MenuItem(fn.c_str())){
+                            std::cout<<"menu/file/open recent plugin/[" << fn << "]\n";
+                            load_plugin( fn );
+                        }
+                    }
+
+                    ImGui::EndMenu();
+                }
 
 				ImGui::Separator();
 
 
-				if( ImGui::MenuItem("Reload Project", "F5") ){
-					if( ! m_lastProjectFilename.empty() ){
-						load_project( m_lastProjectFilename );
-					}
-				}
+
+                if(ImGui::MenuItem("Open Project..", nullptr, false, true)){
+                    fileDialog_OpenProject.SetTitle("Choose Project");
+                    fileDialog_OpenProject.SetTypeFilters({ ".json",".*",".xwb-json" });
+                    fileDialog_OpenProject.Open();
+                }
 
 				if( ImGui::BeginMenu("Recent Projects") ){
 					if(XPHost::m_vecRecentProjects.empty()){
@@ -334,7 +344,15 @@ public:
 					ImGui::EndMenu();
 				}
 
-				ImGui::Separator();
+                if( ImGui::MenuItem("Reload Project", "F5") ){
+                    if( ! m_lastProjectFilename.empty() ){
+                        load_project( m_lastProjectFilename );
+                    }
+                }
+
+                ImGui::Separator();
+
+
 
 				if( ImGui::MenuItem("Exit") ){
 					std::cout<<"menu/file/exit\n";
