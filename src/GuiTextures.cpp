@@ -5,7 +5,7 @@
 #include "GuiTextures.h"
 
 
-bool GuiTextures::m_bDraw=false;
+bool GuiTextures::m_bDraw=true;
 
 int GuiTextures::m_maxTexId=100;
 
