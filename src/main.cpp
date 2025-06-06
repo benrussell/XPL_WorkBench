@@ -64,12 +64,16 @@ const char* glob_recent_plugins_filename = "recent_plugins.json";
 void load_recent_plugins_list() {
     std::cout << "xwb/ Loading recent plugins list.. \n";
 
+	std::map<std::string, int> map_seen;
+
     std::ifstream f(glob_recent_plugins_filename);
     if( f ){
         nlohmann::json data = nlohmann::json::parse(f);
         for (auto pfname: data["recent"]) {
-            XPHost::m_vecRecentPlugins.push_back( pfname );
-
+        	if ( map_seen.contains(pfname) == false ) {
+        		XPHost::m_vecRecentPlugins.push_back( pfname );
+        		map_seen[pfname] = 1;
+        	}
         } //loop recents
 
     }
