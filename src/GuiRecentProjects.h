@@ -56,6 +56,9 @@ public:
 
 
 			for( const auto& fn: XPHost::m_vecRecentPlugins ){
+				if( fn.empty() ){
+					continue;
+				}
 
 				auto tokens = lam_splitString( fn, '/' );
 				std::string fn_clean = tokens[ tokens.size() - 1 ];
