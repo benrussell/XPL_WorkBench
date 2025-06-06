@@ -143,9 +143,57 @@ void GuiPlugins::draw(){
 			const std::string sLabDrawCbs = "draw_cbs [" + std::to_string(p->m_vecDrawCallbackHost.size()) + "]";
 			if( ImGui::TreeNode(sLabDrawCbs.c_str()) ){
 
+				//duplicated code.
+				auto lam_drawFboSummaryBranch = [this](const std::string& label, gz_fbo* fbo_h, const float cost ){
+
+					if(ImGui::TreeNode( label.c_str() )){
+						ImGui::ColorEdit4( "cls", fbo_h->m_FboClearColorRGBA );
+						ImGui::Text( "tex_id: %i", fbo_h->m_tex );
+						ImGui::SameLine();
+						ImGui::Button("show");
+
+						//ImGui::Text( "cost: %0.3f ms", cost );
+
+						ImGui::Text( "w,h: %i,%i", fbo_h->m_width, fbo_h->m_height );
+
+						ImGui::Text( "fbo_h: %i", fbo_h->m_fbo );
+						ImGui::Text( "rbo_h: %i", fbo_h->m_rbo );
+
+						ImGui::TreePop();
+					}
+
+				};
+
+
+				auto lam_drawDrawCallbackHost = [this, lam_drawFboSummaryBranch](const std::string& label, DrawCallbackHost* drawcb) {
+
+					if(ImGui::TreeNode( label.c_str() )) {
+						ImGui::Text( "name: [%s]", drawcb->m_deviceName.c_str() );
+						double cb_cost = drawcb->m_bakeStop_Screen - drawcb->m_bakeStart_Screen;
+						ImGui::Text( "cost: %0.3f ms", cb_cost );
+
+						auto fps_cap = (float)(1000.0 / cb_cost);
+						fps_cap = std::min(9999.f, fps_cap);
+						ImGui::Text("fps cap: %0.3f", fps_cap );
+						ImGui::Text("60fps budget %%: %0.3f", (cb_cost / 16.f) * 100.f );
+
+
+						lam_drawFboSummaryBranch("screen fbo", drawcb->m_screen_fbo, cb_cost);
+
+						ImGui::Text( "before: %i", drawcb->m_before );
+						ImGui::Text( "phase: %i", drawcb->m_phase );
+						ImGui::Text( "refcon: %p", drawcb->m_refcon );
+
+						ImGui::TreePop();
+					}
+
+				};
+
+
+				size_t host_counter = 0;
 				for( auto drawcb: p->m_vecDrawCallbackHost ){
-					//ImGui::Text( "id: %s", dev->m_deviceId.c_str() );
-					ImGui::Text( "instance: %p", &drawcb );
+					lam_drawDrawCallbackHost( "draw_cb_" + std::to_string(host_counter), drawcb );
+					++host_counter;
 				}
 
 				ImGui::TreePop();
