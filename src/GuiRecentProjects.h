@@ -22,8 +22,10 @@ public:
 
 
 //	if( m_bDrawRecent )
-	static void draw( const std::function<void(std::string)>& cbf_load_project )
-	{
+	static void draw(
+		const std::function<void(std::string)>& cbf_load_project, //lambda
+		const std::function<void(std::string)>& cbf_load_plugin //lambda
+		){
 
 		auto lam_splitString = [](const std::string& str, char delimiter) -> std::vector<std::string>{
 			std::vector<std::string> tokens;
@@ -47,21 +49,40 @@ public:
 				ImGui::Text("No recent projects.");
 			}
 
-			if( ImGui::Button("Not Now..") ){
-				ImGui::CloseCurrentPopup();
-				m_bDraw = false;
+			// if( ImGui::Button("Not Now..") ){
+			// 	ImGui::CloseCurrentPopup();
+			// 	m_bDraw = false;
+			// }
+
+
+			for( const auto& fn: XPHost::m_vecRecentPlugins ){
+
+				auto tokens = lam_splitString( fn, '/' );
+				std::string fn_clean = tokens[ tokens.size() - 1 ];
+
+				if(ImGui::Button( ("Open [" + fn_clean +  "]##_btn_" + fn).c_str() )){
+					//m_bDraw = false;
+					//ImGui::CloseCurrentPopup();
+					cbf_load_plugin( fn );
+				}
+				//ImGui::SameLine();
+
+				//ImGui::TextUnformatted( fn_clean.c_str() );
 			}
 
 
-			//FIXMEL child region for scroll
+			ImGui::Separator();
+
+
+			//FIXME: child region for scroll
 			for( const auto& fn: XPHost::m_vecRecentProjects ){
 
 				auto tokens = lam_splitString( fn, '/' );
 				std::string fn_clean = tokens[ tokens.size() - 1 ];
 
 				if(ImGui::Button( ("Open [" + fn_clean +  "]##_btn_" + fn).c_str() )){
-					m_bDraw = false;
-					ImGui::CloseCurrentPopup();
+					//m_bDraw = false;
+					//ImGui::CloseCurrentPopup();
 					cbf_load_project( fn );
 				}
 				//ImGui::SameLine();

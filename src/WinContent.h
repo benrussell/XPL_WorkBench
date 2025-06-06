@@ -926,12 +926,15 @@ public:
 
 		if( GuiRecentProjects::m_bDraw ){
 //			ImGui::OpenPopup("Recent Projects");
-
-			auto lam_loader = [this]( std::string filename ){
+			auto lam_project_loader = [this]( std::string filename ){
 				load_project( filename );
 			};
 
-			GuiRecentProjects::draw( lam_loader );
+			auto lam_plugin_loader = [this]( std::string filename ){
+				load_plugin( filename );
+			};
+
+			GuiRecentProjects::draw( lam_project_loader, lam_plugin_loader );
 		}
 
 
