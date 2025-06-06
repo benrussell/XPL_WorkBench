@@ -22,6 +22,8 @@ public:
 
 	bool win_open=true;
 
+	static std::function<void(int)> openImageInspector;
+
 	void draw();
 
 };

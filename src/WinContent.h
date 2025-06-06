@@ -147,6 +147,11 @@ public:
 		};
 
 
+		GuiPlugins::openImageInspector = [this]( int tex_id ){
+			m_texInspector.m_bDraw = true;
+			m_texInspector.m_showTexId = tex_id;
+		};
+
 
 
 	};

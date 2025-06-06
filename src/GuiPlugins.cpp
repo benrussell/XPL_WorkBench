@@ -6,6 +6,11 @@
 
 
 
+std::function<void(int)> GuiPlugins::openImageInspector;
+
+
+
+
 void GuiPlugins::draw(){
 	if( ! win_open ){
 		return;
@@ -96,7 +101,12 @@ void GuiPlugins::draw(){
 							ImGui::ColorEdit4( "cls", fbo_h->m_FboClearColorRGBA );
 							ImGui::Text( "tex_id: %i", fbo_h->m_tex );
 							ImGui::SameLine();
-							ImGui::Button("show");
+							if(ImGui::Button("show")) {
+								if(openImageInspector) {
+									openImageInspector( fbo_h->m_tex );
+								}
+							}
+
 
 							ImGui::Text( "cost: %0.3f ms", cost );
 
@@ -150,7 +160,11 @@ void GuiPlugins::draw(){
 						ImGui::ColorEdit4( "cls", fbo_h->m_FboClearColorRGBA );
 						ImGui::Text( "tex_id: %i", fbo_h->m_tex );
 						ImGui::SameLine();
-						ImGui::Button("show");
+						if(ImGui::Button("show")) {
+							if(openImageInspector) {
+								openImageInspector( fbo_h->m_tex );
+							}
+						}
 
 						//ImGui::Text( "cost: %0.3f ms", cost );
 
