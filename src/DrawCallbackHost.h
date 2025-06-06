@@ -58,7 +58,8 @@ public:
     XPLMDrawingPhase m_phase;
     int m_before;
     void* m_refcon;
-    
+
+	bool m_xplw_disabled;
 
 	explicit DrawCallbackHost(
         XPLMDrawCallback_f   inCallback,
@@ -66,6 +67,8 @@ public:
 		int                  inWantsBefore,
 		void *               inRefcon
     ){
+
+		m_xplw_disabled = false;
 
         m_draw_cb_f = inCallback;
         m_phase = inPhase;
@@ -285,6 +288,10 @@ public:
 
 	void bake(){
         //std::cout << "DrawCallbackHost->bake()\n";
+
+		if(m_xplw_disabled){
+			return;
+		}
 
 		//bake the screen.
 		m_bakeStart_Screen = m_timer.getElapsedTimeInMilliSec();

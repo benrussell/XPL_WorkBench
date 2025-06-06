@@ -183,6 +183,9 @@ void GuiPlugins::draw(){
 
 					if(ImGui::TreeNode( label.c_str() )) {
 						ImGui::Text( "name: [%s]", drawcb->m_deviceName.c_str() );
+
+						ImGui::Checkbox( "disabled", &drawcb->m_xplw_disabled );
+
 						double cb_cost = drawcb->m_bakeStop_Screen - drawcb->m_bakeStart_Screen;
 						ImGui::Text( "cost: %0.3f ms", cb_cost );
 
