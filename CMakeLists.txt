@@ -160,7 +160,7 @@ set( XP_SHIM_SRC
         ${SHIM_FOL}shim_XPLMProcessing.cpp ${SHIM_FOL}shim_XPLMProcessing.h
         ${SHIM_FOL}shim_XPLMUtilities.cpp ${SHIM_FOL}shim_XPLMUtilities.h
 
-        src/Plugin.h
+        src/Plugin.cpp src/Plugin.h
         src/XPHost.cpp src/XPHost.h
         src/WinContent.h
         src/AvionicsHost.h
