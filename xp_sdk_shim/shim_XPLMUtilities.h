@@ -16,6 +16,7 @@ extern "C" {
 
 void* XPLMFindPluginBySignature( char* sig );
 
+void ex_XPLMSendMessageToPlugin( void* from, void* to, int message, int param );
 void XPLMSendMessageToPlugin( void* to, int message, int param );
 
 

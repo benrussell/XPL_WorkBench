@@ -34,6 +34,7 @@
 #include "GuiRecentProjects.h"
 #include "GuiTextures.h"
 #include "GuiTextureInspector.h"
+#include "GuiPluginMessages.h"
 
 #include "GuiShaderTest.h"
 
@@ -940,6 +941,11 @@ public:
 			};
 
 			GuiRecentProjects::draw( lam_project_loader, lam_plugin_loader );
+		}
+
+
+		if ( GuiPluginMessages::m_bDraw ) {
+			GuiPluginMessages::draw();
 		}
 
 

@@ -30,10 +30,32 @@ void* XPLMFindPluginBySignature( char* sig ){
 }
 
 
+
+// this can send from any to any
+void ex_XPLMSendMessageToPlugin( void* from, void* to, int message, int param ){
+
+	std::string msg = "ex_XPLMSendMessageToPlugin: from: " + std::to_string((size_t)from) +
+				", to: " + std::to_string((size_t)to) +
+				", msg: " + std::to_string(message) +
+				", param: " + std::to_string(param);
+
+	XPHost::m_vecPluginMessages.push_back(msg);
+
+	std::cout << msg << "\n";
+
+}
+
+
+//this can only send from a plugin to another plugin or the host.
+//this version is the SDK compliant version
 void XPLMSendMessageToPlugin( void* to, int message, int param ){
 
-	std::cout<<"XPLMSendMessageToPlugin: " << std::to_string((size_t)to) <<
-					", msg:" << std::to_string(message) << ", param:" << param << "\n";
+	//global_target_plugin = (Plugin*)to;
+
+	ex_XPLMSendMessageToPlugin( global_target_plugin, to, message, param );
+
+	// std::cout<<"XPLMSendMessageToPlugin: " << std::to_string((size_t)to) <<
+	// 				", msg:" << std::to_string(message) << ", param:" << param << "\n";
 
 }
 

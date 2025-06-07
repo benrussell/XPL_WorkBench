@@ -39,6 +39,7 @@ public:
 	static std::vector<std::string> m_vecRecentProjects;
     static std::vector<std::string> m_vecRecentPlugins;
 
+	static std::vector<std::string> m_vecPluginMessages;
 
     static std::vector<std::string> m_vecLog;
 

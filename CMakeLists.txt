@@ -181,6 +181,8 @@ set( XP_SHIM_SRC
         src/GuiTextures.cpp src/GuiTextures.h
         src/GuiTextureInspector.h
 
+        src/GuiPluginMessages.cpp src/GuiPluginMessages.h
+
         src/GuiShaderTest.h 
         src/imgui_common.h 
         src/FBO.h

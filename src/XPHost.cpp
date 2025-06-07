@@ -18,3 +18,6 @@ std::vector<std::string> XPHost::m_vecRecentProjects;
 std::vector<std::string> XPHost::m_vecRecentPlugins;
 
 std::vector<std::string> XPHost::m_vecLog;
+
+std::vector<std::string> XPHost::m_vecPluginMessages;
+
