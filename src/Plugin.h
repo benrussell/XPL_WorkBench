@@ -381,6 +381,28 @@ public:
 	}
 
 
+
+	void send_xpl_message( int from, int message, void* param ) {
+
+		if( m_plugin_is_enabled ){
+			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginReceiveMessage("
+			<< from << ", "
+			<< message << ", "
+			<< (size_t)param << ", "
+			")\n";
+			void (*fptr_rx_msg)(int,int,void*);
+			fptr_rx_msg = (void (*)(int,int,void*))dlsym( m_dlh, "XPluginReceiveMessage" ); //FIXME: replace with fn sig typedef
+
+			//printf("xwb/ send_xpl_msg(): fptr_rx_msg: %p\n", fptr_rx_msg);
+			(*fptr_rx_msg)( from, message, param );
+
+		}
+
+
+	}
+
+
+
 };
 
 

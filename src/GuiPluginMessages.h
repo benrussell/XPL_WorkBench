@@ -25,10 +25,10 @@ public:
 
     static bool m_bDraw;
 
-    static int m_msg_sender_plugin_id;
-    static int m_msg_target_plugin_id;
-    static int m_msg_message;
-    static int m_msg_param; //refcons etc
+    static size_t m_msg_sender_plugin_id;
+    static size_t m_msg_target_plugin_id;
+    static size_t m_msg_message;
+    static size_t m_msg_param; //refcons etc
 
 
     //	if( m_bDrawRecent )
@@ -55,18 +55,22 @@ public:
         //		if( ImGui::BeginPopupModal("Recent Projects") )
         {
 
-            ImGui::InputInt("sender", &m_msg_sender_plugin_id);
-            ImGui::InputInt("target", &m_msg_target_plugin_id);
+            //ImGui::InputInt("sender", &m_msg_sender_plugin_id);
+            ImGui::InputScalar("sender", ImGuiDataType_U64, &m_msg_sender_plugin_id, nullptr, nullptr, "%zu");
+            //ImGui::InputInt("target", &m_msg_target_plugin_id);
+            ImGui::InputScalar("target", ImGuiDataType_U64, &m_msg_target_plugin_id, nullptr, nullptr, "%zu");
             //FIXME: drop down list of message types?
-            ImGui::InputInt("message", &m_msg_message);
-            ImGui::InputInt("param", &m_msg_param);
+            //ImGui::InputInt("message", &m_msg_message);
+            ImGui::InputScalar("message", ImGuiDataType_U64, &m_msg_message, nullptr, nullptr, "%zu");
+            //ImGui::InputInt("param", &m_msg_param);
+            ImGui::InputScalar("param", ImGuiDataType_U64, &m_msg_param, nullptr, nullptr, "%zu");
 
             if( ImGui::Button("Send Message") ){
                 ex_XPLMSendMessageToPlugin(
-                                        (void*)m_msg_sender_plugin_id,
-                                        (void*)m_msg_target_plugin_id,
+                                        m_msg_sender_plugin_id,
+                                        m_msg_target_plugin_id,
                                         m_msg_message,
-                                        m_msg_param
+                                        (void*)m_msg_param
                                         );
             }
 
