@@ -162,7 +162,7 @@ set( XP_SHIM_SRC
 
         src/Plugin.cpp src/Plugin.h
         src/XPHost.cpp src/XPHost.h
-        src/WinContent.h
+        src/WinContent.cpp src/WinContent.h
         src/AvionicsHost.h
         src/DrawCallbackHost.h
         src/GuiAvionicsDevice.h
