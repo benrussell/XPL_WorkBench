@@ -12,6 +12,28 @@ std::vector<xp_dref*> dref_pool;
 
 
 
+[[maybe_unused]] void XPLMSetDatavf( XPLMDataRef *dref_h, float* new_values, int offset, int count ){
+
+	if( dref_h ){
+		auto dr = reinterpret_cast<xp_dref*>(dref_h);
+		dr->setFloat( new_values[0] );
+
+	}
+
+}
+
+
+[[maybe_unused]] void XPLMSetDatavi( XPLMDataRef *dref_h, int* new_values, int offset, int count ){
+
+	if( dref_h ){
+		auto dr = reinterpret_cast<xp_dref*>(dref_h);
+		dr->setFloat( new_values[0] ); //FIXME
+
+	}
+
+}
+
+
 
 
 [[maybe_unused]] void XPLMSetDataf( XPLMDataRef *dref_h, float new_value ){
@@ -195,17 +217,17 @@ std::vector<xp_dref*> dref_pool;
 
 void XPLMRegisterDataAccessor()
 	{ //FIXME
-		std::cout<<"!XPLMRegisterDataAccessor\n";
+		std::cout<<"wxb/ XPLMRegisterDataAccessor - NOOP!\n";
 
 		drp::saveDref("custom dref");
 
-		throw std::runtime_error("custom drefs not supported by YakPlane");
+		throw std::runtime_error("custom drefs not supported. :(");
 
 	};
 
 
 void XPLMUnregisterDataAccessor(){
-
+	std::cout<<"wxb/ XPLMUnregisterDataAccessor - NOOP!\n"; //FIXME:
 };
 
 

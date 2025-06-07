@@ -94,6 +94,9 @@ extern "C" {
 
 [[maybe_unused]] void XPLMSetDataf( XPLMDataRef *dref_h, float new_value );
 
+[[maybe_unused]] void XPLMSetDatavf( XPLMDataRef *dref_h, float* new_values, int offset, int count );
+[[maybe_unused]] void XPLMSetDatavi( XPLMDataRef *dref_h, int* new_values, int offset, int count );
+
 
 //[[maybe_unused]] float XPLMGetDataf();
 [[maybe_unused]] float XPLMGetDataf( XPLMDataRef* dref_h );
