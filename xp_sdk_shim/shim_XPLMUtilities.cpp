@@ -188,10 +188,51 @@ void       XPLMUnregisterCommandHandler(
 
 
 
+void XPLMReloadScenery() {
+	std::cout<<"wxb/ XPLMReloadScenery - NOOP!\n";
+};
+
+
+void XPLMFindLastNavAidOfType() {
+	std::cout<<"wxb/ XPLMFindLastNavAidOfType - NOOP!\n";
+}
 
 
 
+void XPLMGetDirectoryContents() {
+	std::cout<<"wxb/ XPLMGetDirectoryContents - NOOP!\n";
+}
+
+
+void XPLMIsDataRefGood() {
+	std::cout<<"wxb/ XPLMIsDatarefGood - NOOP!\n";
+}
+
+
+void XPLMGetDataRefTypes() {
+	std::cout<<"wxb/ XPLMGetDataRefTypes - NOOP!\n";
+}
+
+
+void XPLMSetDatad() {
+	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n";
+}
+
+void XPLMSetDatab() {
+	std::cout<<"wxb/ XPLMSetDatab - NOOP!\n";
+}
+
+
+void XPLMGetDatad() {
+	std::cout<<"wxb/ XPLMGetDatad - NOOP!\n";
+}
+
+void XPLMGetDatab() {
+	std::cout<<"wxb/ XPLMGetDatab - NOOP!\n";
+}
 
 
 
-
+void XPLMIsPluginEnabled() {
+	std::cout<<"wxb/ XPLMIsPluginEnabled - NOOP!\n";
+}

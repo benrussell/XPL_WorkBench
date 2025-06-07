@@ -11,6 +11,24 @@
 
 extern "C" {
 
+	void XPLMReloadScenery();
+
+	void XPLMFindLastNavAidOfType();
+
+	void XPLMGetDirectoryContents();
+
+	void XPLMIsDataRefGood();
+
+	void XPLMGetDataRefTypes();
+
+	void XPLMGetDatad();
+	void XPLMSetDatad();
+
+	void XPLMGetDatab();
+	void XPLMSetDatab();
+
+	void XPLMIsPluginEnabled();
+
 
 [[maybe_unused]] void XPLMDebugString(const char *msg);
 
