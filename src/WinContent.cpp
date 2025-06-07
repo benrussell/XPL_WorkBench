@@ -361,6 +361,11 @@ void WinBox::draw_triangle_box(){
 					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
 				}
 
+				if(ImGui::MenuItem("Plugin Messages", nullptr, GuiPluginMessages::m_bDraw, true)){
+					GuiPluginMessages::m_bDraw = !GuiPluginMessages::m_bDraw;
+				}
+
+
 				if(ImGui::MenuItem("Recent Projects", nullptr, GuiRecentProjects::m_bDraw, true)){
 					GuiRecentProjects::m_bDraw = ! GuiRecentProjects::m_bDraw;
 				}
