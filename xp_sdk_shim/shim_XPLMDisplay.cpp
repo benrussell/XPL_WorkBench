@@ -277,7 +277,7 @@ void       XPLMDestroyAvionics(
 					inRefcon
 				);
 
-			global_target_plugin->m_vecDrawCallbackHost.emplace_back( dcbh );
+			global_target_plugin->m_vecDrawCallbackHost.push_back( dcbh );
 
 			return 1;
 		}

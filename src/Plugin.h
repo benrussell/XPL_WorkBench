@@ -127,6 +127,7 @@ public:
 
 				if( plugin_started ){
 					this->call_enable();
+					this->takeContext(); //FIXME: this block needs tidying
 
 				}else{
 					// update Plugin* (this) status vars to show that plugin refused to start.
@@ -152,15 +153,9 @@ public:
 
 		std::cout<<"xwb/ ~Plugin()\n";
 
-		//global_target_plugin = this;
-		this->takeContext();
-
 		this->call_disable();
 
 		this->call_stop();
-
-		//global_target_plugin = nullptr;
-		this->releaseContext();
 
 
 		for( auto host: m_vecDrawCallbackHost ){
@@ -380,39 +375,39 @@ public:
 
 
 	void call_disable() {
-		// if( m_plugin_is_enabled ){
-			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginDisable()\n";
-			void (*fptr_disable)();
-			fptr_disable = (void (*)())dlsym( m_dlh, "XPluginDisable" ); //FIXME: replace with fn sig typedef
-			(*fptr_disable)();
-		// }else {
-		// 	std::cout<<"xwb/ already disabled.\n";
-		// }
+		this->takeContext();
+
+		std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginDisable()\n";
+		void (*fptr_disable)();
+		fptr_disable = (void (*)())dlsym( m_dlh, "XPluginDisable" ); //FIXME: replace with fn sig typedef
+		(*fptr_disable)();
+
+		this->releaseContext();
 	}
 
 
 	int call_enable() {
-		// if( ! m_plugin_is_enabled ){
-			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
-			int (*fptr_enable)();
-			fptr_enable = (int (*)()) dlsym(m_dlh, "XPluginEnable"); //FIXME: replace with fn sig typedef
-			int plugin_enabled = (*fptr_enable)();
-			m_plugin_enable_ret_val = plugin_enabled;
+		this->takeContext();
 
-			if( ! plugin_enabled ){
-				// update Plugin* (this) status vars to show that plugin is disabled.
-				std::cout << "xwb/ m_dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
-				m_plugin_is_enabled = false;
+		std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginEnable()\n";
+		int (*fptr_enable)();
+		fptr_enable = (int (*)()) dlsym(m_dlh, "XPluginEnable"); //FIXME: replace with fn sig typedef
+		int plugin_enabled = (*fptr_enable)();
+		m_plugin_enable_ret_val = plugin_enabled;
 
-			}else{
-				m_plugin_is_enabled = true;
+		if( ! plugin_enabled ){
+			// update Plugin* (this) status vars to show that plugin is disabled.
+			std::cout << "xwb/ m_dlh->XPluginEnable Error: Plugin refused to enable and returned 0.\n";
+			m_plugin_is_enabled = false;
 
-			}
+		}else{
+			m_plugin_is_enabled = true;
 
-			return plugin_enabled;
-		// }else {
-		// 	std::cout<<"xwb/ already enabled.\n";
-		// }
+		}
+
+		this->releaseContext();
+
+		return plugin_enabled;
 
 
 	}
@@ -422,10 +417,12 @@ public:
 
 	void call_stop() {
 		if( m_plugin_start_ret_val ){
+			this->takeContext();
 			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop()\n";
 			void (*fptr_stop)();
 			fptr_stop = (void (*)())dlsym( m_dlh, "XPluginStop" ); //FIXME: replace with fn sig typedef
 			(*fptr_stop)();
+			this->releaseContext();
 		}else{
 			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"/" << m_pluginSig << "]->XPluginStop - skipped. Plugin refused to start.\n";
 		}
