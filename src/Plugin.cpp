@@ -39,12 +39,12 @@
 			printf("xwb/  loaded dylib; m_dlh: %p\n", m_dlh);
 
 			char name[512]; //FIXME: x-plane SDK docs say 256??
-			char desc[512];
 			char sig[512];
+			char desc[512];
 
-			snprintf( name, 256, "XPL_WB Name" );
-			snprintf( desc, 256, "XPL_WB Description" );
-			snprintf( sig, 256, "XPL_WB Signature" );
+			snprintf( name, 256, "XWB Name" );
+			snprintf( sig, 256, "XWB Signature" );
+			snprintf( desc, 256, "XWB Description" );
 
 			this->call_start( name, sig, desc );
 
