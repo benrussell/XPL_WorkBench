@@ -27,12 +27,24 @@ void GuiPlugins::draw(){
 
 	for( auto p: XPHost::m_vecPlugins ){
 
-		const std::string sNodeLabel = p->m_pluginSig;
+		const std::string sNodeLabel = std::to_string(p->m_plugin_id) + ":" + p->m_pluginSig;
 		const std::string sLabPtr = "P: " + std::to_string((size_t)p);
 		if( ImGui::TreeNodeEx( sNodeLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ){
 
-			ImGui::Text("id: %zu", p->m_plugin_id);
-			ImGui::Text("en: %i", p->m_plugin_is_enabled);
+
+			if(ImGui::Checkbox("enabled", &p->m_plugin_is_enabled)) {
+					if ( p->m_plugin_is_enabled) {
+						std::cout << "enabled: " << p->m_plugin_is_enabled << "\n";
+						p->call_enable();
+
+					}else {
+						std::cout << "enabled: " << p->m_plugin_is_enabled << "\n";
+						p->call_disable();
+
+					}
+
+			}
+
 			ImGui::Text("ptr: %p", (void*)p);
 			ImGui::Text("name: %s", p->m_pluginName.c_str());
 			ImGui::Text("desc: %s", p->m_pluginDesc.c_str());

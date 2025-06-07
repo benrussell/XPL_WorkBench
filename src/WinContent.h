@@ -581,28 +581,29 @@ public:
 
 		// Render all avionics device FBO surfaces.
 		for( auto p: XPHost::m_vecPlugins ){
-			for( auto dev: p->m_vecAvionicsHost ){
-				// README: This is an FBO bake loop.
-				// This is NOT imgui calling code.
-				dev->bake();
-			}
-		}
+			if ( p->m_plugin_is_enabled ) {
 
+				for( auto dev: p->m_vecAvionicsHost ){
+					// README: This is an FBO bake loop.
+					// This is NOT imgui calling code.
+					dev->bake();
+				}
 
-		// Render all avionics device FBO surfaces.
-		for( auto p: XPHost::m_vecPlugins ){
-			for( auto dev: p->m_vecDrawCallbackHost ){
-				// README: This is an FBO bake loop.
-				// This is NOT imgui calling code.
-				dev->bake();
+				for( auto dev: p->m_vecDrawCallbackHost ){
+					// README: This is an FBO bake loop.
+					// This is NOT imgui calling code.
+					dev->bake();
+				}
+
 			}
+
 		}
 
 
 
 		//draws a grid of textures that should give us
 		//an FBO debug channel.
-		draw_TextureDump();
+		draw_TextureDump(); //this draws into the bg of the main host window
 
 
 
