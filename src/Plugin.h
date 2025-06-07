@@ -99,6 +99,8 @@ public:
 
 	int call_enable();
 
+	int call_start( char*, char*, char* );
+
 	void call_stop();
 
 

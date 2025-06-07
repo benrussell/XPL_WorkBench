@@ -46,39 +46,7 @@
 			snprintf( desc, 256, "XPL_WB Description" );
 			snprintf( sig, 256, "XPL_WB Signature" );
 
-
-			std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"]->XPluginStart()\n";
-			int (*fptr_start)(char*,char*,char*);
-			fptr_start = (int (*)(char*,char*,char*))dlsym( m_dlh, "XPluginStart" ); //FIXME: replace with fn sig typedef
-			if( fptr_start ) {
-				int plugin_started = (*fptr_start)(name, sig, desc);
-				std::cout << "xwb/ \tret name: " << name << "\n";
-				std::cout << "xwb/ \tret sig: " << sig << "\n";
-				std::cout << "xwb/ \tret desc: " << desc << "\n";
-
-				m_pluginName = name;
-				m_pluginSig = sig;
-				m_pluginDesc = desc;
-
-				m_plugin_start_ret_val = plugin_started;
-
-				if( plugin_started ){
-					this->call_enable();
-					this->takeContext(); //FIXME: this block needs tidying
-
-				}else{
-					// update Plugin* (this) status vars to show that plugin refused to start.
-					std::cout << "xwb/ m_dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
-				}
-
-			}else{
-				std::string msg = "[" + fname + "]\n" + "Could not find XPluginStart";
-				throw std::runtime_error( msg );
-			}
-
-			//reset to null when we're done calling into the plugin
-			//global_target_plugin = nullptr;
-			this->releaseContext();
+			this->call_start( name, sig, desc );
 
 		} //dlopen worked
 
@@ -332,6 +300,49 @@
 
 	}
 
+
+
+
+	int Plugin::call_start( char* name, char* sig, char* desc ) {
+
+		int plugin_started = 0;
+
+		this->takeContext();
+		std::cout<<"xwb/ m_dlh["<< m_plugin_id <<"]->XPluginStart()\n";
+		int (*fptr_start)(char*,char*,char*);
+		fptr_start = (int (*)(char*,char*,char*))dlsym( m_dlh, "XPluginStart" ); //FIXME: replace with fn sig typedef
+		if( fptr_start ) {
+			plugin_started = (*fptr_start)(name, sig, desc);
+			std::cout << "xwb/ \tret name: " << name << "\n";
+			std::cout << "xwb/ \tret sig: " << sig << "\n";
+			std::cout << "xwb/ \tret desc: " << desc << "\n";
+
+			m_pluginName = name;
+			m_pluginSig = sig;
+			m_pluginDesc = desc;
+
+			m_plugin_start_ret_val = plugin_started;
+
+			this->releaseContext();
+
+		}else{
+			this->releaseContext();
+			std::string msg = "Could not find XPluginStart";
+			throw std::runtime_error( msg );
+		}
+
+
+		if( plugin_started ){
+			this->call_enable();
+
+		}else{
+			// update Plugin* (this) status vars to show that plugin refused to start.
+			std::cout << "xwb/ m_dlh->XPluginStart Error: Plugin refused to start and returned 0.\n";
+		}
+
+
+		return 0;
+	}
 
 
 
