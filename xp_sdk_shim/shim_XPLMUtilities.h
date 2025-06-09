@@ -15,7 +15,14 @@ extern "C" {
 
 	void XPLMFindLastNavAidOfType();
 
-	void XPLMGetDirectoryContents();
+	void XPLMGetDirectoryContents(const char *         inDirectoryPath,
+						 int                  inFirstReturn,
+						 char *               outFileNames,
+						 int                  inFileNameBufSize,
+						 char **              outIndices,    /* Can be NULL */
+						 int                  inIndexCount,
+						 int *                outTotalFiles,    /* Can be NULL */
+						 int *                outReturnedFiles);
 
 	void XPLMIsDataRefGood();
 

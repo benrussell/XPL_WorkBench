@@ -198,11 +198,83 @@ void XPLMFindLastNavAidOfType() {
 }
 
 
+void XPLMGetDirectoryContents(const char* inDirectoryPath,
+                             int inFirstReturn,
+                             char* outFileNames,
+                             int inFileNameBufSize,
+                             char** outIndices,
+                             int inIndexCount,
+                             int* outTotalFiles,
+                             int* outReturnedFiles) {
 
-void XPLMGetDirectoryContents() {
-	std::cout<<"wxb/ XPLMGetDirectoryContents - NOOP!\n";
+	std::cout<<"wxb/ XPLMGetDirectoryContents: ";
+	std::cout<<"  inDirectoryPath: [" << inDirectoryPath << "]\n";
+	// std::cout<<"  inFirstReturn: " << inFirstReturn << "\n";
+	// std::cout<<"  outFileNames: " << outFileNames << "\n";
+	// std::cout<<"  inFileNameBufSize: " << inFileNameBufSize << "\n";
+	// std::cout<<"  outIndices: " << outIndices << "\n";
+	// std::cout<<"  inIndexCount: " << inIndexCount << "\n";
+	// std::cout<<"  outTotalFiles: " << outTotalFiles << "\n";
+	// std::cout<<"  outReturnedFiles: " << outReturnedFiles << "\n";
+
+
+
+    if (!inDirectoryPath || !outFileNames || !outReturnedFiles) {
+        if (outReturnedFiles) *outReturnedFiles = 0;
+        if (outTotalFiles) *outTotalFiles = 0;
+        return;
+    }
+
+    // Use C++17 filesystem to get directory contents
+    std::vector<std::string> files;
+    try {
+        for (const auto& entry : std::filesystem::directory_iterator(inDirectoryPath)) {
+            files.push_back(entry.path().filename().string());
+        }
+    } catch (const std::exception& e) {
+        if (outReturnedFiles) *outReturnedFiles = 0;
+        if (outTotalFiles) *outTotalFiles = 0;
+        return;
+    }
+
+    // Set total number of files if requested
+    if (outTotalFiles) {
+        *outTotalFiles = static_cast<int>(files.size());
+    }
+
+    // Calculate how many files we can return
+    int availableSpace = inFileNameBufSize;
+    int filesReturned = 0;
+    int currentPos = 0;
+
+    // Skip files before inFirstReturn
+    size_t startIndex = static_cast<size_t>(inFirstReturn);
+
+    // Process files
+    for (size_t i = startIndex; i < files.size() && availableSpace > 0; ++i) {
+        const std::string& filename = files[i];
+
+        // Check if we have space for this filename + null terminator
+        if (availableSpace >= (filename.length() + 1)) {
+            // Copy filename to output buffer
+            strcpy(outFileNames + currentPos, filename.c_str());
+
+            // Update indices if requested
+            if (outIndices && filesReturned < inIndexCount) {
+                outIndices[filesReturned] = outFileNames + currentPos;
+            }
+
+            currentPos += filename.length() + 1;
+            availableSpace -= filename.length() + 1;
+            filesReturned++;
+        } else {
+            break;
+        }
+    }
+
+    // Set number of files actually returned
+    *outReturnedFiles = filesReturned;
 }
-
 
 void XPLMIsDataRefGood() {
 	std::cout<<"wxb/ XPLMIsDatarefGood - NOOP!\n";
