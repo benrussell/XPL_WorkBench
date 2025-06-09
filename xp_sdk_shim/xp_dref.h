@@ -27,6 +27,10 @@ public:
 //		std::cout << "xp_dref() constructor ********\n";
 		drefName = std::move(name);
 		drefType = type;
+
+		m_valDouble = 0.0;
+		m_valFloat = 0.0f;
+		m_valInt = 0;
 	}
 
 	std::string drefName;

@@ -113,7 +113,7 @@ extern "C" {
 
 	int XPLMIsDataRefGood( void* dref );
 
-	void XPLMGetDataRefTypes();
+	int XPLMGetDataRefTypes( XPLMDataRef *dref_h );
 
 	double XPLMGetDatad( XPLMDataRef *dref_h );
 	void XPLMSetDatad( XPLMDataRef *dref_h, double new_value );

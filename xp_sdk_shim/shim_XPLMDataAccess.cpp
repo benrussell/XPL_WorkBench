@@ -241,8 +241,34 @@ int XPLMIsDataRefGood( void* dref ) {
 }
 
 
-void XPLMGetDataRefTypes() {
-	std::cout<<"wxb/ XPLMGetDataRefTypes - NOOP!\n";
+
+/*
+Unknown 0
+Int 1
+Float 2
+Double 4
+FloatArray 8
+IntArray 16
+Data 32
+*/
+
+int XPLMGetDataRefTypes( XPLMDataRef *dref_h ) {
+	std::cout<<"wxb/ XPLMGetDataRefTypes - broken\n";
+
+	if( dref_h ) {
+		auto dr = reinterpret_cast<xp_dref*>(dref_h);
+
+		switch( dr->drefType ) {
+			case xp_dref_type::dref_Generic:
+				return 2;
+				break;
+
+			default:
+				return 0;
+		}
+	}
+
+	return 2;
 }
 
 
