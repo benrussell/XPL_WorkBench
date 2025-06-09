@@ -215,13 +215,30 @@ std::vector<xp_dref*> dref_pool;
 
 
 
-void XPLMRegisterDataAccessor()
-	{ //FIXME
-		std::cout<<"wxb/ XPLMRegisterDataAccessor - NOOP!\n";
+void XPLMRegisterDataAccessor(
+						 const char *         inDataName,
+						 XPLMDataTypeID       inDataType,
+						 int                  inIsWritable,
+						 XPLMGetDatai_f       inReadInt,
+						 XPLMSetDatai_f       inWriteInt,
+						 XPLMGetDataf_f       inReadFloat,
+						 XPLMSetDataf_f       inWriteFloat,
+						 XPLMGetDatad_f       inReadDouble,
+						 XPLMSetDatad_f       inWriteDouble,
+						 XPLMGetDatavi_f      inReadIntArray,
+						 XPLMSetDatavi_f      inWriteIntArray,
+						 XPLMGetDatavf_f      inReadFloatArray,
+						 XPLMSetDatavf_f      inWriteFloatArray,
+						 XPLMGetDatab_f       inReadData,
+						 XPLMSetDatab_f       inWriteData,
+						 void *               inReadRefcon,
+						 void *               inWriteRefcon)
+	{
+		std::cout<<"wxb/ XPLMRegisterDataAccessor [" << inDataName << "]\n";
+		std::string custom_dref_name = std::string(inDataName);
+		drp::saveDref(custom_dref_name);
 
-		drp::saveDref("custom dref");
-
-		throw std::runtime_error("custom drefs not supported. :(");
+		//throw std::runtime_error("custom drefs not supported. :(");
 
 	};
 

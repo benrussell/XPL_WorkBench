@@ -127,7 +127,48 @@ extern "C" {
 
 
 
-void XPLMRegisterDataAccessor();
+	//these are all placeholder type defs
+	typedef void* XPLMGetDatai_f;
+	typedef void* XPLMSetDatai_f;
+
+	typedef void* XPLMGetDatavi_f;
+	typedef void* XPLMSetDatavi_f;
+
+
+	typedef void* XPLMGetDataf_f;
+	typedef void* XPLMSetDataf_f;
+
+	typedef void* XPLMGetDatavf_f;
+	typedef void* XPLMSetDatavf_f;
+
+	typedef void* XPLMGetDatad_f;
+	typedef void* XPLMSetDatad_f;
+
+	typedef void* XPLMGetDatab_f;
+	typedef void* XPLMSetDatab_f;
+
+
+	typedef int XPLMDataTypeID;
+
+	void XPLMRegisterDataAccessor(
+							 const char *         inDataName,
+							 XPLMDataTypeID       inDataType,
+							 int                  inIsWritable,
+							 XPLMGetDatai_f       inReadInt,
+							 XPLMSetDatai_f       inWriteInt,
+							 XPLMGetDataf_f       inReadFloat,
+							 XPLMSetDataf_f       inWriteFloat,
+							 XPLMGetDatad_f       inReadDouble,
+							 XPLMSetDatad_f       inWriteDouble,
+							 XPLMGetDatavi_f      inReadIntArray,
+							 XPLMSetDatavi_f      inWriteIntArray,
+							 XPLMGetDatavf_f      inReadFloatArray,
+							 XPLMSetDatavf_f      inWriteFloatArray,
+							 XPLMGetDatab_f       inReadData,
+							 XPLMSetDatab_f       inWriteData,
+							 void *               inReadRefcon,
+							 void *               inWriteRefcon);
+
 void XPLMUnregisterDataAccessor();
 
 
