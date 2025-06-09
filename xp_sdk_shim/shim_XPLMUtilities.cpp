@@ -35,7 +35,9 @@ int XPLMFindPluginBySignature( char* sig ){
 	}
 
 	std::cout << " 404\n";
-	return -1;
+	//returning 0 will route all msgs into the host.
+	//returning -1 will probably set a flag on the querying plugin side.
+	return 0;//-1;
 }
 
 
@@ -43,13 +45,20 @@ int XPLMFindPluginBySignature( char* sig ){
 // this can send from any to any
 void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 
-	std::string msg = "ex_XPLMSendMessageToPlugin: from: " + std::to_string(from) +
-				", to: " + std::to_string(to) +
-				", msg: " + std::to_string(message) +
-				", param: " + std::to_string((size_t)param);
+
+	char msg[256];
+	sprintf(msg, "ex_XPLMSendMessageToPlugin: from: %d, to: %d, msg: 0x%08x, param: %p",
+			from, to, message, (size_t)param);
+	std::string str_msg(msg);
 
 	XPHost::m_vecPluginMessages.push_back(msg);
 	std::cout << msg << "\n";
+
+	if ( to == 0 ) {
+		//msg is to host
+		//std::cout << "  msg is to host\n";
+		return;
+	}
 
 
 	size_t target_id = to - 1;
@@ -70,7 +79,9 @@ void XPLMSendMessageToPlugin( int to, int message, void* param ){
 
 	//global_target_plugin = (Plugin*)to;
 
-	ex_XPLMSendMessageToPlugin( 1, to, message, param ); //FIXME: plugin id
+	int sender_id = global_target_plugin->m_plugin_id;
+
+	ex_XPLMSendMessageToPlugin( sender_id, to, message, param ); //FIXME: plugin id
 
 	// std::cout<<"XPLMSendMessageToPlugin: " << std::to_string((size_t)to) <<
 	// 				", msg:" << std::to_string(message) << ", param:" << param << "\n";
