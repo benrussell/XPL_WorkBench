@@ -51,6 +51,16 @@ void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 			from, to, message, (size_t)param);
 	std::string str_msg(msg);
 
+
+	//this is a plugin registration msg, decode it.
+	if ( message == 0x01000000 ) {
+		std::string payload = std::string( (char*)param );
+		XPHost::m_vecPluginMessages.push_back(payload);
+		std::cout << payload << "\n";
+	}
+
+
+	//log for host gui
 	XPHost::m_vecPluginMessages.push_back(msg);
 	std::cout << msg << "\n";
 
@@ -77,11 +87,8 @@ void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 //this version is the SDK compliant version
 void XPLMSendMessageToPlugin( int to, int message, void* param ){
 
-	//global_target_plugin = (Plugin*)to;
-
 	int sender_id = global_target_plugin->m_plugin_id;
-
-	ex_XPLMSendMessageToPlugin( sender_id, to, message, param ); //FIXME: plugin id
+	ex_XPLMSendMessageToPlugin( sender_id, to, message, param );
 
 	// std::cout<<"XPLMSendMessageToPlugin: " << std::to_string((size_t)to) <<
 	// 				", msg:" << std::to_string(message) << ", param:" << param << "\n";
