@@ -32,6 +32,10 @@ public:
         // const std::function<void(std::string)>& cbf_load_plugin //lambda
         ){
 
+        if( ! m_bDraw ) {
+            return;
+        }
+
         auto lam_splitString = [](const std::string& str, char delimiter) -> std::vector<std::string>{
             std::vector<std::string> tokens;
             std::string token;

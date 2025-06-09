@@ -115,8 +115,8 @@ extern "C" {
 
 	void XPLMGetDataRefTypes();
 
-	void XPLMGetDatad();
-	void XPLMSetDatad();
+	double XPLMGetDatad( XPLMDataRef *dref_h );
+	void XPLMSetDatad( XPLMDataRef *dref_h, double new_value );
 
 	void XPLMGetDatab();
 	void XPLMSetDatab();

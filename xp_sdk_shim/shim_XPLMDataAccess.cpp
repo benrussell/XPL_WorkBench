@@ -246,7 +246,7 @@ void XPLMGetDataRefTypes() {
 }
 
 
-void XPLMSetDatad() {
+void XPLMSetDatad( XPLMDataRef *dref_h, double new_value ) {
 	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n";
 }
 
@@ -255,8 +255,34 @@ void XPLMSetDatab() {
 }
 
 
-void XPLMGetDatad() {
-	std::cout<<"wxb/ XPLMGetDatad - NOOP!\n";
+double XPLMGetDatad(  XPLMDataRef *dref_h ) {
+	std::cout<<"wxb/ XPLMGetDatad - broken!\n";
+
+	if( dref_h ){
+		auto dr = reinterpret_cast<xp_dref*>(dref_h);
+
+		int ret=0;
+
+		switch( dr->drefType ){
+			//			case dref_FrameRatePeriod:
+			//			{
+			//				auto dr_frp = reinterpret_cast<xp_dref_frp *>(dr);
+			//				ret = dr_frp->getFloat();
+			//			}
+			//				break;
+			default:
+				ret = 0.0; //dr->getDouble();
+				break;
+		}
+
+		//        std::cout << "XPLMGetDataf: returning:" << ret << "\n";
+		return ret;
+
+	}
+
+	std::cout << "XPLMGetDatad: bad handle.\n";
+	return 0.0;
+
 }
 
 void XPLMGetDatab() {
