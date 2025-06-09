@@ -116,6 +116,8 @@ struct Plugin::cb_params_t{
 	float interval_secs=0.f; //FIXME: duplicated? avail in params?
 	int relative_to_now=1;
 
+	float frames_since_last_call=0.f;
+
 	double interval_millis=0.0;
 
 	double m_lastTimerMillis=0.0;

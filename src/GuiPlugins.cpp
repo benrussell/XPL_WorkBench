@@ -237,7 +237,7 @@ void GuiPlugins::draw(){
 
 					std::string id = "_id" + std::to_string(fl_ctr);
 					char flcbLabel[256];
-					std::snprintf(flcbLabel, sizeof(flcbLabel), "flcb_ptr[%zu] %p: %f", fl_ctr, flcb.params.refcon, flcb.profile_ms);
+					std::snprintf(flcbLabel, sizeof(flcbLabel), "flcb_ptr[%zu] fnptr:%p rc:%p: %f", fl_ctr, flcb.params.callbackFunc, flcb.params.refcon, flcb.profile_ms);
 					std::string flcb_lab = flcbLabel;
 					if(ImGui::TreeNodeEx(id.c_str(), 0, "%s",flcb_lab.c_str())){
 						ImGui::Checkbox("pause", &flcb.m_paused);
