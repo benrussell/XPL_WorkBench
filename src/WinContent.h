@@ -35,6 +35,7 @@
 #include "GuiTextures.h"
 #include "GuiTextureInspector.h"
 #include "GuiPluginMessages.h"
+#include "GuiMemory.h"
 
 #include "GuiShaderTest.h"
 

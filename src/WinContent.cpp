@@ -503,7 +503,7 @@ void WinBox::draw_TextureDump(){
 void WinBox::OnDraw(){
 
 		//		gz::log::dbg("sleeping");
-		int ms = 16;
+		int ms = 10;
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 
 
@@ -665,6 +665,8 @@ void WinBox::OnDraw(){
 
 
 		GuiTextures::draw();
+
+		GuiMemory::draw();
 
 
 		//quick-bez window code.
