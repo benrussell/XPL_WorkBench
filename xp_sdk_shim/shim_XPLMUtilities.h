@@ -23,7 +23,7 @@ extern "C" {
 						 int *                outReturnedFiles);
 
 
-	void XPLMIsPluginEnabled();
+	int XPLMIsPluginEnabled( int plugin_id );
 
 
 [[maybe_unused]] void XPLMDebugString(const char *msg);

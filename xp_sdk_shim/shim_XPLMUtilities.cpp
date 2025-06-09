@@ -312,6 +312,19 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
 }
 
 
-void XPLMIsPluginEnabled() {
-	std::cout<<"wxb/ XPLMIsPluginEnabled - NOOP!\n";
+int XPLMIsPluginEnabled( int plugin_id ) {
+	std::cout<<"wxb/ XPLMIsPluginEnabled: " << plugin_id << "\n";
+
+	if ( plugin_id == 0 ) {
+		return 1;
+	}
+
+	size_t target_id = plugin_id-1;
+	if( target_id >= XPHost::m_vecPlugins.size() ){
+		std::cerr << "XPLMIsPluginEnabled:  target_id out of range: " << target_id << "\n";
+		return 0;
+	}
+	auto target = XPHost::m_vecPlugins[target_id];
+
+	return target->m_plugin_is_enabled;
 }
