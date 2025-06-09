@@ -111,6 +111,16 @@ extern "C" {
 [[maybe_unused]] void XPLMGetDatavi( XPLMDataRef* dref_h, int* buffer, int offset, int count );
 
 
+	int XPLMIsDataRefGood( void* dref );
+
+	void XPLMGetDataRefTypes();
+
+	void XPLMGetDatad();
+	void XPLMSetDatad();
+
+	void XPLMGetDatab();
+	void XPLMSetDatab();
+
 
 
 [[maybe_unused]] XPLMDataRef* XPLMFindDataRef( const char* dref_name );

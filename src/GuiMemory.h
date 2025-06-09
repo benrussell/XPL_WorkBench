@@ -62,6 +62,29 @@ public:
             ImGui::Separator();
 
 
+            auto lam_hexBytesToString = [](const unsigned char* data, size_t length) -> std::string {
+                std::ostringstream oss;
+
+                oss << std::dec << std::setw(3) << length << "      "
+                    << std::hex << std::setw(8) << reinterpret_cast<uintptr_t>(data) << ": ";
+
+                for (size_t i = 0; i < length; ++i) {
+                    oss << std::hex << std::setw(2) << std::setfill('0')
+                        << static_cast<int>(data[i]);
+
+                    if (i % 2 == 1) {
+                        oss << " ";
+                    }
+                }
+
+                return oss.str();
+            };
+
+
+            size_t default_ptr = 0x55ab2ee05f50;
+            std::string chunk = "ptrs from app only";//lam_hexBytesToString( (unsigned char*)default_ptr, 128 );
+            ImGui::Text( "%s", chunk.c_str() );
+
 
             for( const auto& msg: XPHost::m_vecPluginMessages ){
                 // if( fn.empty() ){

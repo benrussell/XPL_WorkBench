@@ -114,31 +114,17 @@
 
 
 	void Plugin::run_flcbs(){
-
 		if ( ! m_plugin_is_enabled ) {
 			return;
 		}
 
-
-		//global_target_plugin = this;
 		this->takeContext();
 
-
 		auto lam_runCallbackFn = [this](cb_params_t &cb, double delta) {
-
 			//cb.m_lastTimerMillis = now;
 			cb.m_lastDelta = delta;
-			//					std::cout<<"  fire!\n";
-
-			//std::cout << "flcb fn addr: " << (size_t)cb.params.callbackFunc << "\n";
-			//printf("flcb_fn addr: %p\n", cb.params.callbackFunc);
 
 			auto params = cb.params;
-			//					XPLMFlightLoop_f)(
-			//						float                inElapsedSinceLastCall,
-			//						float                inElapsedTimeSinceLastFlightLoop,
-			//						int                  inCounter,
-			//						void *               inRefcon);
 			auto xp_delta = (float)(delta / 1000.0); //x-plane SDK specifies decimal seconds.
 
 			const double dFLCBStart = m_timer.getElapsedTimeInMilliSec();
@@ -151,7 +137,7 @@
 			const double dFLCBStop = m_timer.getElapsedTimeInMilliSec();
 
 			cb.profile_ms = dFLCBStop - dFLCBStart;
-			std::cout << "XDbg: retval from clcb_f: " << retVal << "\n";
+			//std::cout << "XDbg: retval from clcb_f: " << retVal << "\n";
 			cb.interval_secs = retVal;
 			cb.interval_millis = (double)cb.interval_secs * 1000.0;
 
@@ -159,7 +145,6 @@
 
 			//EXPERIMENTAL
 			cb.m_lastTimerMillis = m_timer.getElapsedTimeInMilliSec();
-
 		};
 
 
@@ -176,65 +161,22 @@
 				//flcb intervals are decimal seconds
 				//timer data is decimal millis
 				if( delta > cb.interval_millis ){
-
 					lam_runCallbackFn( cb, delta );
-
-#if 0
-					//cb.m_lastTimerMillis = now;
-					cb.m_lastDelta = delta;
-//					std::cout<<"  fire!\n";
-
-					//std::cout << "flcb fn addr: " << (size_t)cb.params.callbackFunc << "\n";
-					//printf("flcb_fn addr: %p\n", cb.params.callbackFunc);
-
-					auto params = cb.params;
-//					XPLMFlightLoop_f)(
-//						float                inElapsedSinceLastCall,
-//						float                inElapsedTimeSinceLastFlightLoop,
-//						int                  inCounter,
-//						void *               inRefcon);
-					auto xp_delta = (float)(delta / 1000.0); //x-plane SDK specifies decimal seconds.
-
-					const double dFLCBStart = m_timer.getElapsedTimeInMilliSec();
-					const float retVal = (*params.callbackFunc)(
-						xp_delta,
-						0.0, //FIXME: this needs to be fixed.
-						cb.m_callCounter,
-						params.refcon
-						);
-					const double dFLCBStop = m_timer.getElapsedTimeInMilliSec();
-
-					cb.profile_ms = dFLCBStop - dFLCBStart;
-					//std::cout << "XDbg: retval from clcb_f: " << retVal << "\n";
-					cb.interval_secs = retVal;
-					cb.interval_millis = (double)cb.interval_secs * 1000.0;
-
-					++cb.m_callCounter;
-
-					//EXPERIMENTAL
-					cb.m_lastTimerMillis = m_timer.getElapsedTimeInMilliSec();
-#endif
-
 				}
 
-			}else
-			if( cb.interval_secs < 0.0 ){
+			}else if( cb.interval_secs < 0.0 && ! cb.m_paused ){
 				//interval is in frames
 				cb.frames_since_last_call -= 1.f;
-
 				if ( cb.interval_secs <= cb.frames_since_last_call ) {
 					//std::cout << "wxb/ flcb neg interval call..\n";
 					cb.frames_since_last_call = 0.f;
 					lam_runCallbackFn( cb, delta );
 				}
 
-
 			}else{
 				//std::cout<<"cb.interval 0\n";
 				// interval is set to 0, registered but not scheduled. skip.
 			}
-
-
 
 
 		} //loop flcb vec for this plugin

@@ -2,11 +2,9 @@
 // Created by br on 2/8/24.
 //
 
-#ifndef GLFW_XP_HOST_SHIM_XPLMUTILITIES_H
-#define GLFW_XP_HOST_SHIM_XPLMUTILITIES_H
+#ifndef GLFW_XP_HOST_SHIM_XPLM_UTILITIES_H
+#define GLFW_XP_HOST_SHIM_XPLM_UTILITIES_H
 
-
-#include <iostream>
 
 
 extern "C" {
@@ -24,22 +22,13 @@ extern "C" {
 						 int *                outTotalFiles,    /* Can be NULL */
 						 int *                outReturnedFiles);
 
-	void XPLMIsDataRefGood();
-
-	void XPLMGetDataRefTypes();
-
-	void XPLMGetDatad();
-	void XPLMSetDatad();
-
-	void XPLMGetDatab();
-	void XPLMSetDatab();
 
 	void XPLMIsPluginEnabled();
 
 
 [[maybe_unused]] void XPLMDebugString(const char *msg);
 
-void* XPLMFindPluginBySignature( char* sig );
+int XPLMFindPluginBySignature( char* sig );
 
 void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param );
 void XPLMSendMessageToPlugin( int to, int message, void* param );
@@ -101,4 +90,4 @@ void       XPLMUnregisterCommandHandler(
 
 } //extern
 
-#endif //GLFW_XP_HOST_SHIM_XPLMUTILITIES_H
+#endif //GLFW_XP_HOST_SHIM_XPLM_UTILITIES_H

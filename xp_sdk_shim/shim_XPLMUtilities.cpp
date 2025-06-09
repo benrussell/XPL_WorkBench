@@ -24,9 +24,18 @@ void XPLMDebugString( const char* msg ){
 
 
 
-void* XPLMFindPluginBySignature( char* sig ){
-	std::cout<<"!XPLMFindPluginBySignature: [" << std::string(sig) << "]\n";
-	return nullptr; //FIXME
+int XPLMFindPluginBySignature( char* sig ){
+	std::cout<<"XPLMFindPluginBySignature: [" << std::string(sig) << "] ";
+
+	for ( auto plugin: XPHost::m_vecPlugins ) {
+		if( plugin->m_pluginSig == sig ){
+			std::cout << " found plugin: " << plugin->m_plugin_id << "\n";
+			return plugin->m_plugin_id;
+		}
+	}
+
+	std::cout << " 404\n";
+	return -1;
 }
 
 
@@ -45,7 +54,7 @@ void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 
 	size_t target_id = to - 1;
 	if( target_id >= XPHost::m_vecPlugins.size() ){
-		std::cerr << "  target_id out of range: " << target_id << "\n";
+		std::cerr << "ex_XPLMSendMessageToPlugin:  target_id out of range: " << target_id << "\n";
 		return;
 	}
 
@@ -87,7 +96,7 @@ XPLMCommandRef XPLMFindCommand(
 		}
 	}
 
-	std::cerr << "XPLMFindCommand: cmd 404:[" + std::string(inName) + "]\n";
+	std::cout << "XPLMFindCommand: cmd 404:[" + std::string(inName) + "]\n";
 
 	return nullptr;
 };
@@ -218,6 +227,14 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
 	// std::cout<<"  outReturnedFiles: " << outReturnedFiles << "\n";
 
 
+#if 0
+	sprintf(outFileNames, "");
+	*outTotalFiles = 0;
+	*outReturnedFiles = 0;
+	return;
+#endif
+
+
 
     if (!inDirectoryPath || !outFileNames || !outReturnedFiles) {
         if (outReturnedFiles) *outReturnedFiles = 0;
@@ -275,34 +292,6 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
     // Set number of files actually returned
     *outReturnedFiles = filesReturned;
 }
-
-void XPLMIsDataRefGood() {
-	std::cout<<"wxb/ XPLMIsDatarefGood - NOOP!\n";
-}
-
-
-void XPLMGetDataRefTypes() {
-	std::cout<<"wxb/ XPLMGetDataRefTypes - NOOP!\n";
-}
-
-
-void XPLMSetDatad() {
-	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n";
-}
-
-void XPLMSetDatab() {
-	std::cout<<"wxb/ XPLMSetDatab - NOOP!\n";
-}
-
-
-void XPLMGetDatad() {
-	std::cout<<"wxb/ XPLMGetDatad - NOOP!\n";
-}
-
-void XPLMGetDatab() {
-	std::cout<<"wxb/ XPLMGetDatab - NOOP!\n";
-}
-
 
 
 void XPLMIsPluginEnabled() {

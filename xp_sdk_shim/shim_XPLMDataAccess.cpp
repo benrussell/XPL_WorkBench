@@ -235,3 +235,33 @@ void XPLMUnregisterDataAccessor(){
 
 
 
+int XPLMIsDataRefGood( void* dref ) {
+	std::cout<<"wxb/ XPLMIsDatarefGood - always true!\n";
+	return 0;
+}
+
+
+void XPLMGetDataRefTypes() {
+	std::cout<<"wxb/ XPLMGetDataRefTypes - NOOP!\n";
+}
+
+
+void XPLMSetDatad() {
+	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n";
+}
+
+void XPLMSetDatab() {
+	std::cout<<"wxb/ XPLMSetDatab - NOOP!\n";
+}
+
+
+void XPLMGetDatad() {
+	std::cout<<"wxb/ XPLMGetDatad - NOOP!\n";
+}
+
+void XPLMGetDatab() {
+	std::cout<<"wxb/ XPLMGetDatab - NOOP!\n";
+}
+
+
+
