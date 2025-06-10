@@ -70,12 +70,10 @@
 
 
 [[maybe_unused]] float XPLMGetElapsedTime(){
-//	std::cout << "!XPLMGetElapsedTime..\n";
+	// This is probably slightly different from X-Plane behaviour.
+	// The X-Plane timer has "feature" where it stalls during various operations.
 
-    static float hack = 0.1f;
-    hack += 0.01f;
-
-    return hack; //FIXME: Use Timer.h
+    return XPHost::m_timer.getElapsedTimeInSec();
 }
 
 
