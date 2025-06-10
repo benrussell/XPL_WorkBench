@@ -11,6 +11,9 @@ WinBox::WinBox( int width, int height ){
     /* Create a windowed mode window and its OpenGL context */
     m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", NULL, NULL); //FIXME: Why duplicate?
 
+	XPHost::m_timer.start();
+
+
     if (!m_winh)
     {
         glfwTerminate();
@@ -412,6 +415,22 @@ void WinBox::draw_triangle_box(){
 
 
 			ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+
+			auto lam_formatTime = [](double totalSeconds) {
+				int hours   = static_cast<int>(totalSeconds / 3600);
+				double rem  = totalSeconds - hours * 3600;
+				int minutes = static_cast<int>(rem / 60);
+				double secs = rem - minutes * 60;
+
+				char buf[32];
+				std::snprintf(buf, sizeof(buf), "%02d:%02d:%04.1f",
+							  hours, minutes, secs);
+				return std::string(buf);
+			};
+
+			std::string runtime = lam_formatTime( XPHost::m_timer.getElapsedTimeInSec() );
+			ImGui::Text("%s", runtime.c_str() );
 
 
 			ImGui::EndMainMenuBar();

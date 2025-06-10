@@ -21,3 +21,6 @@ std::vector<std::string> XPHost::m_vecLog;
 
 std::vector<std::string> XPHost::m_vecPluginMessages;
 
+
+
+Timer XPHost::m_timer;
