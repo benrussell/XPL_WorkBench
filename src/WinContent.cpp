@@ -98,6 +98,24 @@ void WinBox::load_plugin( const std::string& fname ){
         Plugin *p = new Plugin(fname);
         XPHost::m_vecPlugins.push_back(p);
 
+
+        {
+
+        	char name[512]; //FIXME: x-plane SDK docs say 256??
+        	char sig[512];
+        	char desc[512];
+
+        	snprintf( name, 256, "XWB Name" );
+        	snprintf( sig, 256, "XWB Signature" );
+        	snprintf( desc, 256, "XWB Description" );
+
+        	p->call_start( name, sig, desc );
+
+        }
+
+
+
+
         //FIXME: filter for dupes
 
         XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);

@@ -38,16 +38,6 @@
 			std::cout<<"xwb/ --- xpl static init / end   ---\n";
 			printf("xwb/  loaded dylib; m_dlh: %p\n", m_dlh);
 
-			char name[512]; //FIXME: x-plane SDK docs say 256??
-			char sig[512];
-			char desc[512];
-
-			snprintf( name, 256, "XWB Name" );
-			snprintf( sig, 256, "XWB Signature" );
-			snprintf( desc, 256, "XWB Description" );
-
-			this->call_start( name, sig, desc );
-
 		} //dlopen worked
 
 	} //constructor
