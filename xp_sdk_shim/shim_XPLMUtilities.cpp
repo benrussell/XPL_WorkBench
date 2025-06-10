@@ -78,7 +78,7 @@ void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 	}
 
 	auto target = XPHost::m_vecPlugins[target_id];
-	target->send_xpl_message( 0, message, param ); //FIXME: from
+	target->send_xpl_message( from, message, param );
 
 }
 
@@ -209,7 +209,7 @@ void       XPLMUnregisterCommandHandler(
 		XPLMCommandCallback_f inHandler,
 		int                  inBefore,
 		void *               inRefcon){
-	std::cout<<"!XPLMUnregisterCommandHandler\n"; //FIXME:
+	std::cout<<"!XPLMUnregisterCommandHandler - NOOP\n"; //FIXME:
 };
 
 
