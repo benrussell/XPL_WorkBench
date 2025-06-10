@@ -1,16 +1,19 @@
 //
 // Created by br on 2/8/24.
 //
+#include <GL/glew.h>
 
 #include "shim_XPLMProcessing.h"
+
+
 #include "../src/XPHost.h"
 
 
 
-[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( const XPLMCreateFlightLoop_t* loop_params ){
+[[maybe_unused]] XPLMFlightLoopID XPLMCreateFlightLoop( XPLMCreateFlightLoop_t* loop_params ){
 
 	// printf(" loop_params ptr: %p\n", loop_params);
-	
+
     // std::cout << "XPLMCreateFlightLoop\n";
 	// printf(" sz: %i\n", loop_params->structSize);
 	// printf(" phase: %i\n", loop_params->phase);
@@ -18,9 +21,10 @@
 	// printf(" refcon: %p\n", loop_params->refcon);
 	if( global_target_plugin ){
 		return (void*)global_target_plugin->register_flcb( *loop_params );
+	}else{
+		std::cout<<" XPLMCreateFlightLoop failed; bad plugin ptr\n";
 	}
 
-	std::cout<<" XPLMCreateFlightLoop failed; bad plugin ptr\n";
 	return nullptr;
 }
 
@@ -37,7 +41,7 @@
 
 
 
-[[maybe_unused]] void XPLMScheduleFlightLoop(
+[[maybe_unused]] void XPLMScheduleFlightLoop( //FIXME
         XPLMFlightLoopID     inFlightLoopID,
         float                inInterval,
         int                  inRelativeToNow){
@@ -47,12 +51,15 @@
 //    std::cout << " " << inRelativeToNow << "\n";
 
 	if( global_target_plugin ){
-		//FIXME: this is going to fail? Why?
+		//FIXME: this is going to fail?
 		global_target_plugin->flcb_set( inFlightLoopID, inInterval, inRelativeToNow );
 
 	}else{
 		std::cout << "  XPLMScheduleFlightLoop failed: bad global_target_plugin ptrn\n";
 	}
+
+
+	// std::cout<<"  XPLMScheduleFlightLoop: ret\n";
 
 }
 
