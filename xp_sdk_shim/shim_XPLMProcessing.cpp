@@ -41,7 +41,7 @@
 
 
 
-[[maybe_unused]] void XPLMScheduleFlightLoop( //FIXME
+[[maybe_unused]] void XPLMScheduleFlightLoop(
         XPLMFlightLoopID     inFlightLoopID,
         float                inInterval,
         int                  inRelativeToNow){
@@ -51,15 +51,11 @@
 //    std::cout << " " << inRelativeToNow << "\n";
 
 	if( global_target_plugin ){
-		//FIXME: this is going to fail?
 		global_target_plugin->flcb_set( inFlightLoopID, inInterval, inRelativeToNow );
 
 	}else{
 		std::cout << "  XPLMScheduleFlightLoop failed: bad global_target_plugin ptrn\n";
 	}
-
-
-	// std::cout<<"  XPLMScheduleFlightLoop: ret\n";
 
 }
 
