@@ -30,11 +30,11 @@
 
 
 [[maybe_unused]] void XPLMDestroyFlightLoop(){
-    std::cout << "XPLMDestroyFlightLoop - NOOP!\n";
+    std::cout << "XPLMDestroyFlightLoop - NOOP!\n"; //FIXME
 }
 
 [[maybe_unused]] void XPLMRegisterFlightLoop(){
-    std::cout << "XPLMRegisterFlightLoop - NOOP!\n";
+    std::cout << "XPLMRegisterFlightLoop - NOOP!\n"; //FIXME
 }
 
 

@@ -22,7 +22,7 @@
 [[maybe_unused]] void XPLMEnableFeature( const char* feature_name ){
 	if( strcmp(feature_name, "XPLM_USE_NATIVE_PATHS") != 0 ){
 		// mute the native paths request as thats all we support
-		std::cout << "xwb/ XPLMEnableFeature: NO OP: " << feature_name << "\n";
+		std::cout << "xwb/ XPLMEnableFeature: NOOP: " << feature_name << "\n"; //FIXME
 	}
 }
 

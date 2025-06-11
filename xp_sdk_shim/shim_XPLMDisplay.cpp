@@ -289,7 +289,7 @@ void       XPLMDestroyAvionics(
 					XPLMDrawingPhase     inPhase,
 					int                  inWantsBefore,
 					void *               inRefcon){
-					std::cout << "xwb/ XPLMUnregisterDrawCallback - NOOP\n";
+					std::cout << "xwb/ XPLMUnregisterDrawCallback - NOOP\n"; //FIXME
 					//ret 1 if the cb was found, ret 0 if it was not.
 					return 0;
 					};
@@ -301,7 +301,7 @@ void       XPLMDestroyAvionics(
 
 
 [[maybe_unused]] void XPLMGetMouseLocationGlobal(){
-	std::cout << "xwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
+	std::cout << "xwb/ XPLMGetMouseLocationGlobal - NOOP.\n"; //FIXME
 }
 
 //DISPLAY

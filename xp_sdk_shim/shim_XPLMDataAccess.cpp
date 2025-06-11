@@ -290,16 +290,16 @@ int XPLMGetDataRefTypes( XPLMDataRef *dref_h ) {
 
 
 void XPLMSetDatad( XPLMDataRef *dref_h, double new_value ) {
-	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n";
+	std::cout<<"wxb/ XPLMSetDatad - NOOP!\n"; //FIXME
 }
 
 void XPLMSetDatab() {
-	std::cout<<"wxb/ XPLMSetDatab - NOOP!\n";
+	std::cout<<"wxb/ XPLMSetDatab - NOOP!\n"; //FIXME
 }
 
 
 double XPLMGetDatad(  XPLMDataRef *dref_h ) {
-	std::cout<<"wxb/ XPLMGetDatad - broken!\n";
+	std::cout<<"wxb/ XPLMGetDatad - broken!\n"; //FIXME
 
 	if( dref_h ){
 		auto dr = reinterpret_cast<xp_dref*>(dref_h);

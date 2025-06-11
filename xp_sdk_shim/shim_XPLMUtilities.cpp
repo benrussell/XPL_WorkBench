@@ -236,12 +236,12 @@ void       XPLMUnregisterCommandHandler(
 
 
 void XPLMReloadScenery() {
-	std::cout<<"wxb/ XPLMReloadScenery - NOOP!\n";
+	std::cout<<"wxb/ XPLMReloadScenery - NOOP!\n"; //FIXME
 };
 
 
 void XPLMFindLastNavAidOfType() {
-	std::cout<<"wxb/ XPLMFindLastNavAidOfType - NOOP!\n";
+	std::cout<<"wxb/ XPLMFindLastNavAidOfType - NOOP!\n"; //FIXME
 }
 
 
