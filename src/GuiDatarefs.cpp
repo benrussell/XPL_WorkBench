@@ -26,15 +26,29 @@ void GuiDatarefs::draw(){
     }
 
 
+
+//    auto #include <cstring>
+
+    auto lam_contains = [](const char* haystack, const char* needle) {
+        // sanity checks
+        if (!haystack || !needle)
+            return false;
+        // empty needle ⇒ consider it “found”
+        if (*needle == '\0')
+            return true;
+        return std::strstr(haystack, needle) != nullptr;
+    };
+
+
+
+
+
     char caLabel[512]{}; //gui label
-    char caNameExtract[256]{}; //search filter match buffer
 
     size_t wid=0;
     for( auto dr: XPHost::m_dref_pool ) {
-        //filter_buff
-        memcpy(caNameExtract, dr->drefName.c_str(), filter_len);
 
-        if (strcmp(filter_buff, caNameExtract) == 0)
+        if ( lam_contains(dr->drefName.c_str(), filter_buff) )
         {
             snprintf(caLabel, 512, "%s  %s",
                              dr->drefName.c_str(), dr->typeName().c_str()
