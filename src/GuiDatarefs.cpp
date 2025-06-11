@@ -14,35 +14,47 @@ void GuiDatarefs::draw(){
     ImGui::SetNextWindowPos(ImVec2(0,390), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(320,360), ImGuiCond_FirstUseEver );
 
-    const std::string devDesc = "Datarefs";
+    const std::string devDesc = "DataRefs";
     ImGui::Begin(devDesc.c_str(), &win_open );
 
+    static char filter_buff[256]{};
+    ImGui::InputText("filter", filter_buff, 1024);
+    size_t filter_len = strlen(filter_buff);
+
     if(XPHost::m_dref_pool.empty()) {
-        ImGui::Text("Empty datarefs list.");
+        ImGui::Text("Empty DataRefs list.");
     }
 
+
+    char caLabel[512]{}; //gui label
+    char caNameExtract[256]{}; //search filter match buffer
+
     size_t wid=0;
-    for( auto dr: XPHost::m_dref_pool ){
+    for( auto dr: XPHost::m_dref_pool ) {
+        //filter_buff
+        memcpy(caNameExtract, dr->drefName.c_str(), filter_len);
 
-        if( ImGui::TreeNode( dr->drefName.c_str() ) ){
+        if (strcmp(filter_buff, caNameExtract) == 0)
+        {
+            snprintf(caLabel, 512, "%s  %s",
+                             dr->drefName.c_str(), dr->typeName().c_str()
+                    );
 
-            float fTmp = dr->getFloat();
-            std::string widget_id = "##_slider_" + std::to_string(wid);
-            ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
+            if (ImGui::TreeNode(caLabel)) {
+                float fTmp = dr->getFloat();
+                std::string widget_id = "##_slider_" + std::to_string(wid);
+                ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
 
-            std::string widget_id_txt = "##_text_" + std::to_string(wid);
-            ImGui::InputFloat(widget_id_txt.c_str(), &fTmp);
+                std::string widget_id_txt = "##_text_" + std::to_string(wid);
+                ImGui::InputFloat(widget_id_txt.c_str(), &fTmp);
 
-            dr->setFloat(fTmp);
+                dr->setFloat(fTmp);
 
-            ImGui::TreePop();
+                ImGui::TreePop();
+            }
+            ++wid;
         }
 
-
-
-
-
-        ++wid;
     }
 
 
