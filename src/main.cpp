@@ -48,6 +48,8 @@
 #include <iostream>
 #include <filesystem>
 
+#include "CommandsTxtParse.h"
+
 
 std::vector<WinBox*> window_pool;
 
@@ -192,7 +194,7 @@ int main(int argc, char** argv)
 	}
 
 
-
+	auto cmds = CommandsTxtParse("Commands.txt");
 
 
 	load_recent_projects_list();

@@ -184,6 +184,8 @@ set( XP_SHIM_SRC
         src/GuiPluginMessages.cpp src/GuiPluginMessages.h
         src/GuiMemory.cpp src/GuiMemory.h
 
+        src/CommandsTxtParse.cpp src/CommandsTxtParse.h
+
         src/GuiShaderTest.h 
         src/imgui_common.h 
         src/FBO.h
