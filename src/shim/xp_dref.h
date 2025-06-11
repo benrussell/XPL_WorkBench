@@ -52,6 +52,33 @@ public:
 	int m_valInt;
 	double m_valDouble;
 
+	std::string typeName() const{
+		switch ( drefType ) {
+			case dref_FrameRatePeriod:
+				return "frp";
+
+			case dref_ModelViewMatrix:
+				return "model";
+
+			case dref_ProjectionMatrix:
+				return "projection";
+
+			case dref_Viewport:
+				return "viewport";
+
+			case dref_VREnabled:
+				return "vr_enabled";
+
+			case dref_Generic:
+				return "generic";
+
+			default:
+				return "??";
+		}
+	}
+
+
+
 	virtual float getFloat(){
 //		std::cout << "xp_dref->read(): " << drefName << "\n";
 		return m_valFloat;
