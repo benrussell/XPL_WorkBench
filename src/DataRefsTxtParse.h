@@ -18,8 +18,10 @@ struct DataRefsTxtLine {
     std::string name;
     std::string type;
     std::string writable;
+    std::string units;
     std::string comment;
 };
+
 
 class DataRefsTxtParse {
 public:
@@ -36,51 +38,49 @@ public:
             s = std::string(wsfront, wsback);
     }
 
-    std::vector<DataRefsTxtLine> load_and_filter_commands(const std::string& filename) {
+    std::vector<DataRefsTxtLine> load_and_filter_drefs(const std::string& filename) {
         std::vector<DataRefsTxtLine> results;
         std::ifstream infile(filename);
         std::string line;
 
-        while (std::getline(infile, line)) {
-            std::string name, comment;
-            size_t pos = 0;
+        // parser for:
+        //  dref_name<ws>type<ws>writeable<ws>units<ws>comment
+       while (std::getline(infile, line)) {
+            std::istringstream iss(line);
+            std::string name, type, writable, units, comment;
 
-            // Skip leading whitespace
-            while (pos < line.size() && std::isspace(static_cast<unsigned char>(line[pos]))) ++pos;
+            // Parse each field (stop after units as comment may have spaces)
+            if (!(iss >> name >> type >> writable >> units)) {
+                // Skip malformed or incomplete lines
+                continue;
+            }
 
-            // Find first whitespace after command name
-            size_t name_end = pos;
-            while (name_end < line.size() && !std::isspace(static_cast<unsigned char>(line[name_end]))) ++name_end;
-
-            name = line.substr(pos, name_end - pos);
-
-            // Skip whitespace between name and comment
-            size_t comment_start = name_end;
-            while (comment_start < line.size() && std::isspace(static_cast<unsigned char>(line[comment_start]))) ++comment_start;
-
-            comment = (comment_start < line.size()) ? line.substr(comment_start) : "";
-
+            // Rest of the line is the comment (may contain whitespace)
+            std::getline(iss, comment);
             trim(name);
+            trim(type);
+            trim(writable);
+            trim(units);
             trim(comment);
 
             if (!name.empty()) {
-                results.push_back({.name=name, .comment=comment});
+                results.push_back({
+                    .name = name,
+                    .type = type,
+                    .writable = writable,
+                    .units = units,
+                    .comment = comment
+                });
             }
         }
         return results;
     }
 
 
-
-
     DataRefsTxtParse( const char* filename ) {
-
-        auto lines = load_and_filter_commands(filename);
-        std::cout << "DataRefsTxtParse: lines: " << lines.size() << "\n";
-
-        m_recs = lines;
-
-    };
+        m_recs = load_and_filter_drefs(filename);
+        std::cout << "DataRefsTxtParse: lines: " << m_recs.size() << "\n";
+    }
 
 };
 
