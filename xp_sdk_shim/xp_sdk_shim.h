@@ -6,7 +6,7 @@
 #define GLFW_XP_HOST_XP_SDK_SHIM_H
 
 
-#include "xp_core.h"
+#include "shim_XPLMPlugin.h"
 #include "xp_dref.h"
 
 #include "shim_XPLMDataAccess.h"

@@ -9,6 +9,11 @@
 
 extern "C" {
 
+
+	[[maybe_unused]] void XPLMGetSystemPath( char* outBuff );
+
+
+
 	void XPLMReloadScenery();
 
 	void XPLMFindLastNavAidOfType();

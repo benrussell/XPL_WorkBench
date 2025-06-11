@@ -293,3 +293,19 @@ void       XPLMDestroyAvionics(
 					//ret 1 if the cb was found, ret 0 if it was not.
 					return 0;
 					};
+
+
+
+
+
+
+
+[[maybe_unused]] void XPLMGetMouseLocationGlobal(){
+	std::cout << "xwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
+}
+
+//DISPLAY
+
+
+
+

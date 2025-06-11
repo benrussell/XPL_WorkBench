@@ -149,9 +149,9 @@ set( SHIM_FOL "./xp_sdk_shim/" )
 # output binary which causes plugin loading to fail.
 # There is a linker flag to explore to work around this.
 set( XP_SHIM_SRC
-        ${SHIM_FOL}xp_core.cpp ${SHIM_FOL}xp_core.h
+        ${SHIM_FOL}shim_XPLMPlugin.cpp ${SHIM_FOL}shim_XPLMPlugin.h
         ${SHIM_FOL}xp_dref.cpp ${SHIM_FOL}xp_dref.h
-        ${SHIM_FOL}xp_sdk_shim.h
+        #${SHIM_FOL}xp_sdk_shim.h
 
         ${SHIM_FOL}shim_XPLMDataAccess.cpp ${SHIM_FOL}shim_XPLMDataAccess.h
         ${SHIM_FOL}shim_XPLMDisplay.cpp ${SHIM_FOL}shim_XPLMDisplay.h

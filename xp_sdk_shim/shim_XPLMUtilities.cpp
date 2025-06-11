@@ -17,6 +17,26 @@
 extern Plugin* global_target_plugin;
 
 
+
+
+
+
+
+
+[[maybe_unused]] void XPLMGetSystemPath( char* outBuff ){
+	//	std::cout << "!XPLMGetSystemPath..\n";
+	// snprintf( outBuff, 512, "/fake/x-plane/path" ); //FIXME:
+	snprintf( outBuff, 512, "/media/br/MintyData/br/X-Plane 12" ); //FIXME:
+}
+
+
+
+
+
+
+
+
+
 void XPLMDebugString( const char* msg ){
 	std::cout << "xwb/ XPLMDebugString: " << msg;
 	XPHost::m_vecLog.push_back( msg );

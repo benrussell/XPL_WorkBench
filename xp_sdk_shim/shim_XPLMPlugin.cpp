@@ -2,7 +2,7 @@
 // Created by Ben on 27/9/2023.
 //
 
-#include "xp_core.h"
+#include "shim_XPLMPlugin.h"
 #include "shim_XPLMDataAccess.h"
 
 
@@ -19,38 +19,12 @@
 
 
 
-
 [[maybe_unused]] void XPLMEnableFeature( const char* feature_name ){
 	if( strcmp(feature_name, "XPLM_USE_NATIVE_PATHS") != 0 ){
 		// mute the native paths request as thats all we support
 		std::cout << "xwb/ XPLMEnableFeature: NO OP: " << feature_name << "\n";
 	}
 }
-
-
-[[maybe_unused]] void XPLMGetMouseLocationGlobal(){
-	std::cout << "xwb/ XPLMGetMouseLocationGlobal - NO OP.\n";
-}
-
-//DISPLAY
-
-
-
-
-
-
-
-
-
-[[maybe_unused]] void XPLMGetSystemPath( char* outBuff ){
-//	std::cout << "!XPLMGetSystemPath..\n";
-	// snprintf( outBuff, 512, "/fake/x-plane/path" ); //FIXME:
-	snprintf( outBuff, 512, "/media/br/MintyData/br/X-Plane 12" ); //FIXME:
-}
-
-
-
-
 
 
 

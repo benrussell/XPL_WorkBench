@@ -301,6 +301,9 @@ int        XPLMUnregisterDrawCallback(
 
 
 
+	[[maybe_unused]] void XPLMGetMouseLocationGlobal();
+
+
 
 
 

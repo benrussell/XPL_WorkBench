@@ -13,13 +13,6 @@ extern "C" {
 
 [[maybe_unused]] void XPLMEnableFeature( const char* feature_name );
 
-[[maybe_unused]] void XPLMGetMouseLocationGlobal();
-
-[[maybe_unused]] void XPLMGetSystemPath( char* outBuff );
-
-
-
-
 [[maybe_unused]] int XPLMGetMyID( void );
 
 [[maybe_unused]] void XPLMGetPluginInfo( 
