@@ -281,11 +281,7 @@ void WinBox::draw_triangle_box(){
                     XPHost::m_vecPlugins.clear();
                 }
 
-
-
-
                 ImGui::Separator();
-
 
 
                 if(ImGui::MenuItem("Open Project..", nullptr, false, true)){
@@ -321,23 +317,18 @@ void WinBox::draw_triangle_box(){
 
 				if( ImGui::MenuItem("Exit") ){
 					std::cout<<"menu/file/exit\n";
-
 					glfwSetWindowShouldClose(this->m_winh, 1);
 
 				}
 
-
 				ImGui::EndMenu();
 			}
-
-
 
 			if(ImGui::BeginMenu("Tools")){
 
 				if(ImGui::MenuItem("Shader Harness", nullptr, m_shaderTest->m_bDraw, true)){
 					m_shaderTest->m_bDraw = ! m_shaderTest->m_bDraw;
 				}
-
 
 				if(ImGui::MenuItem("Textures", nullptr, GuiTextures::m_bDraw, true)){
 					GuiTextures::m_bDraw = ! GuiTextures::m_bDraw;
@@ -347,9 +338,7 @@ void WinBox::draw_triangle_box(){
 					m_texInspector.m_bDraw = ! m_texInspector.m_bDraw;
 				}
 
-
 				ImGui::EndMenu();
-
 			}
 
 
@@ -433,13 +422,14 @@ void WinBox::draw_triangle_box(){
 
 
 			ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+			XPHost::fps = ImGui::GetIO().Framerate;
 
 
 			auto lam_formatTime = [](double totalSeconds) {
-				int hours   = static_cast<int>(totalSeconds / 3600);
-				double rem  = totalSeconds - hours * 3600;
-				int minutes = static_cast<int>(rem / 60);
-				double secs = rem - minutes * 60;
+				const int hours   = static_cast<int>(totalSeconds / 3600);
+				const double rem  = totalSeconds - hours * 3600;
+				const int minutes = static_cast<int>(rem / 60);
+				const double secs = rem - minutes * 60;
 
 				char buf[32];
 				std::snprintf(buf, sizeof(buf), "%02d:%02d:%04.1f",
@@ -447,7 +437,7 @@ void WinBox::draw_triangle_box(){
 				return std::string(buf);
 			};
 
-			std::string runtime = lam_formatTime( XPHost::m_timer.getElapsedTimeInSec() );
+			const std::string runtime = lam_formatTime( XPHost::m_timer.getElapsedTimeInSec() );
 			ImGui::Text("%s", runtime.c_str() );
 
 

@@ -34,7 +34,7 @@ size_t dref_factory::search_ctr=0;
 
 
 
-
+float XPHost::fps;
 
 
 

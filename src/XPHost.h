@@ -37,6 +37,8 @@ class GuiDatarefs;
 class XPHost {
 public:
 
+	static float fps;
+
 	static Timer m_timer;
 
 	static std::vector<xp_dref*> m_dref_pool;

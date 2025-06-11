@@ -121,19 +121,12 @@
         float ret=0.f;
 
         switch( dr->drefType ){
-            case dref_FrameRatePeriod:
-//			{
-//				auto dr_frp = reinterpret_cast<xp_dref_frp *>(dr);
-//				ret = dr_frp->getFloat();
-//			}
-            	ret = 1.23456;
+        	case dref_FrameRatePeriod:
+            	ret = 1.f / XPHost::fps;
                 break;
 
-
             default:
-				{
-					ret = dr->getFloat();
-				}
+				ret = dr->getFloat();
 				break;
         }
 
@@ -199,16 +192,14 @@
 
 
 [[maybe_unused]] XPLMDataRef* XPLMFindDataRef( const char* dref_name ){
-//	std::cout << "!XPLMFindDataRef(" << dref_name << ")\n";
-
-
+	std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
 
     const std::string search_name = std::string(dref_name);
-    xp_dref *found_dref = dref_factory::saveDref( std::string(dref_name) ); //FIXME
+    xp_dref *found_dref = dref_factory::saveDref( std::string(dref_name) ); //FIXME: call find...
 
-    if( ! found_dref ){
-        std::cout << " dref not found:[" << dref_name << "]\n";
-    }
+    // if( ! found_dref ){
+        // std::cout << " dref not found:[" << dref_name << "]\n";
+    // }
 
     return found_dref;
 
@@ -254,8 +245,8 @@ void XPLMUnregisterDataAccessor(){
 
 
 int XPLMIsDataRefGood( void* dref ) {
-	std::cout<<"wxb/ XPLMIsDatarefGood - always true!\n";
-	return 0;
+	std::cout<<"wxb/ XPLMIsDatarefGood - doesnt track dref ownership\n"; //FIXME:
+	return 1;
 }
 
 
