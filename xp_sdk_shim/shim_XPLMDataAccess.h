@@ -23,11 +23,11 @@ extern std::vector<xp_dref*> dref_pool;
 
 
 
-class drp{
+class dref_factory{
 public:
 	static xp_dref* saveDref( const std::string& name ){
 
-		std::cout<<"drp::saveDref: " << name << "\n";
+		std::cout<<"dref_factory::saveDref: " << name << "\n";
 
 
 //		bool need = true;

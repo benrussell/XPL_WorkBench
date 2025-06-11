@@ -64,7 +64,7 @@ public:
             trim(comment);
 
             if (!name.empty()) {
-                results.push_back({name, comment});
+                results.push_back({.name=name, .comment=comment});
             }
         }
         return results;

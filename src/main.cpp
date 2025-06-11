@@ -177,7 +177,7 @@ int main(int argc, char** argv)
     load_recent_plugins_list();
 
 
-	drp::init(); //dref pool
+	dref_factory::init(); //dref pool
 
 
 #if 0

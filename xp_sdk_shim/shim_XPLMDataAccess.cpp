@@ -203,7 +203,7 @@ std::vector<xp_dref*> dref_pool;
 //	std::cout << "!XPLMFindDataRef(" << dref_name << ")\n";
 
     const std::string search_name = std::string(dref_name);
-    xp_dref *found_dref = drp::saveDref( std::string(dref_name) );
+    xp_dref *found_dref = dref_factory::saveDref( std::string(dref_name) );
 
     if( ! found_dref ){
         std::cout << " dref not found:[" << dref_name << "]\n";
@@ -236,7 +236,7 @@ void XPLMRegisterDataAccessor(
 	{
 		std::cout<<"wxb/ XPLMRegisterDataAccessor [" << inDataName << "]\n";
 		std::string custom_dref_name = std::string(inDataName);
-		drp::saveDref(custom_dref_name);
+		dref_factory::saveDref(custom_dref_name);
 
 		//throw std::runtime_error("custom drefs not supported. :(");
 
