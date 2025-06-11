@@ -23,66 +23,6 @@ extern std::vector<xp_dref*> dref_pool;
 
 
 
-class dref_factory{
-public:
-	static xp_dref* saveDref( const std::string& name ){
-
-		std::cout<<"dref_factory::saveDref: " << name << "\n";
-
-
-//		bool need = true;
-		for( auto dr: dref_pool ){
-			if( dr->drefName == name ){
-				//need=false;
-				std::cout << "  dref found: ret existing.\n";
-				return dr;
-			}
-		}
-
-//		if(need){
-			auto drTmp = new xp_dref( name, xp_dref_type::dref_Generic );
-			dref_pool.push_back(drTmp);
-			std::cout << "  dref created: ret new.\n";
-			return drTmp;
-//		}
-
-	}; //saveDref
-
-
-
-	static void init(){
-
-//	XPLMGetDatavf(gModelViewMatrixRef, mModelView, 0, 16);
-//	XPLMGetDatavf(gProjectionMatrixRef, mProjection, 0, 16);
-//	XPLMGetDatavi(gViewportRef, mViewport, 0, 4);
-
-//	static float mModelView[16], mProjection[16];
-//	static int mViewport[4];
-
-
-//		auto dr_frp = new xp_dref_frp( "sim/time/framerate_period", xp_dref_type::dref_FrameRatePeriod );
-//		dref_pool.push_back(dr_frp);
-
-		auto dr_mvm = new xp_dref( "sim/graphics/view/modelview_matrix", xp_dref_type::dref_ModelViewMatrix );
-		dref_pool.push_back(dr_mvm);
-
-		auto dr_pm = new xp_dref( "sim/graphics/view/projection_matrix", xp_dref_type::dref_ProjectionMatrix );
-		dref_pool.push_back(dr_pm);
-
-		auto dr_vp = new xp_dref( "sim/graphics/view/viewport", xp_dref_type::dref_Viewport );
-		dref_pool.push_back(dr_vp);
-
-		auto dr_vr = new xp_dref( "sim/graphics/VR/enabled", xp_dref_type::dref_VREnabled );
-		dref_pool.push_back(dr_vr);
-
-	};
-
-
-};
-
-
-
-
 
 
 

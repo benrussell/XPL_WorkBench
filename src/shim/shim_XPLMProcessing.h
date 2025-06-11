@@ -9,7 +9,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "xp_dref.h"
 
 #include <vector>
 #include <cstring>

@@ -157,7 +157,7 @@ void WinBox::load_project( const std::string& filename ){
 
     //unload our plugins!
     std::cout<<"xwb/ ----- unloading plugins -------\n";
-    for( auto p: XPHost::m_vecPlugins ){
+    for(const  auto p: XPHost::m_vecPlugins ){
         delete p;
     }
     XPHost::m_vecPlugins.clear();
@@ -207,8 +207,8 @@ void WinBox::draw_triangle_box(){
     r+=0.2f;
 
     //we want a 100pix base size on the triangle so its easy to see.
-    const float base_size = 1000.f;
-    const float half = base_size / 2.f;
+    constexpr float base_size = 1000.f;
+    constexpr float half = base_size / 2.f;
 
     glPushMatrix();
 
@@ -275,7 +275,7 @@ void WinBox::draw_triangle_box(){
                 if(ImGui::MenuItem("Unload all Plugins..", nullptr, false, true)){
                     //unload our plugins!
                     std::cout<<"xwb/ ----- unloading plugins -------\n";
-                    for( auto p: XPHost::m_vecPlugins ){
+                    for( const auto p: XPHost::m_vecPlugins ){
                         delete p;
                     }
                     XPHost::m_vecPlugins.clear();
@@ -360,10 +360,10 @@ void WinBox::draw_triangle_box(){
 						ImGui::MenuItem("No plugins.");
 					}
 
-					for( auto p: XPHost::m_vecPlugins ){
+					for( const auto p: XPHost::m_vecPlugins ){
 						if( ! p->m_vecAvionicsHost.empty() ){
 							if(ImGui::BeginMenu( p->m_pluginName.c_str() )) {
-								for( auto dev: p->m_vecAvionicsHost ){
+								for(const auto dev: p->m_vecAvionicsHost ){
 									//FIXME: needs click handler to show window for dev
 									ImGui::MenuItem( dev->m_deviceId.c_str() );
 								}
@@ -491,10 +491,10 @@ void WinBox::draw_TextureDump(){
 		glBindTexture(GL_TEXTURE_2D, tex);
 
 		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f); glVertex2f(-(size), -(size));
-		glTexCoord2f(1.0f, 0.0f); glVertex2f( (size), -(size));
-		glTexCoord2f(1.0f, 1.0f); glVertex2f( (size),  (size));
-		glTexCoord2f(0.0f, 1.0f); glVertex2f(-(size),  (size));
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f( size, -size);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f( size,  size);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(-size,  size);
 		glEnd();
 
 	};
@@ -510,7 +510,7 @@ void WinBox::draw_TextureDump(){
 
 		size_t grid_count = 2;
 
-		const float size = 100.0f;
+		constexpr float size = 100.0f;
 		const float margin = size + 10.f;
 		const float shift = size + margin;
 		const float cr = shift * (grid_count * -1.f);
@@ -539,14 +539,13 @@ void WinBox::draw_TextureDump(){
 
 void WinBox::OnDraw(){
 
-		//		gz::log::dbg("sleeping");
+#if 0  //FPS / CPU usage cap
 		int ms = 10;
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+#endif
 
 
-
-		if( m_bDrawTriangle )
-		{
+		if( m_bDrawTriangle ){
 			glPushMatrix();
 			//		glTranslatef( 150, 150, 0 );
 			draw_triangle_box();
@@ -560,13 +559,13 @@ void WinBox::OnDraw(){
 			if ( p->m_plugin_is_enabled ) {
 
 				for( auto dev: p->m_vecAvionicsHost ){
-					// README: This is an FBO bake loop.
+					// This is an FBO bake loop.
 					// This is NOT imgui calling code.
 					dev->bake();
 				}
 
 				for( auto dev: p->m_vecDrawCallbackHost ){
-					// README: This is an FBO bake loop.
+					// This is an FBO bake loop.
 					// This is NOT imgui calling code.
 					dev->bake();
 				}
@@ -584,8 +583,8 @@ void WinBox::OnDraw(){
 
 
 //turn the imgui code on and off easily
-#define XPHO_USE_IMGUI 1
-#if XPHO_USE_IMGUI
+#define XPLWB_USE_IMGUI 1
+#if XPLWB_USE_IMGUI
 		ImGui::SetCurrentContext(imguiContext);
 
 		ImGui_ImplOpenGL2_NewFrame();

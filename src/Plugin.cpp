@@ -6,9 +6,6 @@
 #include "Plugin.h"
 
 
-
-
-
 	Plugin::Plugin( std::string fname ){
 		m_plugin_id = ++plugin_id_ctr;
 

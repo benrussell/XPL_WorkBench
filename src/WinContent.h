@@ -39,6 +39,9 @@
 
 #include "GuiShaderTest.h"
 
+
+
+// this might be prototype code for a shim windowing layer
 class WinRender{
 public:
 	virtual void draw() = 0;
@@ -69,50 +72,49 @@ struct WinType {
 
 
 
-
+// this contains our master GUI
 
 class WinBox{
 public:
 
 	ImGui::FileBrowser fileDialog_Open;
-
 	ImGui::FileBrowser fileDialog_OpenProject;
 
 	std::string m_lastProjectFilename{};
 
 //private:
 	GLFWwindow* m_winh;
-
 	ImGuiContext* imguiContext = nullptr;
 
+
+	// this is a message from dlopen failures and C++ exceptions??
 	bool m_displayErrorMessage = false;
 	std::string m_sErrorMessage;
+
 
 	bool m_bDumpTextures = false;
 	bool m_bDrawTriangle = false;
 
 
+	//this has a click handler that we need to setup in ctor
 	GuiTextureInspector m_texInspector;
 
+
 	GuiShaderTest* m_shaderTest; //must be a pointer because static init of shaders will CTD
+
 
 
 	WinBox( int width, int height );
 	~WinBox();
 
-
 	void load_plugin( const std::string& fname );
 	void load_project( const std::string& filename );
 
-
 	void draw_triangle_box();
-
 
 	void menu_TitlebarMenu();
 
-
 	void CreateDockSpace();
-
 
 	//render a grid of textured quads
 	void draw_TextureDump();
@@ -120,11 +122,9 @@ public:
 
 	virtual void OnDraw();
 
-
 	//draw the background of the main gui window
 	//this will be filled in with an imgui dockable area
 	void OnCallDraw();
-
 
 };
 

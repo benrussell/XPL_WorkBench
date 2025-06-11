@@ -18,11 +18,6 @@ extern Plugin* global_target_plugin;
 
 
 
-
-
-
-
-
 [[maybe_unused]] void XPLMGetSystemPath( char* outBuff ){
 	//	std::cout << "!XPLMGetSystemPath..\n";
 	// snprintf( outBuff, 512, "/fake/x-plane/path" ); //FIXME:
@@ -30,18 +25,10 @@ extern Plugin* global_target_plugin;
 }
 
 
-
-
-
-
-
-
-
 void XPLMDebugString( const char* msg ){
 	std::cout << "xwb/ XPLMDebugString: " << msg;
 	XPHost::m_vecLog.push_back( msg );
 }
-
 
 
 int XPLMFindPluginBySignature( char* sig ){
@@ -61,16 +48,13 @@ int XPLMFindPluginBySignature( char* sig ){
 }
 
 
-
 // this can send from any to any
 void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 
-
 	char msg[256];
 	sprintf(msg, "ex_XPLMSendMessageToPlugin: from: %d, to: %d, msg: 0x%08x, param: %p",
-			from, to, message, (size_t)param);
+			from, to, message, param);
 	std::string str_msg(msg);
-
 
 	//this is a plugin registration msg, decode it.
 	if ( message == 0x01000000 ) {
@@ -114,11 +98,6 @@ void XPLMSendMessageToPlugin( int to, int message, void* param ){
 	// 				", msg:" << std::to_string(message) << ", param:" << param << "\n";
 
 }
-
-
-
-
-
 
 
 XPLMCommandRef XPLMFindCommand(
@@ -223,7 +202,6 @@ void       XPLMRegisterCommandHandler(
 };
 
 
-
 void       XPLMUnregisterCommandHandler(
 		XPLMCommandRef       inComand,
 		XPLMCommandCallback_f inHandler,
@@ -231,8 +209,6 @@ void       XPLMUnregisterCommandHandler(
 		void *               inRefcon){
 	std::cout<<"!XPLMUnregisterCommandHandler - NOOP\n"; //FIXME:
 };
-
-
 
 
 void XPLMReloadScenery() {
@@ -348,3 +324,4 @@ int XPLMIsPluginEnabled( int plugin_id ) {
 
 	return target->m_plugin_is_enabled;
 }
+

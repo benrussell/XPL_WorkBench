@@ -11,6 +11,10 @@ GuiDatarefs XPHost::gui_Datarefs;
 
 GuiPlugins XPHost::gui_Plugins;
 
+
+std::vector<xp_dref*> XPHost::m_dref_pool;
+
+
 size_t XPHost::m_plugin_id_ctr=0;
 std::vector<Plugin*> XPHost::m_vecPlugins;
 

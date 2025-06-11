@@ -8,7 +8,6 @@
 #include "shim_XPLMDataAccess.h"
 #include "../XPHost.h"
 
-std::vector<xp_dref*> dref_pool;
 
 
 

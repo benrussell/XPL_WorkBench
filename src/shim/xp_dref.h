@@ -9,6 +9,16 @@
 #include <utility>
 #include <iostream>
 
+
+//	XPLMGetDatavf(gModelViewMatrixRef, mModelView, 0, 16);
+//	XPLMGetDatavf(gProjectionMatrixRef, mProjection, 0, 16);
+//	XPLMGetDatavi(gViewportRef, mViewport, 0, 4);
+
+//	static float mModelView[16], mProjection[16];
+//	static int mViewport[4];
+
+
+
 enum xp_dref_type{
 	dref_FrameRatePeriod, //sim/time/framerate_period
 	dref_ModelViewMatrix, //sim/graphics/view/modelview_matrix
@@ -23,6 +33,8 @@ enum xp_dref_type{
 
 class xp_dref {
 public:
+	virtual ~xp_dref() = default;
+
 	xp_dref( std::string name, xp_dref_type type ){
 //		std::cout << "xp_dref() constructor ********\n";
 		drefName = std::move(name);
@@ -66,23 +78,6 @@ public:
 //	virtual void read_arr( float* buff, int offset, int count );
 
 };
-
-
-
-
-
-
-//
-//
-//class xp_dref_frp: public xp_dref{
-//public:
-//	xp_dref_frp( std::string name, xp_dref_type type ):
-//	xp_dref(name, type){}
-//
-//	float getFloat() override{
-//		return 0.12345f;
-//	}
-//};
 
 
 

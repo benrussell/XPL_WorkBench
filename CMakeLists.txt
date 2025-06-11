@@ -174,22 +174,25 @@ set( XP_SHIM_SRC
 #        third_party/stb_image/stb_image.h
 
         src/StaticDefs.cpp
-        src/GuiDatarefs.h
+        src/GuiDatarefs.cpp        src/GuiDatarefs.h
         src/xpCmdCustom.h
-        src/GuiPlugins.cpp src/GuiPlugins.h
-        src/GuiRecentProjects.cpp src/GuiRecentProjects.h
-        src/GuiTextures.cpp src/GuiTextures.h
+        src/GuiPlugins.cpp          src/GuiPlugins.h
+        src/GuiRecentProjects.cpp       src/GuiRecentProjects.h
+        src/GuiTextures.cpp         src/GuiTextures.h
         src/GuiTextureInspector.h
 
-        src/GuiPluginMessages.cpp src/GuiPluginMessages.h
-        src/GuiMemory.cpp src/GuiMemory.h
+        src/GuiPluginMessages.cpp   src/GuiPluginMessages.h
+        src/GuiMemory.cpp           src/GuiMemory.h
 
-        src/CommandsTxtParse.cpp src/CommandsTxtParse.h
-        src/DataRefsTxtParse.cpp src/DataRefsTxtParse.h
+        src/CommandsTxtParse.cpp    src/CommandsTxtParse.h
+        src/DataRefsTxtParse.cpp    src/DataRefsTxtParse.h
 
-        src/GuiShaderTest.h 
+        src/GuiShaderTest.h
+
         src/imgui_common.h 
         src/FBO.h
+
+
         src/main.cpp
         )
 

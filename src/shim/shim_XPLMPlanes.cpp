@@ -1,8 +1,10 @@
 
 #include "shim_XPLMPlanes.h"
 
+#include <iostream>
 
-#include "../XPHost.h"
+
+//#include "../XPHost.h"
 
 
 [[maybe_unused]] void XPLMGetNthAircraftModel(
