@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "../xp_sdk_shim/shim_XPLMProcessing.h"
+#include "shim/shim_XPLMProcessing.h"
 #include "AvionicsHost.h"
 #include "GuiAvionicsDevice.h"
 #include "GuiDatarefs.h"

@@ -8,7 +8,7 @@
 #include "AvionicsHost.h"
 
 
-#include "../xp_sdk_shim/shim_XPLMDisplay.h"
+#include "shim/shim_XPLMDisplay.h"
 
 
 #include "imgui.h"

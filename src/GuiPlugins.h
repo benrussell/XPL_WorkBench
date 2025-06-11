@@ -14,7 +14,7 @@
 
 #include "imgui.h"
 
-//#include "xp_sdk_shim/shim_XPLMDataAccess.h"
+//#include "shim/shim_XPLMDataAccess.h"
 
 
 class GuiPlugins {

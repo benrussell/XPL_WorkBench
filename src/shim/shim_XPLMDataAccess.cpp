@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "shim_XPLMDataAccess.h"
-#include "../src/XPHost.h"
+#include "../XPHost.h"
 
 std::vector<xp_dref*> dref_pool;
 

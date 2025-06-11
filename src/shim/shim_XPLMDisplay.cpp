@@ -11,14 +11,14 @@
 
 #include <GL/glew.h>
 
-#include "../src/WinContent.h"
-#include "../src/AvionicsHost.h"
-#include "../src/DrawCallbackHost.h"
+#include "../WinContent.h"
+#include "../AvionicsHost.h"
+#include "../DrawCallbackHost.h"
 
 
 #include "shim_XPLMDisplay.h"
 
-#include "../src/XPHost.h"
+#include "../XPHost.h"
 
 extern std::vector<WinBox*> window_pool;
 

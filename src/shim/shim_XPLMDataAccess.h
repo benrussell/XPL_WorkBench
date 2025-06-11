@@ -10,7 +10,7 @@
 #include "xp_dref.h"
 
 
-#include "../src/Plugin.h"
+#include "../Plugin.h"
 class Plugin;
 extern Plugin* global_target_plugin;
 

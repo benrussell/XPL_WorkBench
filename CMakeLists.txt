@@ -117,7 +117,7 @@ ENDIF(CMAKE_SYSTEM_NAME STREQUAL Linux)
 
 
 SUBDIRS(
-        #xp_sdk_shim
+        #shim
         imgui_lib
         gz_core
 )
@@ -135,12 +135,12 @@ SET( USE_LIBS
         gzcore
 
         imgui_lib
-        #xp_sdk_shim
+        #shim
         )
 
 
 
-set( SHIM_FOL "./xp_sdk_shim/" )
+set( SHIM_FOL "src/shim/" )
 
 
 
@@ -151,7 +151,7 @@ set( SHIM_FOL "./xp_sdk_shim/" )
 set( XP_SHIM_SRC
         ${SHIM_FOL}shim_XPLMPlugin.cpp ${SHIM_FOL}shim_XPLMPlugin.h
         ${SHIM_FOL}xp_dref.cpp ${SHIM_FOL}xp_dref.h
-        #${SHIM_FOL}xp_sdk_shim.h
+        #${SHIM_FOL}shim.h
 
         ${SHIM_FOL}shim_XPLMDataAccess.cpp ${SHIM_FOL}shim_XPLMDataAccess.h
         ${SHIM_FOL}shim_XPLMDisplay.cpp ${SHIM_FOL}shim_XPLMDisplay.h

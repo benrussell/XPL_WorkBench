@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "../xp_sdk_shim/shim_XPLMUtilities.h"
+#include "shim/shim_XPLMUtilities.h"
 
 
 class xpCmdCustom {

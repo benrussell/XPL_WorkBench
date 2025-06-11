@@ -5,8 +5,8 @@
 #include <iostream>
 #include <dlfcn.h>
 
-#include "../xp_sdk_shim/xp_sdk_shim.h"
-#include "../xp_sdk_shim/shim_XPLMDataAccess.h"
+#include "shim/xp_sdk_shim.h"
+#include "shim/shim_XPLMDataAccess.h"
 
 
 #include "Plugin.h"

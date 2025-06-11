@@ -6,7 +6,7 @@
 #include "shim_XPLMProcessing.h"
 
 
-#include "../src/XPHost.h"
+#include "../XPHost.h"
 
 
 

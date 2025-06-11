@@ -16,7 +16,7 @@
 //#include "Plugin.h" //cant include this here, breaks compile
 #include "AvionicsHost.h"
 
-#include "../xp_sdk_shim/shim_XPLMDisplay.h"
+#include "shim/shim_XPLMDisplay.h"
 
 
 

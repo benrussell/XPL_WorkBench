@@ -12,9 +12,9 @@
 
 
 
-#include "../src/Plugin.h"
+#include "../Plugin.h"
 
-#include "../src/XPHost.h"
+#include "../XPHost.h"
 
 
 

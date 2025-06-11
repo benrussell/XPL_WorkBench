@@ -6,7 +6,7 @@
 
 #include "shim_XPLMGraphics.h"
 
-#include "../src/XPHost.h"
+#include "../XPHost.h"
 
 
 [[maybe_unused]] void XPLMBindTexture2d( int textureNum, int textureUnit ){

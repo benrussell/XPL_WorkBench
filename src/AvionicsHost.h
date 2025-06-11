@@ -18,7 +18,7 @@
 #include "imgui_impl_opengl2.h"
 
 
-#include "../xp_sdk_shim/shim_XPLMDisplay.h"
+#include "shim/shim_XPLMDisplay.h"
 
 #include "../third_party/timer/src/Timer.h"
 

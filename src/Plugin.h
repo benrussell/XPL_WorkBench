@@ -11,8 +11,8 @@
 #include <iostream>
 #include <dlfcn.h>
 
-#include "../xp_sdk_shim/shim_XPLMDataAccess.h"
-#include "../xp_sdk_shim/shim_XPLMProcessing.h"
+#include "shim/shim_XPLMDataAccess.h"
+#include "shim/shim_XPLMProcessing.h"
 
 #include "AvionicsHost.h"
 #include "DrawCallbackHost.h"
