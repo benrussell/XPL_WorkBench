@@ -18,37 +18,12 @@
 #include "stb_image.h"
 
 
-
-
-
-
-// void load_xpl( std::string plug_name ){
-//  // This fn is broken because it forces a cwd change.
-//  // README: Use WinBox->load_plugin() defined in WinContent.h //FIXME: refac these filenames and class names.
-
-// 	std::cout << "Looking for xpl\n";
-// 	//const std::string root_folder = "/Users/br/Dev/gz_core/cmake-build-debug/src/examples/";
-//     const std::string root_folder = "/home/br/Dev/gz_core/cmake-build-debug/src/examples/";
-
-// 	std::string fname = root_folder + plug_name;
-
-// 	std::cout << "------ loading xpl -----\n";
-
-// 	Plugin* p = new Plugin(fname);
-// 	XPHost::m_vecPlugins.push_back(p);
-
-// 	std::cout << "New Plugin* at addr: " << std::to_string((size_t)p) << "\n";
-
-// }
-
-
-
-
-
 #include <iostream>
 #include <filesystem>
 
 #include "CommandsTxtParse.h"
+#include "DataRefsTxtParse.h"
+
 
 
 std::vector<WinBox*> window_pool;
@@ -195,6 +170,7 @@ int main(int argc, char** argv)
 
 
 	auto cmds = CommandsTxtParse("Commands.txt");
+	auto drefs = DataRefsTxtParse("DataRefs.txt");
 
 
 	load_recent_projects_list();

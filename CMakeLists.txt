@@ -185,6 +185,7 @@ set( XP_SHIM_SRC
         src/GuiMemory.cpp src/GuiMemory.h
 
         src/CommandsTxtParse.cpp src/CommandsTxtParse.h
+        src/DataRefsTxtParse.cpp src/DataRefsTxtParse.h
 
         src/GuiShaderTest.h 
         src/imgui_common.h 
