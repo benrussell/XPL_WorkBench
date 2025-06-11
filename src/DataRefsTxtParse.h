@@ -24,7 +24,7 @@ struct DataRefsTxtLine {
 class DataRefsTxtParse {
 public:
 
-
+    std::vector<DataRefsTxtLine> m_recs;
 
     // Helper function to trim leading/trailing whitespace
     static inline void trim(std::string& s) {
@@ -77,6 +77,8 @@ public:
 
         auto lines = load_and_filter_commands(filename);
         std::cout << "DataRefsTxtParse: lines: " << lines.size() << "\n";
+
+        m_recs = lines;
 
     };
 

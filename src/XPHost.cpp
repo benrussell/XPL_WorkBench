@@ -28,3 +28,13 @@ std::vector<std::string> XPHost::m_vecPluginMessages;
 
 
 Timer XPHost::m_timer;
+
+
+size_t dref_factory::search_ctr=0;
+
+
+
+
+
+
+

@@ -73,13 +73,15 @@ private:
 
 class dref_factory{
 public:
+	static size_t search_ctr;
+
+
 	static xp_dref* saveDref( const std::string& name ){
-
-		std::cout<<"dref_factory::saveDref: " << name << "\n";
-
+		//std::cout<<"dref_factory::saveDref: " << name << "\n";
 
 		//		bool need = true;
 		for( auto dr: XPHost::m_dref_pool ){
+			++search_ctr;
 			if( dr->drefName == name ){
 				//need=false;
 				std::cout << "  dref found: ret existing.\n";
@@ -90,7 +92,7 @@ public:
 		//		if(need){
 		auto drTmp = new xp_dref( name, xp_dref_type::dref_Generic );
 		XPHost::m_dref_pool.push_back(drTmp);
-		std::cout << "  dref created: ret new.\n";
+		//std::cout << "  dref created: ret new.\n";
 		return drTmp;
 		//		}
 
@@ -129,12 +131,6 @@ public:
 
 
 };
-
-
-
-
-
-
 
 
 

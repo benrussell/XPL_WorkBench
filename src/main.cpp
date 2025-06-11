@@ -172,12 +172,18 @@ int main(int argc, char** argv)
 	auto cmds = CommandsTxtParse("Commands.txt");
 	auto drefs = DataRefsTxtParse("DataRefs.txt");
 
+	for ( const auto dr: drefs.m_recs ) {
+		dref_factory::saveDref( dr.name );
+	}
+	dref_factory::init(); //dref pool
+
+	std::cout << "search penalty: " << dref_factory::search_ctr << "\n";
+
 
 	load_recent_projects_list();
     load_recent_plugins_list();
 
 
-	dref_factory::init(); //dref pool
 
 
 #if 0
