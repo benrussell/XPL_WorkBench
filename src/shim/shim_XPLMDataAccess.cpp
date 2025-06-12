@@ -192,17 +192,12 @@
 
 
 [[maybe_unused]] XPLMDataRef* XPLMFindDataRef( const char* dref_name ){
-	std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
+	//std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
 
     const std::string search_name = std::string(dref_name);
-    xp_dref *found_dref = dref_factory::saveDref( std::string(dref_name) ); //FIXME: call find...
-
-    // if( ! found_dref ){
-        // std::cout << " dref not found:[" << dref_name << "]\n";
-    // }
+    xp_dref *found_dref = dref_factory::findDref( std::string(dref_name) );
 
     return found_dref;
-
 }
 
 

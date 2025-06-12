@@ -10,23 +10,9 @@
 #include "xp_dref.h"
 
 
-#include "../Plugin.h"
-class Plugin;
-extern Plugin* global_target_plugin;
-
 
 //alias for SDK compat
 typedef xp_dref XPLMDataRef;
-
-extern std::vector<xp_dref*> dref_pool;
-
-
-
-
-
-
-
-
 
 
 extern "C" {

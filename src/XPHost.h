@@ -78,25 +78,42 @@ public:
 	static size_t search_ctr;
 
 
-	static xp_dref* saveDref( const std::string& name ){
-		//std::cout<<"dref_factory::saveDref: " << name << "\n";
+	static xp_dref* findDref( const std::string& name ){
+		//std::cout<<"dref_factory::findDref: " << name << "\n";
 
 		//		bool need = true;
 		for( auto dr: XPHost::m_dref_pool ){
 			++search_ctr;
 			if( dr->drefName == name ){
 				//need=false;
-				std::cout << "  dref found: ret existing.\n";
+				//std::cout << "findDref:  dref found: ret existing.\n";
 				return dr;
 			}
 		}
 
-		//		if(need){
-		auto drTmp = new xp_dref( name, xp_dref_type::dref_Generic );
-		XPHost::m_dref_pool.push_back(drTmp);
+		std::cerr << "xwb/dref_factory.findDref(" << name << "): 404";
+		return nullptr;
+
+	}; //findDref
+
+
+	static xp_dref* saveDref( const std::string& name ){
+		//std::cout<<"dref_factory::saveDref: " << name << "\n";
+
+		xp_dref* dr;
+
+		dr = findDref( name );
+		if ( dr ) {
+			std::cout << "saveDref:  dref found: ret existing.\n";
+			return dr;
+		}
+
+		dr = new xp_dref( name, xp_dref_type::dref_Generic );
+		XPHost::m_dref_pool.push_back(dr);
+		//global_target_plugin->m_vecDataRefs.push_back(dr);
+
 		//std::cout << "  dref created: ret new.\n";
-		return drTmp;
-		//		}
+		return dr;
 
 	}; //saveDref
 
