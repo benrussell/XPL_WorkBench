@@ -8,7 +8,10 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include <vector>
 
+// #include "../Plugin.h"
+class Plugin;
 
 //	XPLMGetDatavf(gModelViewMatrixRef, mModelView, 0, 16);
 //	XPLMGetDatavf(gProjectionMatrixRef, mProjection, 0, 16);
@@ -44,6 +47,8 @@ public:
 		m_valFloat = 0.0f;
 		m_valInt = 0;
 	}
+
+	std::vector<Plugin*> m_vecPluginConsumers;
 
 	std::string drefName;
 	xp_dref_type drefType;

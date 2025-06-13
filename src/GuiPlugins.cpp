@@ -94,46 +94,6 @@ void GuiPlugins::draw(){
 				ImGui::TreePop();
 			}
 
-			const std::string sLabDrefs = "drefs [" + std::to_string(p->m_vecDataRefs.size()) + "]";
-			if( ImGui::TreeNode(sLabDrefs.c_str() ) ) {
-				for( auto dr: p->m_vecDataRefs ){
-
-					ImGui::Text( "%s", dr->drefName.c_str() );
-
-					//					ImGui::SameLine();
-					// std::string sBtnLabel_Begin = "Begin##_rnd_" + cmd->m_name;
-					// if( ImGui::Button(sBtnLabel_Begin.c_str()) ){
-					// 	cmd->callBegin();
-					// }
-
-					// counter intuitive, requires a bunch of extra work. begin/end good enough to build gauges.
-					//							if (ImGui::IsItemActive()) {
-					//								// Button is being held down
-					//								ImGui::Text("Button is being held down!");
-					//								cmd->callHold();
-					//							}
-
-					// ImGui::SameLine();
-					// std::string sBtnLabel_End = "End##_rnd_" + cmd->m_name;
-					// if( ImGui::Button(sBtnLabel_End.c_str()) ){
-					// 	cmd->callEnd();
-					// }
-
-					// ImGui::SameLine();
-					// std::string sBtnLabel_Once = "Once##_rnd_" + cmd->m_name;
-					// if( ImGui::Button(sBtnLabel_Once.c_str()) ){
-					// 	cmd->callBegin();
-					// 	cmd->callEnd();
-					// }
-					//
-					// ImGui::SameLine();
-					// ImGui::Text( "%s", cmd->m_name.c_str() );
-
-
-				}
-
-			}
-
 
 
 			const std::string sLabAvDevs = "av_devs [" + std::to_string(p->m_vecAvionicsHost.size()) + "]";

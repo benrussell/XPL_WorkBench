@@ -195,9 +195,13 @@
 	//std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
 
     const std::string search_name = std::string(dref_name);
-    xp_dref *found_dref = dref_factory::findDref( std::string(dref_name) );
+    xp_dref *dr = dref_factory::findDref( std::string(dref_name) );
 
-    return found_dref;
+	if ( dr ) {
+		dr->m_vecPluginConsumers.push_back(global_target_plugin);
+	}
+
+    return dr;
 }
 
 

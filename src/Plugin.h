@@ -60,7 +60,6 @@ public:
 	std::vector<cb_params_t> m_vecFlightLoops; //FIXME should be *
 
 	std::vector<xpCmdCustom*> m_vecCommands;
-	std::vector<xp_dref*> m_vecDataRefs;
 
 
 	std::vector<int> m_vecTextures;

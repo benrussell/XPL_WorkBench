@@ -48,13 +48,18 @@ void GuiDatarefs::draw(){
     size_t wid=0;
     for( auto dr: XPHost::m_dref_pool ) {
 
-        if ( lam_contains(dr->drefName.c_str(), filter_buff) )
+        if ( lam_contains(dr->drefName.c_str(), filter_buff) && dr->m_vecPluginConsumers.size() > 0 )
         {
             snprintf(caLabel, 512, "%s  %s",
                              dr->drefName.c_str(), dr->typeName().c_str()
                     );
 
             if (ImGui::TreeNode(caLabel)) {
+
+                for ( auto plugin: dr->m_vecPluginConsumers ) {
+                    ImGui::Text("- %s", plugin->m_pluginSig.c_str() );
+                }
+
                 float fTmp = dr->getFloat();
                 std::string widget_id = "##_slider_" + std::to_string(wid);
                 ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
