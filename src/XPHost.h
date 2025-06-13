@@ -97,15 +97,18 @@ public:
 	}; //findDref
 
 
-	static xp_dref* saveDref( const std::string& name ){
+	static xp_dref* saveDref( const std::string& name, const std::string type, bool try_find=true ){
 		//std::cout<<"dref_factory::saveDref: " << name << "\n";
 
 		xp_dref* dr;
 
-		dr = findDref( name );
-		if ( dr ) {
-			std::cout << "saveDref:  dref found: ret existing.\n";
-			return dr;
+		//this is optional so we can load from DataRefs.txt without error logs
+		if ( try_find ) {
+			dr = findDref( name );
+			if ( dr ) {
+				std::cout << "saveDref:  dref found: ret existing.\n";
+				return dr;
+			}
 		}
 
 		dr = new xp_dref( name, xp_dref_type::dref_Generic );
