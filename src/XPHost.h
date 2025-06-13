@@ -111,7 +111,7 @@ public:
 			}
 		}
 
-		dr = new xp_dref( name, xp_dref_type::dref_Generic );
+		dr = new xp_dref( name, xp_dref_type::dref_Generic, type );
 		XPHost::m_dref_pool.push_back(dr);
 		//global_target_plugin->m_vecDataRefs.push_back(dr);
 
@@ -124,23 +124,23 @@ public:
 
 	static void init(){
 
-		//		auto dr_frp = new xp_dref_frp( "sim/time/framerate_period", xp_dref_type::dref_FrameRatePeriod );
+		//		auto dr_frp = new xp_dref_frp( "sim/time/framerate_period", xp_dref_type::dref_FrameRatePeriod, "float" );
 		//		dref_pool.push_back(dr_frp);
 
 		// ReSharper disable once CppDFAMemoryLeak
-		auto dr_mvm = new xp_dref( "sim/graphics/view/modelview_matrix", xp_dref_type::dref_ModelViewMatrix );
+		auto dr_mvm = new xp_dref( "sim/graphics/view/modelview_matrix", xp_dref_type::dref_ModelViewMatrix, "float" );
 		XPHost::m_dref_pool.push_back(dr_mvm);
 
 		// ReSharper disable once CppDFAMemoryLeak
-		auto dr_pm = new xp_dref( "sim/graphics/view/projection_matrix", xp_dref_type::dref_ProjectionMatrix );
+		auto dr_pm = new xp_dref( "sim/graphics/view/projection_matrix", xp_dref_type::dref_ProjectionMatrix, "float" );
 		XPHost::m_dref_pool.push_back(dr_pm);
 
 		// ReSharper disable once CppDFAMemoryLeak
-		auto dr_vp = new xp_dref( "sim/graphics/view/viewport", xp_dref_type::dref_Viewport );
+		auto dr_vp = new xp_dref( "sim/graphics/view/viewport", xp_dref_type::dref_Viewport, "float" );
 		XPHost::m_dref_pool.push_back(dr_vp);
 
 		// ReSharper disable once CppDFAMemoryLeak
-		auto dr_vr = new xp_dref( "sim/graphics/VR/enabled", xp_dref_type::dref_VREnabled );
+		auto dr_vr = new xp_dref( "sim/graphics/VR/enabled", xp_dref_type::dref_VREnabled, "int" );
 		XPHost::m_dref_pool.push_back(dr_vr);
 
 	};

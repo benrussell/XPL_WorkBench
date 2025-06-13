@@ -38,10 +38,12 @@ class xp_dref {
 public:
 	virtual ~xp_dref() = default;
 
-	xp_dref( std::string name, xp_dref_type type ){
+	xp_dref( std::string name, xp_dref_type type, std::string typeName ){
 //		std::cout << "xp_dref() constructor ********\n";
 		drefName = std::move(name);
 		drefType = type;
+
+		drefTypeName = typeName;
 
 		m_valDouble = 0.0;
 		m_valFloat = 0.0f;
@@ -51,11 +53,16 @@ public:
 	std::vector<Plugin*> m_vecPluginConsumers;
 
 	std::string drefName;
-	xp_dref_type drefType;
+
 
 	float m_valFloat;
 	int m_valInt;
 	double m_valDouble;
+
+
+	//FIXME: This dref type meta data needs to be sorted out.
+	xp_dref_type drefType;
+	std::string drefTypeName;
 
 	std::string typeName() const{
 		switch ( drefType ) {

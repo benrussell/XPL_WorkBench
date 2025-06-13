@@ -50,8 +50,8 @@ void GuiDatarefs::draw(){
 
         if ( lam_contains(dr->drefName.c_str(), filter_buff) && dr->m_vecPluginConsumers.size() > 0 )
         {
-            snprintf(caLabel, 512, "%s  %s",
-                             dr->drefName.c_str(), dr->typeName().c_str()
+            snprintf(caLabel, 512, "%s  %s  %s",
+                             dr->drefName.c_str(), dr->typeName().c_str(), dr->drefTypeName.c_str()
                     );
 
             if (ImGui::TreeNode(caLabel)) {
