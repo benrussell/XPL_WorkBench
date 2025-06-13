@@ -309,9 +309,10 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
 
 
 int XPLMIsPluginEnabled( int plugin_id ) {
-	std::cout<<"wxb/ XPLMIsPluginEnabled: " << plugin_id << "\n";
+	std::cout<<"wxb/ XPLMIsPluginEnabled( plugin_id:" << plugin_id << " )\n";
 
 	if ( plugin_id == 0 ) {
+		// host is always enabled.
 		return 1;
 	}
 
