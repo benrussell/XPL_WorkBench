@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 	auto drefs = DataRefsTxtParse("DataRefs.txt");
 
 	for ( const auto dr: drefs.m_recs ) {
-		dref_factory::saveDref( dr.name );
+		dref_factory::saveDref( dr.name, dr.type, false );
 	}
 	dref_factory::init(); //dref pool
 

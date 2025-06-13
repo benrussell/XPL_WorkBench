@@ -227,7 +227,7 @@ void XPLMRegisterDataAccessor(
 	{
 		std::cout<<"wxb/ XPLMRegisterDataAccessor [" << inDataName << "]\n";
 		std::string custom_dref_name = std::string(inDataName);
-		dref_factory::saveDref(custom_dref_name);
+		dref_factory::saveDref(custom_dref_name, "accessor");
 
 		//throw std::runtime_error("custom drefs not supported. :(");
 
