@@ -102,7 +102,7 @@ void XPLMSendMessageToPlugin( int to, int message, void* param ){
 
 XPLMCommandRef XPLMFindCommand(
 		const char *         inName){
-	std::cout<<"XPLMFindCommand:[" << inName << "]\n";
+	//std::cout<<"XPLMFindCommand:[" << inName << "]\n";
 
 	for( const auto& p: XPHost::m_vecPlugins ){
 		for( const auto& cmd: p->m_vecCommands ){
@@ -113,8 +113,17 @@ XPLMCommandRef XPLMFindCommand(
 		}
 	}
 
-	std::cout << "XPLMFindCommand: cmd 404:[" + std::string(inName) + "]\n";
+#define AUTO_CMD_CREATE 1
+#if AUTO_CMD_CREATE
+	auto cmd = new xpCmdCustom( inName, "inDescription" );
+	global_target_plugin->m_vecCommands.push_back( cmd );
 
+	return cmd;
+#endif
+
+
+
+	std::cout << "XPLMFindCommand:[" + std::string(inName) + "] 404\n";
 	return nullptr;
 };
 
@@ -241,7 +250,7 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
 	// std::cout<<"  outReturnedFiles: " << outReturnedFiles << "\n";
 
 
-#if 0
+#if 1
 	sprintf(outFileNames, "");
 	*outTotalFiles = 0;
 	*outReturnedFiles = 0;
