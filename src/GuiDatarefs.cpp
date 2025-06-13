@@ -56,8 +56,13 @@ void GuiDatarefs::draw(){
 
             if (ImGui::TreeNode(caLabel)) {
 
-                for ( auto plugin: dr->m_vecPluginConsumers ) {
-                    ImGui::Text("- %s", plugin->m_pluginSig.c_str() );
+                char buff[512];
+                snprintf( buff, 512, "consumers[%li]", dr->m_vecPluginConsumers.size() );
+                if (ImGui::TreeNode(buff)) {
+                    for ( auto plugin: dr->m_vecPluginConsumers ) {
+                        ImGui::Text("%s", plugin->m_pluginSig.c_str() );
+                    }
+                    ImGui::TreePop();
                 }
 
                 float fTmp = dr->getFloat();
