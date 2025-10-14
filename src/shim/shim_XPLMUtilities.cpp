@@ -26,7 +26,7 @@ extern Plugin* global_target_plugin;
 
 
 void XPLMDebugString( const char* msg ){
-	std::cout << "xwb/ XPLMDebugString: " << msg;
+	std::cout << "xwb/ XPLMDebugString: [" << msg << "]\n";
 	XPHost::m_vecLog.push_back( msg );
 }
 
