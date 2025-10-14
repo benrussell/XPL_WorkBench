@@ -17,7 +17,7 @@
 
 
 [[maybe_unused]] void XPLMGenerateTextureNumbers(GLuint *textures, int count ){
-	std::cout << "XPLMGenerateTextureNumbers..\n";
+	std::cout << "XPLMGenerateTextureNumbers: " << count << "\n";
     glGenTextures( count, textures );
 
     for( auto x=0; x<count; ++x ){
