@@ -50,8 +50,9 @@ public:
             std::string name, type, writable, units, comment;
 
             // Parse each field (stop after units as comment may have spaces)
-            if (!(iss >> name >> type >> writable >> units)) {
+            if( ! (iss >> name >> type >> writable >> units) ){
                 // Skip malformed or incomplete lines
+                std::cerr << "dref parse Error: " << line << std::endl;
                 continue;
             }
 

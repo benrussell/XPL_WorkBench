@@ -158,7 +158,7 @@ int main(int argc, char** argv)
 		try {
 			// report and store the cwd where we loaded from.
 			global_path_when_started = fs::current_path();
-			//std::cout << "xwb/ Current working directory: " << global_path_when_started << std::endl;
+			std::cout << "xwb/ Current working directory: " << global_path_when_started << std::endl;
 		}
 		catch (const fs::filesystem_error &e) {
 			std::cerr << "Filesystem error: " << e.what() << std::endl;
@@ -253,6 +253,7 @@ int main(int argc, char** argv)
 
 	// Pull argv into a vector<string>
 	std::vector<std::string> args;
+	args.resize(argc);
 	for (int i = 0; i < argc; ++i) {
 		args.emplace_back(argv[i]);
 	}

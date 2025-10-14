@@ -21,6 +21,11 @@ void GuiDatarefs::draw(){
     ImGui::InputText("filter", filter_buff, 1024);
     size_t filter_len = strlen(filter_buff);
 
+    ImGui::SameLine();
+    static bool bShowAll = true;
+    ImGui::Checkbox("All", &bShowAll);
+
+
     if(XPHost::m_dref_pool.empty()) {
         ImGui::Text("Empty DataRefs list.");
     }
@@ -46,9 +51,15 @@ void GuiDatarefs::draw(){
     char caLabel[512]{}; //gui label
 
     size_t wid=0;
+    bool bShowThisItem = false;
     for( auto dr: XPHost::m_dref_pool ) {
 
-        if ( lam_contains(dr->drefName.c_str(), filter_buff) && dr->m_vecPluginConsumers.size() > 0 )
+        bShowThisItem = (dr->m_vecPluginConsumers.size() > 0) || bShowAll;
+
+        if (
+            lam_contains(dr->drefName.c_str(), filter_buff)
+            && bShowThisItem
+            )
         {
             snprintf(caLabel, 512, "%s  %s  %s",
                              dr->drefName.c_str(), dr->typeName().c_str(), dr->drefTypeName.c_str()
