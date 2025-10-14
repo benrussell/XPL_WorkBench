@@ -52,7 +52,7 @@ int XPLMFindPluginBySignature( char* sig ){
 void ex_XPLMSendMessageToPlugin( int from, int to, int message, void* param ){
 
 	char msg[256];
-	sprintf(msg, "ex_XPLMSendMessageToPlugin: from: %d, to: %d, msg: 0x%08x, param: %p",
+	snprintf(msg, 256, "ex_XPLMSendMessageToPlugin: from: %d, to: %d, msg: 0x%08x, param: %p",
 			from, to, message, param);
 	std::string str_msg(msg);
 
@@ -251,7 +251,7 @@ void XPLMGetDirectoryContents(const char* inDirectoryPath,
 
 
 #if 1
-	sprintf(outFileNames, "");
+	snprintf(outFileNames, inFileNameBufSize, "");
 	*outTotalFiles = 0;
 	*outReturnedFiles = 0;
 	return;
