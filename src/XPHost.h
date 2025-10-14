@@ -91,7 +91,7 @@ public:
 			}
 		}
 
-		std::cerr << "xwb/dref_factory.findDref(" << name << "): 404\n";
+		//std::cerr << "xwb/dref_factory.findDref(" << name << "): 404\n";
 		return nullptr;
 
 	}; //findDref
