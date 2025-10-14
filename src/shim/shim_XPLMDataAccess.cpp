@@ -61,7 +61,7 @@
     buffer[3] = 0; //top
 
 
-	std::cout << "XPLMGetDatavi: hard coded.\n";
+	std::cout << "[" << global_target_plugin->m_pluginSig << "] " << "XPLMGetDatavi: hard coded.\n";
 
 }
 
@@ -105,7 +105,7 @@
     }
 
 
-	std::cout << "XPLMGetDatavf: bad handle.\n";
+	//std::cout << "[" << global_target_plugin->m_pluginSig << "] " << "XPLMGetDatavf: bad handle.\n";
 
 }
 
@@ -136,7 +136,7 @@
     }
 
     //could not find a dref
-	std::cout << "XPLMGetDataf: bad handle.\n";
+	//std::cout << "[" << global_target_plugin->m_pluginSig << "] " << "XPLMGetDataf: bad handle.\n";
     return 0.f;
 }
 
@@ -172,7 +172,7 @@
 
 	}
 
-	std::cout << "XPLMGetDatai: bad handle.\n";
+	//std::cout << "[" << global_target_plugin->m_pluginSig << "] " << "XPLMGetDatai: bad handle.\n";
 	return 0;
 }
 
@@ -192,13 +192,25 @@
 
 
 [[maybe_unused]] XPLMDataRef* XPLMFindDataRef( const char* dref_name ){
-	std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
+	// std::cout << "XPLMFindDataRef(" << dref_name << ")\n";
 
     const std::string search_name = std::string(dref_name);
     xp_dref *dr = dref_factory::findDref( std::string(dref_name) );
 
 	if ( dr ) {
 		dr->m_vecPluginConsumers.push_back(global_target_plugin);
+	}else
+	{
+		const std::string& sig = global_target_plugin->m_pluginSig;
+		std::cerr << "[" << sig << ":" <<
+			global_target_plugin->m_plugin_id
+			//global_target_plugin->m_plugin_
+			<< "] " << "XPLMFindDataRef: 404 [" <<
+			dref_name
+			<< "]\n";
+
+		//global_target_plugin->m_plugin_is_enabled = false;
+		// global_target_plugin->call_disable();
 	}
 
     return dr;
