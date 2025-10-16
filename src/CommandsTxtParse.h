@@ -76,7 +76,7 @@ class CommandsTxtParse {
     CommandsTxtParse( const char* filename ) {
 
         auto lines = load_and_filter_commands(filename);
-        std::cout << "CommandsTxtParse: lines: " << lines.size() << "\n";
+        std::cout << "xwb/ CommandsTxtParse: lines: " << lines.size() << "\n";
 
     };
 

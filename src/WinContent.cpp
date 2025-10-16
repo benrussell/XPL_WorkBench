@@ -316,7 +316,7 @@ void WinBox::draw_triangle_box(){
 
 
 				if( ImGui::MenuItem("Exit") ){
-					std::cout<<"menu/file/exit\n";
+					std::cout<<"xwb/ menu/file/exit\n";
 					glfwSetWindowShouldClose(this->m_winh, 1);
 
 				}

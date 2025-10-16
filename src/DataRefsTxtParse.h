@@ -25,7 +25,6 @@ struct DataRefsTxtLine {
 
 class DataRefsTxtParse {
 public:
-
     std::vector<DataRefsTxtLine> m_recs;
 
     // Helper function to trim leading/trailing whitespace
@@ -45,16 +44,30 @@ public:
 
         // parser for:
         //  dref_name<ws>type<ws>writeable<ws>units<ws>comment
-       while (std::getline(infile, line)) {
+
+        bool skip_first = true;
+        while (std::getline(infile, line)) {
+            if (skip_first) {
+                skip_first = false;
+                continue;
+            }
+
+            if ( line.empty() ) {
+                continue;
+            }
+
             std::istringstream iss(line);
             std::string name, type, writable, units, comment;
 
             // Parse each field (stop after units as comment may have spaces)
-            if( ! (iss >> name >> type >> writable >> units) ){
+            // if( ! (iss >> name >> type >> writable >> units) ){
+            if (!(iss >> name >> type >> writable)) {
                 // Skip malformed or incomplete lines
                 std::cerr << "dref parse Error: " << line << std::endl;
                 continue;
             }
+
+            units = "dunno?";
 
             // Rest of the line is the comment (may contain whitespace)
             std::getline(iss, comment);
@@ -78,13 +91,11 @@ public:
     }
 
 
-    DataRefsTxtParse( const char* filename ) {
+    DataRefsTxtParse(const char* filename) {
         m_recs = load_and_filter_drefs(filename);
-        std::cout << "DataRefsTxtParse: lines: " << m_recs.size() << "\n";
+        std::cout << "xwb/ DataRefsTxtParse: lines: " << m_recs.size() << "\n";
     }
-
 };
-
 
 
 #endif //DATAREFSTXTPARSE_H
