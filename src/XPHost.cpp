@@ -20,6 +20,9 @@ std::vector<Plugin*> XPHost::m_vecPlugins;
 
 std::vector<std::string> XPHost::m_vecRecentProjects;
 std::vector<std::string> XPHost::m_vecRecentPlugins;
+std::vector<std::string> XPHost::m_vecXPlaneFolders;
+
+std::string XPHost::m_active_xp_folder;
 
 std::vector<std::string> XPHost::m_vecLog;
 

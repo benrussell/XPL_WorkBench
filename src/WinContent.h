@@ -86,26 +86,23 @@ public:
 	GLFWwindow* m_winh;
 	ImGuiContext* imguiContext = nullptr;
 
-
 	// this is a message from dlopen failures and C++ exceptions??
 	bool m_displayErrorMessage = false;
 	std::string m_sErrorMessage;
 
-
 	bool m_bDumpTextures = false;
 	bool m_bDrawTriangle = false;
-
 
 	//this has a click handler that we need to setup in ctor
 	GuiTextureInspector m_texInspector;
 
-
 	GuiShaderTest* m_shaderTest; //must be a pointer because static init of shaders will CTD
-
 
 
 	WinBox( int width, int height );
 	~WinBox();
+
+	void set_xp_choice( const std::string& fname );
 
 	void load_plugin( const std::string& fname );
 	void load_project( const std::string& filename );

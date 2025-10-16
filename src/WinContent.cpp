@@ -39,17 +39,13 @@ WinBox::WinBox( int width, int height ){
 
     //ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear();
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/Roboto-Regular.ttf", 18.0f);
+    io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/Roboto-Regular.ttf", 16.0f); //FIXME: make this configurable for size?
     if (!io.FontDefault) {
         std::cerr << "Error: Could not load font 'Roboto-Regular.ttf'" << std::endl;
     }
     ImGui_ImplOpenGL2_CreateFontsTexture();
 
 #endif
-
-
-
-
 
 
     //setup the texture inspector on click handler
@@ -66,7 +62,6 @@ WinBox::WinBox( int width, int height ){
         m_texInspector.m_bDraw = true;
         m_texInspector.m_showTexId = tex_id;
     };
-
 
 
 };
@@ -91,6 +86,11 @@ WinBox::~WinBox(){
 };
 
 
+void WinBox::set_xp_choice( const std::string& fname ) {
+	std::cout << "xwb/ set_xp_choice: ["<< fname <<"]\n";
+	XPHost::m_active_xp_folder = fname;
+}
+
 
 void WinBox::load_plugin( const std::string& fname ){
     //std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
@@ -98,9 +98,7 @@ void WinBox::load_plugin( const std::string& fname ){
         Plugin *p = new Plugin(fname);
         XPHost::m_vecPlugins.push_back(p);
 
-
         {
-
         	char name[512]; //FIXME: x-plane SDK docs say 256??
         	char sig[512];
         	char desc[512];
@@ -110,14 +108,10 @@ void WinBox::load_plugin( const std::string& fname ){
         	snprintf( desc, 256, "XWB Description" );
 
         	p->call_start( name, sig, desc );
-
         }
 
 
-
-
         //FIXME: filter for dupes
-
         XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
         //XPHost::m_vecRecentPlugins.push_back( fname );
 
@@ -129,9 +123,6 @@ void WinBox::load_plugin( const std::string& fname ){
         m_displayErrorMessage = true;
     }
 }
-
-
-
 
 
 
@@ -153,16 +144,12 @@ void WinBox::load_project( const std::string& filename ){
     }
 
 
-
-
     //unload our plugins!
     std::cout<<"xwb/ ----- unloading plugins -------\n";
     for(const  auto p: XPHost::m_vecPlugins ){
         delete p;
     }
     XPHost::m_vecPlugins.clear();
-
-
 
 
     std::ifstream f( filename );
@@ -194,8 +181,6 @@ void WinBox::load_project( const std::string& filename ){
     } //loop project plugins
 
 } //load_project()
-
-
 
 
 
@@ -310,9 +295,35 @@ void WinBox::draw_triangle_box(){
                         load_project( m_lastProjectFilename );
                     }
                 }
-
                 ImGui::Separator();
 
+
+				if( ImGui::BeginMenu("X-Plane Folder") ){
+					if(XPHost::m_vecXPlaneFolders.empty()){
+						ImGui::Separator();
+					}
+
+					bool bActiveMenu = false;
+					for( const auto& fn: XPHost::m_vecXPlaneFolders ){
+						if (XPHost::m_active_xp_folder == fn) {
+							bActiveMenu = true;
+						}else {
+							bActiveMenu = false;
+						}
+						if(
+							ImGui::MenuItem(fn.c_str(),
+								NULL,
+								bActiveMenu
+							)
+						){
+							std::cout<<"menu/file/xplane folder/[" << fn << "]\n";
+							set_xp_choice( fn );
+						}
+					}
+
+					ImGui::EndMenu();
+				}
+				ImGui::Separator();
 
 
 				if( ImGui::MenuItem("Exit") ){

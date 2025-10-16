@@ -56,6 +56,9 @@ public:
 
 	static std::vector<std::string> m_vecRecentProjects;
     static std::vector<std::string> m_vecRecentPlugins;
+	static std::vector<std::string> m_vecXPlaneFolders;
+
+	static std::string m_active_xp_folder;
 
 	//content from XPLM IPC messages?
 	static std::vector<std::string> m_vecPluginMessages;

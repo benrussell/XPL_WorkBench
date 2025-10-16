@@ -35,6 +35,7 @@ std::string global_path_when_started;
 
 const char* glob_recent_projects_filename = "recent_projects.json";
 const char* glob_recent_plugins_filename = "recent_plugins.json";
+const char* glob_xp_list_filename = "xp_list.json";
 
 
 
@@ -52,10 +53,7 @@ void load_recent_plugins_list() {
         		map_seen[pfname] = 1;
         	}
         } //loop recents
-
     }
-
-
 }
 
 
@@ -67,20 +65,28 @@ void load_recent_projects_list() {
 		nlohmann::json data = nlohmann::json::parse(f);
 		for (auto pfname: data["recent"]) {
 			XPHost::m_vecRecentProjects.push_back( pfname );
-
 		} //loop recents
-
 	}
-
-
 }
 
+
+void load_xplane_folder_list() {
+	std::cout << "xwb/ Loading xplane folder list.. \n";
+
+	std::ifstream f(glob_xp_list_filename);
+	if( f ){
+		nlohmann::json data = nlohmann::json::parse(f);
+		for (auto pfname: data["xp_folders"]) {
+			XPHost::m_vecXPlaneFolders.push_back( pfname );
+			std::cout << "xp folder: ["<< pfname <<"]\n";
+		} //loop recents
+	}
+}
 
 
 
 void save_recent_plugins(){
     std::cout << "xwb/ Saving recent plugins list..\n";
-
 
     nlohmann::json json;
     nlohmann::json json_arr = nlohmann::json::array();
@@ -92,20 +98,16 @@ void save_recent_plugins(){
     //blueprint record
     json["recent"] = json_arr;
 
-
     std::ofstream myfile;
     myfile.open(glob_recent_plugins_filename);
     myfile << json.dump(1,'\t');
     myfile.close();
-
 }
-
 
 
 void save_recent_projects(){
 	std::cout << "xwb/ Saving recent projects list..\n";
 
-	
 	nlohmann::json json;
 	nlohmann::json json_arr = nlohmann::json::array();
 
@@ -116,26 +118,21 @@ void save_recent_projects(){
 	//blueprint record
 	json["recent"] = json_arr;
 
-
 	std::ofstream myfile;
 	myfile.open(glob_recent_projects_filename);
 	myfile << json.dump(1,'\t');
 	myfile.close();
-
 }
-
-
 
 
 
 int main(int argc, char** argv)
 {
 
-
 	{
 		namespace fs = std::filesystem;
 
-		std::cout << "xwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
+		// std::cout << "xwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
 		try {
 			const char* home_env = std::getenv("HOME");
 			if (!home_env) {
@@ -143,16 +140,15 @@ int main(int argc, char** argv)
 				return -1;
 			}
 			const std::string folder = std::string(home_env) + "/.XPL_WorkBench";
-			std::cout << "xwb/ folder: ["<< folder <<"]\n";
+			// std::cout << "xwb/ folder: ["<< folder <<"]\n";
 
 			fs::current_path(folder);
-		//	std::cout << "Changed working directory to: " << folder << std::endl;
+			//std::cout << "Changed working directory to: " << folder << std::endl;
 
 		} catch (const fs::filesystem_error &e) {
 			std::cerr << "Error changing working directory: " << e.what() << std::endl;
 			return -1;
 		}
-
 
 
 		try {
@@ -166,7 +162,7 @@ int main(int argc, char** argv)
 		catch (const std::exception &e) {
 			std::cerr << "General error: " << e.what() << std::endl;
 		}
-	}
+	}//scope
 
 
 	auto cmds = CommandsTxtParse("Commands.txt");
@@ -183,7 +179,7 @@ int main(int argc, char** argv)
 	load_recent_projects_list();
     load_recent_plugins_list();
 
-
+	load_xplane_folder_list();
 
 
 #if 0
