@@ -177,7 +177,7 @@ int main(int argc, char** argv)
 	}
 	dref_factory::init(); //dref pool
 
-	std::cout << "search penalty: " << dref_factory::search_ctr << "\n";
+	std::cout << "xwb/ search penalty: " << dref_factory::search_ctr << "\n";
 
 
 	load_recent_projects_list();
@@ -258,12 +258,18 @@ int main(int argc, char** argv)
 		args.emplace_back(argv[i]);
 	}
 
+#if 0
 	// we review our args list after we have loaded all our gui and assets, etc
 	if( args.size() > 1 ){
+		std::cout << "argc: " << args.size() << std::endl;
+		// loop all args and print to cout
+		for ( int x=0; x < args.size(); x++ ) {
+			std::cout << "[" << x << "] [" << args[x] << "]\n";
+		}
 		std::cout << "xwb/ cmd line xpl: " << args[1] << "\n";
 		box->load_plugin( args[1] );
 	}
-
+#endif
 
 
 	
