@@ -102,7 +102,7 @@ void XPLMSendMessageToPlugin( int to, int message, void* param ){
 
 XPLMCommandRef XPLMFindCommand(
 		const char *         inName){
-	//std::cout<<"XPLMFindCommand:[" << inName << "]\n";
+	std::cout<<"xwb/ XPLMFindCommand:[" << inName << "]\n";
 
 	for( const auto& p: XPHost::m_vecPlugins ){
 		for( const auto& cmd: p->m_vecCommands ){
@@ -116,8 +116,16 @@ XPLMCommandRef XPLMFindCommand(
 #define AUTO_CMD_CREATE 1
 #if AUTO_CMD_CREATE
 	auto cmd = new xpCmdCustom( inName, "inDescription" );
-	global_target_plugin->m_vecCommands.push_back( cmd );
 
+	if ( global_target_plugin ) {
+		std::cout << "auto created cmd, attempting to assing to global_target_plugin\n";
+		global_target_plugin->m_vecCommands.push_back( cmd );
+
+	}else {
+		std::cerr << "global_target_plugin is nullptr\n";
+	}
+
+	std::cout << "attempting to return new auto created cmd handle\n";
 	return cmd;
 #endif
 
