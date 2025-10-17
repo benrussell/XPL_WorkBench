@@ -224,15 +224,15 @@ void WinBox::draw_triangle_box(){
 	void WinBox::menu_TitlebarMenu(){
 		if( ImGui::BeginMainMenuBar() ){
 			if(ImGui::BeginMenu("File")){
-				if(ImGui::MenuItem("Open Plugin..", nullptr, false, true)){
+				if(ImGui::MenuItem("Load Plugin..", nullptr, false, true)){
 					fileDialog_Open.SetTitle("Choose X-Plane Plugin");
 					fileDialog_Open.SetTypeFilters({ ".xpl",".so",".dylib",".dll" });
-#if 0
+					#if 0
 					namespace fs = std::filesystem;
 					fs::path newCwd = fs::current_path();
 					std::cout << "New working directory: " << newCwd << std::endl;
 					fileDialog_Open.SetPwd(newCwd);
-#endif
+					#endif
 					fileDialog_Open.Open();
 				}
 
@@ -256,7 +256,6 @@ void WinBox::draw_triangle_box(){
                 }
 
 
-
                 if(ImGui::MenuItem("Unload all Plugins..", nullptr, false, true)){
                     //unload our plugins!
                     std::cout<<"xwb/ ----- unloading plugins -------\n";
@@ -269,7 +268,7 @@ void WinBox::draw_triangle_box(){
                 ImGui::Separator();
 
 
-                if(ImGui::MenuItem("Open Project..", nullptr, false, true)){
+                if(ImGui::MenuItem("Load Project..", nullptr, false, true)){
                     fileDialog_OpenProject.SetTitle("Choose Project");
                     fileDialog_OpenProject.SetTypeFilters({ ".json",".*",".xwb-json" });
                     fileDialog_OpenProject.Open();
@@ -432,8 +431,12 @@ void WinBox::draw_triangle_box(){
 			}
 
 
-			ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-			XPHost::fps = ImGui::GetIO().Framerate;
+			// spring to force next items to the right
+			ImGui::SameLine(ImGui::GetContentRegionAvail().x);
+
+			const float fps = ImGui::GetIO().Framerate;
+			ImGui::Text("FPS: %.1f", fps);
+			XPHost::fps = fps;
 
 
 			auto lam_formatTime = [](double totalSeconds) {
@@ -449,7 +452,7 @@ void WinBox::draw_triangle_box(){
 			};
 
 			const std::string runtime = lam_formatTime( XPHost::m_timer.getElapsedTimeInSec() );
-			ImGui::Text("%s", runtime.c_str() );
+			ImGui::Text("RT: %s", runtime.c_str() );
 
 
 			ImGui::EndMainMenuBar();
