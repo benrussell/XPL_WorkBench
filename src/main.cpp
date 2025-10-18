@@ -215,7 +215,7 @@ int main(int argc, char** argv)
 
 	int width=640;
 	int height=480;
-	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench", NULL, NULL);
+	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench GL Context", NULL, NULL);
 
 		if (!mwinh)
 		{

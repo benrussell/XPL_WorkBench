@@ -40,6 +40,9 @@
 #include "GuiShaderTest.h"
 
 
+#include <dlfcn.h>
+
+
 
 // this might be prototype code for a shim windowing layer
 class WinRender{
@@ -106,6 +109,10 @@ public:
 
 	void load_plugin( const std::string& fname );
 	void load_project( const std::string& filename );
+
+	void load_fmod();
+	void load_fmod_studio();
+	void load_xplm();
 
 	void draw_triangle_box();
 

@@ -7,9 +7,11 @@
 
 
 
-WinBox::WinBox( int width, int height ){
+WinBox::WinBox( const int width, const int height ){
     /* Create a windowed mode window and its OpenGL context */
-    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", NULL, NULL); //FIXME: Why duplicate?
+	// create a window that belongs to a member var
+	// window created by main.cpp is only used for getting a GL context.
+    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", nullptr, nullptr);
 
 	XPHost::m_timer.start();
 
@@ -36,6 +38,22 @@ WinBox::WinBox( int width, int height ){
     //	ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(m_winh, true);
     ImGui_ImplOpenGL2_Init();
+
+	//added to assist with OS .app package debug
+	{
+		namespace fs = std::filesystem;
+    	try {
+    		// report and store the cwd where we loaded from.
+    		const std::string folder_now = fs::current_path();
+    		std::cout << "xwb/ cwd for font load: " << folder_now << std::endl;
+    	} catch (const fs::filesystem_error& e) {
+    		std::cerr << "Filesystem error: " << e.what() << std::endl;
+    	}
+    	catch (const std::exception& e) {
+    		std::cerr << "General error: " << e.what() << std::endl;
+    	}
+	}
+
 
     //ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear();
@@ -99,13 +117,15 @@ void WinBox::load_plugin( const std::string& fname ){
         XPHost::m_vecPlugins.push_back(p);
 
         {
-        	char name[512]; //FIXME: x-plane SDK docs say 256??
-        	char sig[512];
-        	char desc[512];
+        	//buffer size is defined by docs for XPLMGetPluginInfo(..)
+        	constexpr int buff_size = 256;
+        	char name[buff_size];
+        	char sig[buff_size];
+        	char desc[buff_size];
 
-        	snprintf( name, 256, "XWB Name" );
-        	snprintf( sig, 256, "XWB Signature" );
-        	snprintf( desc, 256, "XWB Description" );
+        	snprintf( name, buff_size, "XWB Default Name" );
+        	snprintf( sig, buff_size, "xwb.default.signature" );
+        	snprintf( desc, buff_size, "XWB Default Description" );
 
         	p->call_start( name, sig, desc );
         }
@@ -183,6 +203,83 @@ void WinBox::load_project( const std::string& filename ){
 } //load_project()
 
 
+
+void WinBox::load_fmod() {
+	std::cout << "xwb/ load_fmod()\n";
+
+	const std::string fname = "/Users/br/XP12_Libs/X-Plane.app/Contents/Frameworks/libfmod.dylib";
+
+	//works ok on mac
+	std::cout<<"xwb/ calling dlopen(" << fname << ")\n";
+	std::cout<<"xwb/ --- fmod static init / begin ---\n";
+	dlerror(); //clear errors.
+
+	void* dlh = dlopen(fname.c_str(), RTLD_NOW);
+
+	if( dlh == nullptr ){
+		std::string sLoadError = dlerror();
+		throw std::runtime_error( sLoadError ); //we capture this for GUI display
+
+	}else{
+		std::cout<<"xwb/ --- fmod static init / end   ---\n";
+		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
+
+	} //dlopen worked
+
+}
+
+
+
+void WinBox::load_fmod_studio() {
+	std::cout << "xwb/ load_fmod_studio()\n";
+
+	std::string fname = "/Users/br/XP12_Libs/X-Plane.app/Contents/Frameworks/libfmodstudio.dylib";
+
+	//works ok on mac
+	std::cout<<"xwb/ calling dlopen(" << fname << ")\n";
+	std::cout<<"xwb/ --- fmodstudio static init / begin ---\n";
+	dlerror(); //clear errors.
+
+	void* dlh = dlopen(fname.c_str(), RTLD_NOW);
+
+	if( dlh == nullptr ){
+		std::string sLoadError = dlerror();
+		throw std::runtime_error( sLoadError ); //we capture this for GUI display
+
+	}else{
+		std::cout<<"xwb/ --- fmodstudio static init / end   ---\n";
+		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
+
+	} //dlopen worked
+
+}
+
+
+
+
+void WinBox::load_xplm() {
+	std::cout << "xwb/ load_xplm()\n";
+
+	std::string fname = "@executable_path/../../../Resources/plugins/XPLM.framework/XPLM";
+
+	//works ok on mac
+	std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_LOCAL\n";
+	std::cout<<"xwb/ --- xplm static init / begin ---\n";
+	dlerror(); //clear errors.
+
+	void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_LOCAL );
+
+	if( dlh == nullptr ){
+		std::string sLoadError = dlerror();
+		throw std::runtime_error( sLoadError ); //we capture this for GUI display
+
+	}else{
+		std::cout<<"xwb/ --- xplm static init / end   ---\n";
+		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
+
+	} //dlopen worked
+
+}
 
 
 void WinBox::draw_triangle_box(){
@@ -322,6 +419,15 @@ void WinBox::draw_triangle_box(){
 
 					ImGui::EndMenu();
 				}
+
+
+				if( ImGui::MenuItem("Load XPLM") ){
+					std::cout<<"menu/file/load xplm\n";
+					// set_xp_choice( fn );
+					load_fmod();
+					load_fmod_studio();
+					load_xplm();
+				}
 				ImGui::Separator();
 
 
@@ -340,7 +446,7 @@ void WinBox::draw_triangle_box(){
 					m_shaderTest->m_bDraw = ! m_shaderTest->m_bDraw;
 				}
 
-				if(ImGui::MenuItem("Textures", nullptr, GuiTextures::m_bDraw, true)){
+				if(ImGui::MenuItem("Texture List", nullptr, GuiTextures::m_bDraw, true)){
 					GuiTextures::m_bDraw = ! GuiTextures::m_bDraw;
 				}
 
@@ -639,10 +745,10 @@ void WinBox::OnDraw(){
 				ImGui::Indent();
 				ImGui::Text("_");
 				// Set the width for wrapping
-				float wrap_width = ImGui::GetWindowWidth() - 30.f;
+				const float wrap_width = ImGui::GetWindowWidth() - 30.f;
 
 				//FIXME: put something red on this dialog for attention grab
-				// Enable text wrapping at the current window width
+
 				ImGui::PushTextWrapPos(wrap_width);
 				ImGui::Text("%s", m_sErrorMessage.c_str());
 				ImGui::PopTextWrapPos();
@@ -708,208 +814,6 @@ void WinBox::OnDraw(){
 
 		GuiMemory::draw();
 
-
-		//quick-bez window code.
-		//replace this with a proper avionics device
-		//bezel fbo renderer.
-
-		//FIXME: this stuff can go?
-#if 0
-		auto lam_callCmdByName = []( const std::string& call_by_name ){
-			std::cout<<"qick_bez: callCmdByName:[" << call_by_name << "]\n";
-
-			if( ! XPHost::m_vecPlugins.empty() ){
-				auto p = XPHost::m_vecPlugins[0];
-				if( p ){
-
-					for( auto cmd: p->m_vecCommands ){
-						//ImGui::Text("%s", cmd->m_name.c_str() );
-
-						if( call_by_name == cmd->m_name ){
-							cmd->callBegin();
-							cmd->callEnd();
-						}
-
-					} //loop cmds
-				} //valid ptr ref?
-			} //any plugins loaded?
-
-		};
-
-
-
-
-
-		ImGui::Begin("Bezel Host");
-
-		ImGui::End();
-
-
-		ImGui::Begin("Bezel Left");
-		{
-			if(ImGui::Button("BRT:UP")){
-				lam_callCmdByName("BK_IN-182A/BRT_UP");
-			}
-			if(ImGui::Button("BRT:DN")){
-				lam_callCmdByName("BK_IN-182A/BRT_DN");
-			}
-
-			ImGui::Text("");
-
-			if(ImGui::Button("Wx")){
-				lam_callCmdByName("BK_IN-182A/WX");
-			}
-
-			if(ImGui::Button("WxA")){
-				lam_callCmdByName("BK_IN-182A/WXA");
-			}
-
-			if(ImGui::Button("MAP")){
-				lam_callCmdByName("BK_IN-182A/MAP");
-			}
-
-			ImGui::Text("");
-
-			if(ImGui::Button("GAIN:UP")){
-				lam_callCmdByName("BK_IN-182A/GAIN_UP");
-			}
-			if(ImGui::Button("GAIN:DN")){
-				lam_callCmdByName("BK_IN-182A/GAIN_DN");
-			}
-
-		}
-		ImGui::End();
-
-
-		ImGui::Begin("Bezel Right");
-		{
-			if(ImGui::Button("FN:UP")){
-				lam_callCmdByName("BK_IN-182A/FN_UP");
-			}
-			if(ImGui::Button("FN:DN")){
-				lam_callCmdByName("BK_IN-182A/FN_DN");
-			}
-
-			ImGui::Text("");
-
-			if(ImGui::Button("RNG:UP")){
-				lam_callCmdByName("BK_IN-182A/RNG_UP");
-			}
-			if(ImGui::Button("RNG:DN")){
-				lam_callCmdByName("BK_IN-182A/RNG_DN");
-			}
-
-			ImGui::Text("");
-
-			if(ImGui::Button("STAB")){
-				lam_callCmdByName("BK_IN-182A/STAB");
-			}
-
-			ImGui::Text("");
-
-			if(ImGui::Button("TLT:UP")){
-				lam_callCmdByName("BK_IN-182A/TILT_UP");
-			}
-			if(ImGui::Button("TLT:DN")){
-				lam_callCmdByName("BK_IN-182A/TILT_DN");
-			}
-
-
-//			ImGui::Text("");
-//
-//
-//			if(ImGui::Button("UP")){
-//				lam_callCmdByName("glass/up");
-//			}
-//
-//			if(ImGui::Button("DOWN")){
-//				lam_callCmdByName("glass/down");
-//			}
-
-
-		}
-		ImGui::End();
-
-
-		ImGui::Begin("Bezel Top");
-		{
-
-
-			ImGui::SameLine();
-			ImGui::Button("F1");
-			ImGui::SameLine();
-			ImGui::Button("F2");
-			ImGui::SameLine();
-			ImGui::Button("F3");
-			ImGui::SameLine();
-			ImGui::Button("F4");
-
-			ImGui::SameLine();
-			if(ImGui::Button("CANCEL")){
-				lam_callCmdByName("glass/cancel");
-			}
-
-			ImGui::SameLine();
-			if(ImGui::Button("SELECT")){
-				lam_callCmdByName("glass/select");
-			}
-
-
-			ImGui::SameLine();
-			if(ImGui::Button("PREV")){
-				lam_callCmdByName("glass/left");
-			}
-
-			ImGui::SameLine();
-			if(ImGui::Button("NEXT")){
-				lam_callCmdByName("glass/right");
-			}
-
-
-		}
-		ImGui::End();
-
-
-		ImGui::Begin("Bezel Bottom");
-		{
-
-
-			ImGui::SameLine();
-			ImGui::Button("B1");
-			ImGui::SameLine();
-			ImGui::Button("B2");
-			ImGui::SameLine();
-			ImGui::Button("B3");
-			ImGui::SameLine();
-			ImGui::Button("B4");
-
-			ImGui::SameLine();
-			if(ImGui::Button("CANCEL")){
-				lam_callCmdByName("glass/cancel");
-			}
-
-			ImGui::SameLine();
-			if(ImGui::Button("SELECT")){
-				lam_callCmdByName("glass/select");
-			}
-
-
-			ImGui::SameLine();
-			if(ImGui::Button("PREV")){
-				lam_callCmdByName("glass/left");
-			}
-
-
-			ImGui::SameLine();
-			if(ImGui::Button("NEXT")){
-				lam_callCmdByName("glass/right");
-			}
-
-
-
-		}
-		ImGui::End();
-#endif
 
 
 		if( GuiRecentProjects::m_bDraw ){
