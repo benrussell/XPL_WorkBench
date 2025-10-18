@@ -18,6 +18,8 @@ extern "C" {
 
 	void XPLMFindLastNavAidOfType();
 
+	const char * XPLMGetDirectorySeparator(void);
+
 	void XPLMGetDirectoryContents(const char *         inDirectoryPath,
 						 int                  inFirstReturn,
 						 char *               outFileNames,
@@ -92,6 +94,32 @@ void       XPLMUnregisterCommandHandler(
 
 
 
+
+	#define XPLMMenuID int
+	XPLMMenuID XPLMFindPluginsMenu(void);
+
+
+	typedef void (* XPLMMenuHandler_f)(
+							 void *               inMenuRef,
+							 void *               inItemRef);
+
+	XPLMMenuID XPLMCreateMenu(
+							 const char *         inName,
+							 XPLMMenuID           inParentMenu,
+							 int                  inParentItem,
+							 XPLMMenuHandler_f    inHandler,
+							 void *               inMenuRef);
+
+
+
+	int        XPLMAppendMenuItem(
+							 XPLMMenuID           inMenu,
+							 const char *         inItemName,
+							 void *               inItemRef,
+							 int                  inDeprecatedAndIgnored);
+
+	void       XPLMDestroyMenu(
+							 XPLMMenuID           inMenuID);
 
 } //extern
 

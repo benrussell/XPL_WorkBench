@@ -238,6 +238,13 @@ void XPLMFindLastNavAidOfType() {
 }
 
 
+
+const char * XPLMGetDirectorySeparator(void) {
+	return "/";
+}
+
+
+
 void XPLMGetDirectoryContents(const char* inDirectoryPath,
                              int inFirstReturn,
                              char* outFileNames,
@@ -341,5 +348,44 @@ int XPLMIsPluginEnabled( int plugin_id ) {
 	auto target = XPHost::m_vecPlugins[target_id];
 
 	return target->m_plugin_is_enabled;
+}
+
+
+
+XPLMMenuID XPLMFindPluginsMenu() {
+	std::cerr << "xwb/ nop/ XPLMFindPluginsMenu()\n";
+	return 0;
+}
+
+
+
+XPLMMenuID XPLMCreateMenu(
+							 const char *         inName,
+							 XPLMMenuID           inParentMenu,
+							 int                  inParentItem,
+							 XPLMMenuHandler_f    inHandler,
+							 void *               inMenuRef) {
+	std::cerr << "xwb/ nop/ XPLMCreateMenu()\n";
+	return 0;
+}
+
+
+
+
+int        XPLMAppendMenuItem(
+						 XPLMMenuID           inMenu,
+						 const char *         inItemName,
+						 void *               inItemRef,
+						 int                  inDeprecatedAndIgnored){
+	std::cerr << "xwb/ nop/ XPLMAppendMenuItem()\n";
+	return 0;
+}
+
+
+
+void       XPLMDestroyMenu(
+					XPLMMenuID           inMenuID){
+	std::cerr << "xwb/ nop/ XPLMDestroyMenu()\n";
+
 }
 
