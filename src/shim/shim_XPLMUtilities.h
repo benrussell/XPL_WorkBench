@@ -93,6 +93,23 @@ void       XPLMUnregisterCommandHandler(
 
 
 
+
+
+
+
+	int        XPLMAppendMenuItem(
+							 //XPLMMenuID           inMenu,
+							 void*           inMenu,
+							 const char *         inItemName,
+							 void *               inItemRef,
+							 int                  inDeprecatedAndIgnored);
+
+
+
+
+
+
+
 } //extern
 
 #endif //GLFW_XP_HOST_SHIM_XPLM_UTILITIES_H

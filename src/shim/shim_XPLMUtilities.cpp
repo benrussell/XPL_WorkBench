@@ -343,3 +343,22 @@ int XPLMIsPluginEnabled( int plugin_id ) {
 	return target->m_plugin_is_enabled;
 }
 
+
+
+
+
+
+int        XPLMAppendMenuItem(
+						 //XPLMMenuID           inMenu,
+						 void*           inMenu,
+						 const char *         inItemName,
+						 void *               inItemRef,
+						 int                  inDeprecatedAndIgnored) {
+	std::cerr << "xwb/ nop/ XPLMAppendMenuItem( " << inItemName << " )\n";
+	return 0;
+}
+
+
+
+
+
