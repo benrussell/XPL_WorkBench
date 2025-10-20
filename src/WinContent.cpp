@@ -257,30 +257,6 @@ void WinBox::load_fmod_studio() {
 
 
 
-void WinBox::load_xplm() {
-	std::cout << "xwb/ load_xplm()\n";
-
-	std::string fname = "@executable_path/../../../Resources/plugins/XPLM.framework/XPLM";
-
-	//works ok on mac
-	std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_LOCAL\n";
-	std::cout<<"xwb/ --- xplm static init / begin ---\n";
-	dlerror(); //clear errors.
-
-	void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_LOCAL );
-
-	if( dlh == nullptr ){
-		std::string sLoadError = dlerror();
-		throw std::runtime_error( sLoadError ); //we capture this for GUI display
-
-	}else{
-		std::cout<<"xwb/ --- xplm static init / end   ---\n";
-		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
-
-	} //dlopen worked
-
-}
-
 
 void WinBox::draw_triangle_box(){
     /* Render here */
@@ -421,13 +397,19 @@ void WinBox::draw_triangle_box(){
 				}
 
 
-				if( ImGui::MenuItem("Load XPLM") ){
-					std::cout<<"menu/file/load xplm\n";
+				if( ImGui::MenuItem("Load FMOD") ){
+					std::cout<<"menu/file/load fmod\n";
 					// set_xp_choice( fn );
 					load_fmod();
 					load_fmod_studio();
-					load_xplm();
 				}
+
+
+				// if( ImGui::MenuItem("Load XPLM") ){
+				// 	std::cout<<"menu/file/load xplm\n";
+				// 	// set_xp_choice( fn );
+				// 	load_xplm();
+				// }
 				ImGui::Separator();
 
 

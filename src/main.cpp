@@ -126,11 +126,48 @@ void save_recent_projects(){
 
 
 
+
+
+
+
+
+void load_xplm() {
+	std::cout << "xwb/ load_xplm()\n";
+
+	std::string fname = "@executable_path/../../../Resources/plugins/XPLM.framework/XPLM";
+
+	//works ok on mac
+	std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_GLOBAL\n";
+	std::cout<<"xwb/ --- xplm static init / begin ---\n";
+	dlerror(); //clear errors.
+
+	void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL );
+
+	if( dlh == nullptr ){
+		std::string sLoadError = dlerror();
+		throw std::runtime_error( sLoadError ); //we capture this for GUI display
+
+	}else{
+		std::cout<<"xwb/ --- xplm static init / end   ---\n";
+		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
+
+	} //dlopen worked
+
+}
+
+
+
+
+
+
 int main(int argc, char** argv)
 {
 
 	{
 		namespace fs = std::filesystem;
+
+		std::cout << "xwb/ Boot Folder: [" << fs::current_path() << "]\n";
+
 
 		// std::cout << "xwb/ cwd ~/.XPL_WorkBench..\n"; // FIXME: Windows -> %APPDATA%
 		try {
@@ -163,6 +200,10 @@ int main(int argc, char** argv)
 			std::cerr << "General error: " << e.what() << std::endl;
 		}
 	}//scope
+
+
+
+	load_xplm();
 
 
 	auto cmds = CommandsTxtParse("Commands.txt");
