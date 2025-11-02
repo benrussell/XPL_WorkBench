@@ -159,6 +159,38 @@ public:
 
 
 
+	static int call_draw_cbs() {
+		//std::cout << "xwb/ FXPLM::call_run_flcbs([" << "])\n";
+
+		void* dlh = FXPLM::m_xplm_dlh;
+
+		int init_success = 0;
+
+		// this->takeContext();
+		// std::cout<<"xwb/ FXPLM::load_plugin()\n";
+		int (*fptr_start)();
+		fptr_start = (int (*)())dlsym( dlh, "FXPLM_DrawCBS" ); //FIXME: replace with fn sig typedef
+		if( fptr_start ) {
+			init_success = (*fptr_start)();
+
+		}else{
+			//this->releaseContext();
+			const std::string msg = "Could not find FXPLM_DrawCBS";
+			throw std::runtime_error( msg );
+		}
+
+
+		if( 0 > init_success ) {
+			throw std::runtime_error( "FXPLM_DrawCBS failed, ret value is 0\n" );
+		}
+
+
+		return init_success;
+	}
+
+
+
+
 };
 
 

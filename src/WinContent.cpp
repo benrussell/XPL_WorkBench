@@ -634,6 +634,8 @@ void WinBox::OnDraw(){
 		}
 
 
+
+		FXPLM::call_draw_cbs();
 #if 0 //FIXME: FXPLM
 		// Render all avionics device FBO surfaces.
 		for( auto p: XPHost::m_vecPlugins ){
