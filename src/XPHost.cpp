@@ -16,7 +16,9 @@ std::vector<xp_dref*> XPHost::m_dref_pool;
 
 
 size_t XPHost::m_plugin_id_ctr=0;
+#if 0 //FIXME: FXPLM
 std::vector<Plugin*> XPHost::m_vecPlugins;
+#endif
 
 std::vector<std::string> XPHost::m_vecRecentProjects;
 std::vector<std::string> XPHost::m_vecRecentPlugins;

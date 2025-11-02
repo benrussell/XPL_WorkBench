@@ -112,6 +112,8 @@ void WinBox::set_xp_choice( const std::string& fname ) {
 
 void WinBox::load_plugin( const std::string& fname ){
     //std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
+	throw std::runtime_error("xwb/ load_plugin: Not Implemented");
+#if 0 //FIXME: FXPLM
     try {
         Plugin *p = new Plugin(fname);
         XPHost::m_vecPlugins.push_back(p);
@@ -142,6 +144,7 @@ void WinBox::load_plugin( const std::string& fname ){
         m_sErrorMessage = e.what();
         m_displayErrorMessage = true;
     }
+#endif
 }
 
 
@@ -166,10 +169,12 @@ void WinBox::load_project( const std::string& filename ){
 
     //unload our plugins!
     std::cout<<"xwb/ ----- unloading plugins -------\n";
+#if 0 //FIXME: FXPLM
     for(const  auto p: XPHost::m_vecPlugins ){
         delete p;
     }
     XPHost::m_vecPlugins.clear();
+#endif
 
 
     std::ifstream f( filename );
@@ -332,10 +337,12 @@ void WinBox::draw_triangle_box(){
                 if(ImGui::MenuItem("Unload all Plugins..", nullptr, false, true)){
                     //unload our plugins!
                     std::cout<<"xwb/ ----- unloading plugins -------\n";
+#if 0 //FIXME: FXPLM
                     for( const auto p: XPHost::m_vecPlugins ){
                         delete p;
                     }
                     XPHost::m_vecPlugins.clear();
+#endif
                 }
 
                 ImGui::Separator();
@@ -443,6 +450,10 @@ void WinBox::draw_triangle_box(){
 			if(ImGui::BeginMenu("View")){
 
 				if(ImGui::BeginMenu("Avionics Devices")) {
+					ImGui::MenuItem("FXPLM Fix needed.");
+
+#if 0 //FIXME: FXPLM
+
 					if( XPHost::m_vecPlugins.empty() ){
 						ImGui::MenuItem("No plugins.");
 					}
@@ -458,6 +469,7 @@ void WinBox::draw_triangle_box(){
 							}
 						}
 					}
+#endif
 					ImGui::EndMenu();
 				}
 
@@ -645,7 +657,7 @@ void WinBox::OnDraw(){
 		}
 
 
-
+#if 0 //FIXME: FXPLM
 		// Render all avionics device FBO surfaces.
 		for( auto p: XPHost::m_vecPlugins ){
 			if ( p->m_plugin_is_enabled ) {
@@ -665,6 +677,7 @@ void WinBox::OnDraw(){
 			}
 
 		}
+#endif
 
 
 
@@ -709,12 +722,14 @@ void WinBox::OnDraw(){
 		} //deal with plugin open dialog
 
 
+#if 0 //FIXME: FXPLM
 		//loop over all avionics-device gui instances and call their imgui draw code.
 		for( auto p: XPHost::m_vecPlugins ){
 			for( auto gui: p->m_vecGuiAv ){
 				gui->draw();
 			}
 		}
+#endif
 
 
 		//show an error message box, probably from trying to load a bad plugin or

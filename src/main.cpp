@@ -198,6 +198,7 @@ void load_xplm() {
 
 	call_xplm_init( dlh, "name", "sig", "desc" );
 
+
 }
 
 
@@ -366,12 +367,13 @@ int main(int argc, char** argv)
 	std::vector<WinBox*> keepers;
 	//loop will exit when all windows are closed.
 	while(true){
-	
+
+#if 0 //FIXME: FXPLM
 		//std::cout << "running flcbs\n";
 		for( const auto p: XPHost::m_vecPlugins ){
 			p->run_flcbs();
 		}
-
+#endif
 
 		//loop over child windows and drive their events
 		for( auto window: window_pool ){

@@ -27,8 +27,8 @@ class GuiPlugins;
 
 
 #include "Plugin.h"
-class Plugin;
-extern Plugin* global_target_plugin;
+//FXPLM: class Plugin;
+//FXPLM: extern Plugin* global_target_plugin;
 
 class GuiDatarefs;
 
@@ -46,7 +46,7 @@ public:
 
 	//all loaded plugins
 	static size_t m_plugin_id_ctr;
-	static std::vector<Plugin*> m_vecPlugins;
+	//FXPLM: static std::vector<Plugin*> m_vecPlugins;
 
 	//datarefs tree view
 	static GuiDatarefs gui_Datarefs;

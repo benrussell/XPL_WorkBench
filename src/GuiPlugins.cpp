@@ -21,6 +21,8 @@ void GuiPlugins::draw(){
 	ImGui::SetNextWindowPos(ImVec2(0,30), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(320,360), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plugins", &win_open);
+	ImGui::Text("FXPLM fix needed");
+#if 0 //FIXME: FXPLM
 	if( XPHost::m_vecPlugins.empty() ){
 		ImGui::Text("No plugins loaded.");
 	}
@@ -288,6 +290,8 @@ void GuiPlugins::draw(){
 
 
 	}
+
+#endif
 	ImGui::End(); //plugins gui
 
 
