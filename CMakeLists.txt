@@ -159,12 +159,15 @@ set( XP_SHIM_SRC
 #        ${SHIM_FOL}shim_XPLMProcessing.cpp ${SHIM_FOL}shim_XPLMProcessing.h
 #        ${SHIM_FOL}shim_XPLMUtilities.cpp ${SHIM_FOL}shim_XPLMUtilities.h
 
-        src/Plugin.cpp src/Plugin.h
+        src/main.cpp
+
+        #        src/Plugin.cpp src/Plugin.h
         src/XPHost.cpp src/XPHost.h
         src/WinContent.cpp src/WinContent.h
-        src/AvionicsHost.h
-        src/DrawCallbackHost.h
-        src/GuiAvionicsDevice.h
+#        src/AvionicsHost.h
+#        src/DrawCallbackHost.h
+
+#        src/GuiAvionicsDevice.h
 
         third_party/timer/src/Timer.cpp
         third_party/timer/src/Timer.h
@@ -192,7 +195,6 @@ set( XP_SHIM_SRC
         src/FBO.h
 
 
-        src/main.cpp
         )
 
 

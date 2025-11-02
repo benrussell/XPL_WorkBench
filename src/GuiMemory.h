@@ -14,7 +14,7 @@
 
 #include "XPHost.h"
 #include <functional>
-
+#include <iomanip>
 
 
 class GuiMemory {

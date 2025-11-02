@@ -5,11 +5,11 @@
 #include <iostream>
 #include <dlfcn.h>
 
-#include "shim/xp_sdk_shim.h"
-#include "shim/shim_XPLMDataAccess.h"
+// #include "shim/xp_sdk_shim.h"
+// #include "shim/shim_XPLMDataAccess.h"
 
 
-#include "Plugin.h"
+// #include "Plugin.h"
 #include "XPHost.h"
 #include "WinContent.h"
 
@@ -195,8 +195,10 @@ void load_xplm() {
 	} //dlopen worked
 
 
-
-	call_xplm_init( dlh, "name", "sig", "desc" );
+	char caName[256] = "init_name";
+	char caSig[256] = "init_sig";
+	char caDesc[256] = "init_desc";
+	call_xplm_init( dlh, caName, caSig, caDesc );
 
 
 }

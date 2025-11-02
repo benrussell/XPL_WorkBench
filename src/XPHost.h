@@ -10,14 +10,14 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "shim/shim_XPLMProcessing.h"
-#include "AvionicsHost.h"
-#include "GuiAvionicsDevice.h"
+// #include "shim/shim_XPLMProcessing.h"
+// #include "AvionicsHost.h"
+// #include "GuiAvionicsDevice.h"
 #include "GuiDatarefs.h"
 
 
 class xp_dref;
-#include "shim/xp_dref.h"
+#include "deprecated_shim/xp_dref.h"
 
 
 class GuiPlugins;
@@ -26,7 +26,7 @@ class GuiPlugins;
 #include "../third_party/timer/src/Timer.h"
 
 
-#include "Plugin.h"
+// #include "Plugin.h"
 //FXPLM: class Plugin;
 //FXPLM: extern Plugin* global_target_plugin;
 

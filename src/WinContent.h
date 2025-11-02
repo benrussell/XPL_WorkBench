@@ -5,10 +5,11 @@
 #ifndef GLFW_XP_HOST_WINCONTENT_H
 #define GLFW_XP_HOST_WINCONTENT_H
 
-#include "AvionicsHost.h"
+// #include "AvionicsHost.h"
 
+#include <GL/glew.h>
 
-#include "shim/shim_XPLMDisplay.h"
+#include "deprecated_shim/shim_XPLMDisplay.h"
 
 
 #include "imgui.h"
@@ -29,7 +30,10 @@
 
 #include <sstream>
 
-#include "GuiAvionicsDevice.h"
+// #include "GuiAvionicsDevice.h"
+
+
+
 #include "XPHost.h"
 #include "GuiRecentProjects.h"
 #include "GuiTextures.h"

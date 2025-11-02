@@ -11,13 +11,13 @@
 #include <iostream>
 #include <dlfcn.h>
 
-#include "shim/shim_XPLMDataAccess.h"
-#include "shim/shim_XPLMProcessing.h"
+// #include "shim/shim_XPLMDataAccess.h"
+// #include "shim/shim_XPLMProcessing.h"
 
-#include "AvionicsHost.h"
-#include "DrawCallbackHost.h"
-#include "GuiAvionicsDevice.h"
-#include "xpCmdCustom.h"
+// #include "AvionicsHost.h"
+// #include "DrawCallbackHost.h"
+// #include "GuiAvionicsDevice.h"
+// #include "xpCmdCustom.h"
 
 //#include "XPHost.h"
 
