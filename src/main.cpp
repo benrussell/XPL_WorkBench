@@ -295,12 +295,12 @@ int main(int argc, char** argv)
 	//loop will exit when all windows are closed.
 	while(true){
 
-#if 0 //FIXME: FXPLM
-		//std::cout << "running flcbs\n";
-		for( const auto p: XPHost::m_vecPlugins ){
-			p->run_flcbs();
-		}
-#endif
+
+
+		FXPLM::call_run_flcbs();
+
+
+
 
 		//loop over child windows and drive their events
 		for( auto window: window_pool ){
