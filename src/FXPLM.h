@@ -91,7 +91,7 @@ public:
 
 
 	static int call_load_plugin( const char* fname ) {
-		std::cout << "xwb/ FXPLM::load_plugin([" << fname << "])\n";
+		std::cout << "xwb/ FXPLM::call_load_plugin([" << fname << "])\n";
 
 		void* dlh = FXPLM::m_xplm_dlh;
 
@@ -112,7 +112,7 @@ public:
 
 
 		if( ! init_success ) {
-			throw std::runtime_error( "XPLM_Init failed, ret value is 0\n" );
+			throw std::runtime_error( "XPLM_LoadPlugin failed, ret value is 0\n" );
 		}
 
 
