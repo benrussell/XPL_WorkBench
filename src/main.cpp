@@ -176,7 +176,6 @@ int main(int argc, char** argv)
 
 
 
-	FXPLM::load_xplm();
 
 
 	auto cmds = CommandsTxtParse("Commands.txt");
@@ -246,8 +245,17 @@ int main(int argc, char** argv)
 			exit(EXIT_FAILURE);
 		}
 
+
+	std::cout<<"xwb/ FXPLM init called after first glewInit(); **************\n";
+	//must be after glew init?
+	FXPLM::load_xplm();
+
+
+
 	//we have created a GL context, we can drop this now.
 	glfwDestroyWindow( mwinh );
+
+
 
 
 
