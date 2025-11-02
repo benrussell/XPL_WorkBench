@@ -177,7 +177,7 @@ set( XP_SHIM_SRC
 
         src/StaticDefs.cpp
         src/GuiDatarefs.cpp        src/GuiDatarefs.h
-        src/xpCmdCustom.h
+        #src/xpCmdCustom.h
         src/GuiPlugins.cpp          src/GuiPlugins.h
         src/GuiRecentProjects.cpp       src/GuiRecentProjects.h
         src/GuiTextures.cpp         src/GuiTextures.h
