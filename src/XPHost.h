@@ -74,9 +74,9 @@ private:
 
 
 
+#if 0 //FIXME: FXPLM: ported to dylib
 
-
-class dref_factory{
+class dref_factory{ //FIXME: moved to FXPLM - delete here.
 public:
 	static size_t search_ctr;
 
@@ -157,7 +157,7 @@ public:
 
 };
 
-
+#endif
 
 
 
