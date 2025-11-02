@@ -3,6 +3,50 @@
 //
 
 
+
+
+#include <string>
+#include <dlfcn.h>
+#include <iostream>
+
+extern void* xplm_dlh;
+
+int call_xplm_set_context( void* g_plugin  ) {
+
+	void* dlh = xplm_dlh;
+
+
+	int init_success = 0;
+
+	// this->takeContext();
+	std::cout<<"xwb/ call_xplm_set_context()\n";
+	int (*fptr_start)(void*);
+	fptr_start = (int (*)(void*))dlsym( dlh, "XPLM_SetContext" ); //FIXME: replace with fn sig typedef
+	if( fptr_start ) {
+		init_success = (*fptr_start)( g_plugin );
+		std::cout << "xwb/ \tXPLM_SetContext has returned\n";
+
+	}else{
+		//this->releaseContext();
+		std::string msg = "Could not find XPLM_SetContext";
+		throw std::runtime_error( msg );
+	}
+
+
+	if( ! init_success ) {
+
+		// }else {
+		throw std::runtime_error( "XPLM_SetContext failed, ret value is 0\n" );
+	}
+
+
+	return 0;
+}
+
+
+
+
+
 #include "Plugin.h"
 
 
@@ -80,6 +124,7 @@
 
 	void Plugin::takeContext(){
 		global_target_plugin = this; // inside takeContext()
+		call_xplm_set_context( global_target_plugin );
 
 		m_workingFolder_BeforeContextSwitch = std::filesystem::current_path();
 		std::filesystem::current_path(m_workingFolder);
@@ -91,6 +136,8 @@
 
 	void Plugin::releaseContext(){
 		global_target_plugin = nullptr; //inside releaseContext()
+		call_xplm_set_context( global_target_plugin );
+
 		std::filesystem::current_path(m_workingFolder_BeforeContextSwitch);
 		//std::cout<<"###### release Ctx: " << m_workingFolder_BeforeContextSwitch << "\n";
 	}

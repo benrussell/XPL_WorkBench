@@ -128,8 +128,48 @@ void save_recent_projects(){
 
 
 
+int call_xplm_init( void* dlh, char* name, char* sig, char* desc ) {
+
+	int init_success = 0;
+
+	// this->takeContext();
+	std::cout<<"xwb/ call_xplm_init()\n";
+	int (*fptr_start)(char*,char*,char*);
+	fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPLM_Init" ); //FIXME: replace with fn sig typedef
+	if( fptr_start ) {
+		init_success = (*fptr_start)(name, sig, desc);
+		std::cout << "xwb/ \tret name: " << name << "\n";
+		std::cout << "xwb/ \tret sig: " << sig << "\n";
+		std::cout << "xwb/ \tret desc: " << desc << "\n";
+
+		// m_pluginName = name;
+		// m_pluginSig = sig;
+		// m_pluginDesc = desc;
+		//
+		// m_plugin_start_ret_val = plugin_started;
+		//
+		// this->releaseContext();
+
+	}else{
+		//this->releaseContext();
+		std::string msg = "Could not find XPLM_Init";
+		throw std::runtime_error( msg );
+	}
 
 
+	if( ! init_success ) {
+
+	// }else {
+		throw std::runtime_error( "XPLM_Init failed, ret value is 0\n" );
+	}
+
+
+	return 0;
+}
+
+
+
+void* xplm_dlh;
 
 void load_xplm() {
 	std::cout << "xwb/ load_xplm()\n";
@@ -142,6 +182,7 @@ void load_xplm() {
 	dlerror(); //clear errors.
 
 	void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL );
+	xplm_dlh = dlh;
 
 	if( dlh == nullptr ){
 		std::string sLoadError = dlerror();
@@ -152,6 +193,10 @@ void load_xplm() {
 		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
 
 	} //dlopen worked
+
+
+
+	call_xplm_init( dlh, "name", "sig", "desc" );
 
 }
 

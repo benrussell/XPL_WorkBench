@@ -66,12 +66,13 @@ public:
             ImGui::InputScalar("param", ImGuiDataType_U64, &m_msg_param, nullptr, nullptr, "%zu");
 
             if( ImGui::Button("Send Message") ){
-                ex_XPLMSendMessageToPlugin(
-                                        m_msg_sender_plugin_id,
-                                        m_msg_target_plugin_id,
-                                        m_msg_message,
-                                        (void*)m_msg_param
-                                        );
+                //FIXME:
+                // ex_XPLMSendMessageToPlugin(
+                //                         m_msg_sender_plugin_id,
+                //                         m_msg_target_plugin_id,
+                //                         m_msg_message,
+                //                         (void*)m_msg_param
+                //                         );
             }
 
             ImGui::Separator();
