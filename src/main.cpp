@@ -18,6 +18,8 @@
 #include "stb_image.h"
 
 
+#include "FXPLM.h"
+
 #include <iostream>
 #include <filesystem>
 
@@ -128,83 +130,6 @@ void save_recent_projects(){
 
 
 
-int call_xplm_init( void* dlh, char* name, char* sig, char* desc ) {
-
-	int init_success = 0;
-
-	// this->takeContext();
-	std::cout<<"xwb/ call_xplm_init()\n";
-	int (*fptr_start)(char*,char*,char*);
-	fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPLM_Init" ); //FIXME: replace with fn sig typedef
-	if( fptr_start ) {
-		init_success = (*fptr_start)(name, sig, desc);
-		std::cout << "xwb/ \tret name: " << name << "\n";
-		std::cout << "xwb/ \tret sig: " << sig << "\n";
-		std::cout << "xwb/ \tret desc: " << desc << "\n";
-
-		// m_pluginName = name;
-		// m_pluginSig = sig;
-		// m_pluginDesc = desc;
-		//
-		// m_plugin_start_ret_val = plugin_started;
-		//
-		// this->releaseContext();
-
-	}else{
-		//this->releaseContext();
-		std::string msg = "Could not find XPLM_Init";
-		throw std::runtime_error( msg );
-	}
-
-
-	if( ! init_success ) {
-
-	// }else {
-		throw std::runtime_error( "XPLM_Init failed, ret value is 0\n" );
-	}
-
-
-	return 0;
-}
-
-
-
-void* xplm_dlh;
-
-void load_xplm() {
-	std::cout << "xwb/ load_xplm()\n";
-
-	std::string fname = "@executable_path/../../../Resources/plugins/XPLM.framework/XPLM";
-
-	//works ok on mac
-	std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_GLOBAL\n";
-	std::cout<<"xwb/ --- xplm static init / begin ---\n";
-	dlerror(); //clear errors.
-
-	void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL );
-	xplm_dlh = dlh;
-
-	if( dlh == nullptr ){
-		std::string sLoadError = dlerror();
-		throw std::runtime_error( sLoadError ); //we capture this for GUI display
-
-	}else{
-		std::cout<<"xwb/ --- xplm static init / end   ---\n";
-		printf("xwb/  loaded dylib; dlh: %p\n", dlh);
-
-	} //dlopen worked
-
-
-	char caName[256] = "init_name";
-	char caSig[256] = "init_sig";
-	char caDesc[256] = "init_desc";
-	call_xplm_init( dlh, caName, caSig, caDesc );
-
-
-}
-
-
-
 
 
 
@@ -251,7 +176,7 @@ int main(int argc, char** argv)
 
 
 
-	load_xplm();
+	FXPLM::load_xplm();
 
 
 	auto cmds = CommandsTxtParse("Commands.txt");

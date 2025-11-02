@@ -193,9 +193,11 @@ set( XP_SHIM_SRC
 
         src/imgui_common.h 
         src/FBO.h
+        src/FXPLM.cpp
+        src/FXPLM.h
 
 
-        )
+)
 
 
 

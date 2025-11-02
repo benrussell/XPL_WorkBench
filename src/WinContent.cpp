@@ -5,6 +5,7 @@
 
 #include "WinContent.h"
 
+#include "FXPLM.h"
 
 
 WinBox::WinBox( const int width, const int height ){
@@ -81,7 +82,7 @@ WinBox::WinBox( const int width, const int height ){
         m_texInspector.m_showTexId = tex_id;
     };
 
-
+	std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
 };
 
 
@@ -112,39 +113,15 @@ void WinBox::set_xp_choice( const std::string& fname ) {
 
 void WinBox::load_plugin( const std::string& fname ){
     //std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
-	throw std::runtime_error("xwb/ load_plugin: Not Implemented");
-#if 0 //FIXME: FXPLM
-    try {
-        Plugin *p = new Plugin(fname);
-        XPHost::m_vecPlugins.push_back(p);
+	// throw std::runtime_error("xwb/ load_plugin: Not Implemented");
 
-        {
-        	//buffer size is defined by docs for XPLMGetPluginInfo(..)
-        	constexpr int buff_size = 256;
-        	char name[buff_size];
-        	char sig[buff_size];
-        	char desc[buff_size];
+	const int plugin_loaded = FXPLM::call_load_plugin( fname.c_str() );
 
-        	snprintf( name, buff_size, "XWB Default Name" );
-        	snprintf( sig, buff_size, "xwb.default.signature" );
-        	snprintf( desc, buff_size, "XWB Default Description" );
+	if( plugin_loaded ) {
+		XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
+		printf("\nWinBox::load_plugin(): loaded plugin.\n");
+	}
 
-        	p->call_start( name, sig, desc );
-        }
-
-
-        //FIXME: filter for dupes
-        XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
-        //XPHost::m_vecRecentPlugins.push_back( fname );
-
-        //printf("\nloaded_plugin/ Plugin* addr: %p\n", p);
-
-    }catch (const std::runtime_error& e) {
-        std::cerr << "xwb/ load_plugin/ runtime_error: " << e.what() << std::endl;
-        m_sErrorMessage = e.what();
-        m_displayErrorMessage = true;
-    }
-#endif
 }
 
 
