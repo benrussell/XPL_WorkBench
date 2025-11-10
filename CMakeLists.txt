@@ -61,6 +61,7 @@ INCLUDE_DIRECTORIES(
 set( INC_GZ_CORE ../gz_core/gz_api )
 include_directories( ${INC_GZ_CORE} )
 
+set( LNK_FXPLM_FRAMEWORK "../../blank_xp_frameworks/XPLM/cmake-build-debug/" )
 
 set( LNK_GLFW "../glfw/build_mac/src" )
 set( LNK_GLEW "third_party/glew-2.2.0/lib" )
@@ -154,25 +155,11 @@ set( SHIM_FOL "src/shim/" )
 # output binary which causes plugin loading to fail.
 # There is a linker flag to explore to work around this.
 set( XP_SHIM_SRC
-#        ${SHIM_FOL}shim_XPLMPlugin.cpp ${SHIM_FOL}shim_XPLMPlugin.h
-#        ${SHIM_FOL}xp_dref.cpp ${SHIM_FOL}xp_dref.h
-
-#        ${SHIM_FOL}shim_XPLMDataAccess.cpp ${SHIM_FOL}shim_XPLMDataAccess.h
-#        ${SHIM_FOL}shim_XPLMDisplay.cpp ${SHIM_FOL}shim_XPLMDisplay.h
-#        ${SHIM_FOL}shim_XPLMGraphics.cpp ${SHIM_FOL}shim_XPLMGraphics.h
-#        ${SHIM_FOL}shim_XPLMPlanes.cpp ${SHIM_FOL}shim_XPLMPlanes.h
-#        ${SHIM_FOL}shim_XPLMProcessing.cpp ${SHIM_FOL}shim_XPLMProcessing.h
-#        ${SHIM_FOL}shim_XPLMUtilities.cpp ${SHIM_FOL}shim_XPLMUtilities.h
 
         src/main.cpp
 
-        #        src/Plugin.cpp src/Plugin.h
         src/XPHost.cpp src/XPHost.h
         src/WinContent.cpp src/WinContent.h
-#        src/AvionicsHost.h
-#        src/DrawCallbackHost.h
-
-#        src/GuiAvionicsDevice.h
 
         third_party/timer/src/Timer.cpp
         third_party/timer/src/Timer.h
@@ -182,7 +169,7 @@ set( XP_SHIM_SRC
 
         src/StaticDefs.cpp
         src/GuiDatarefs.cpp        src/GuiDatarefs.h
-        #src/xpCmdCustom.h
+
         src/GuiPlugins.cpp          src/GuiPlugins.h
         src/GuiRecentProjects.cpp       src/GuiRecentProjects.h
         src/GuiTextures.cpp         src/GuiTextures.h
@@ -200,7 +187,6 @@ set( XP_SHIM_SRC
         src/FBO.h
         src/FXPLM.cpp
         src/FXPLM.h
-
 
 )
 

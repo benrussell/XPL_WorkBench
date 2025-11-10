@@ -4,7 +4,7 @@
 
 #include "GuiPlugins.h"
 
-
+#include <XPLMPlugin.h>
 
 std::function<void(int)> GuiPlugins::openImageInspector;
 
@@ -22,19 +22,34 @@ void GuiPlugins::draw(){
 	ImGui::SetNextWindowSize(ImVec2(320,360), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plugins", &win_open);
 	ImGui::Text("FXPLM fix needed");
-#if 0 //FIXME: FXPLM
-	if( XPHost::m_vecPlugins.empty() ){
+
+	const int plugin_count = XPLMCountPlugins();
+
+	char caName[256]{};
+	char caPath[256]{};
+	char caSig[256]{};
+	char caDesc[256]{};
+
+
+
+#if 1 //FIXME: FXPLM
+	if( plugin_count == 0 ){
 		ImGui::Text("No plugins loaded.");
 	}
 
-	for( auto p: XPHost::m_vecPlugins ){
+	for ( int x=1; x<=plugin_count; x++ ) {
+		XPLMGetPluginInfo(x, caName, caPath, caSig, caDesc);
 
-		const std::string sNodeLabel = std::to_string(p->m_plugin_id) + ":" + p->m_pluginSig;
-		const std::string sLabPtr = "P: " + std::to_string((size_t)p);
+	// for( auto p: XPHost::m_vecPlugins ){
+
+		const std::string sNodeLabel = std::to_string(x) + ":" + caSig;
+		const std::string sLabPtr = "P: " + std::to_string((size_t)x);
 		if( ImGui::TreeNodeEx( sNodeLabel.c_str(), ImGuiTreeNodeFlags_DefaultOpen ) ){
 
+			bool plugin_enabled = XPLMIsPluginEnabled( x );
 
-			if(ImGui::Checkbox("enabled", &p->m_plugin_is_enabled)) {
+			if(ImGui::Checkbox("enabled", &plugin_enabled)) {
+#if 0 // FIXME: need more api wraps
 					if ( p->m_plugin_is_enabled) {
 						std::cout << "enabled: " << p->m_plugin_is_enabled << "\n";
 						p->call_enable();
@@ -44,17 +59,20 @@ void GuiPlugins::draw(){
 						p->call_disable();
 
 					}
+#endif
 
 			}
 
-			ImGui::Text("ptr: %p", (void*)p);
-			ImGui::Text("name: %s", p->m_pluginName.c_str());
-			ImGui::Text("desc: %s", p->m_pluginDesc.c_str());
-			ImGui::Text(" sig: %s", p->m_pluginSig.c_str());
+			// ImGui::Text("ptr: %p", (void*)p);
+			ImGui::Text("name: %s", caName);
+			ImGui::Text("desc: %s", caDesc);
+			ImGui::Text(" sig: %s", caSig);
 
-			ImGui::Text(" working: %s", p->m_workingFolder.c_str());
-			ImGui::Text("    from: %s", p->m_workingFolder_BeforeContextSwitch.c_str());
+			//FIXME: need more API calls
+			// ImGui::Text(" working: %s", p->m_workingFolder.c_str());
+			// ImGui::Text("    from: %s", p->m_workingFolder_BeforeContextSwitch.c_str());
 
+#if 0 //FIXME: need apis to query cmd wraps
 			const std::string sLabCmds = "cmds [" + std::to_string(p->m_vecCommands.size()) + "]";
 			int flags_open = ImGuiTreeNodeFlags_DefaultOpen;
 			int flags = 0;
@@ -95,9 +113,10 @@ void GuiPlugins::draw(){
 
 				ImGui::TreePop();
 			}
+#endif
 
 
-
+#if 0 //FIXME: api to query av devs that a plugin owns
 			const std::string sLabAvDevs = "av_devs [" + std::to_string(p->m_vecAvionicsHost.size()) + "]";
 			if( ImGui::TreeNode(sLabAvDevs.c_str()) ){
 
@@ -149,9 +168,13 @@ void GuiPlugins::draw(){
 
 				} //loop avionics host entities.
 
+
 				ImGui::TreePop();
 			}
+#endif //av devs
 
+
+#if 0
 			const std::string sLabAvGuis = "av_gui [" + std::to_string(p->m_vecGuiAv.size()) + "]";
 			if( ImGui::TreeNode(sLabAvGuis.c_str()) ){
 
@@ -282,7 +305,7 @@ void GuiPlugins::draw(){
 
 				ImGui::TreePop();
 			}
-
+#endif
 
 
 			ImGui::TreePop();
