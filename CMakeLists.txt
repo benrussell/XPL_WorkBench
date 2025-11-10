@@ -19,7 +19,7 @@ ENDIF(CMAKE_SYSTEM_NAME STREQUAL Linux)
 
 
 
-
+set( FXPLM_INC "../blank_xp_frameworks/XPLM/XPLM" )
 
 set( IMGUI_ROOT "third_party/imgui-docking"
         )
@@ -49,6 +49,8 @@ INCLUDE_DIRECTORIES(
 
         third_party/glew-2.2.0/include
         third_party/stb_image
+
+        ${FXPLM_INC}
 
 )
 
@@ -85,6 +87,8 @@ IF( APPLE )
     find_library(APPKIT_LIBRARY AppKit)
     find_library(QUARTZCORE_LIBRARY QuartzCore)
 
+    set( FXPLM_DYLIB XPLM )
+
     SET( LIBS_MAC
         ${OPENGL_LIBRARIES}
         ${GLUT_LIBRARY}
@@ -97,7 +101,8 @@ IF( APPLE )
         ${COREGRAPHICS_LIBRARY}
         ${APPKIT_LIBRARY}
         ${QUARTZCORE_LIBRARY}
-
+        "-framework ${FXPLM_DYLIB}"
+        "-F${LNK_FXPLM_FRAMEWORK}"
         )
 
 ENDIF( APPLE )
@@ -207,6 +212,15 @@ add_executable( ${PROJECT_NAME}
         
         ${XP_SHIM_SRC}
         )
+
+
+IF( APPLE )
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            MACOSX_RPATH ON
+            BUILD_WITH_INSTALL_RPATH ON
+            INSTALL_RPATH "@executable_path/../../../Resources/plugins"
+    )
+ENDIF( APPLE )
 
 
 target_link_libraries( ${PROJECT_NAME}  ${USE_LIBS} )
