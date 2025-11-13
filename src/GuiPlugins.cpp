@@ -5,6 +5,7 @@
 #include "GuiPlugins.h"
 
 #include <XPLMPlugin.h>
+#include <XPLMUtilities.h>
 
 std::function<void(int)> GuiPlugins::openImageInspector;
 
@@ -49,17 +50,18 @@ void GuiPlugins::draw(){
 			bool plugin_enabled = XPLMIsPluginEnabled( x );
 
 			if(ImGui::Checkbox("enabled", &plugin_enabled)) {
-#if 0 // FIXME: need more api wraps
-					if ( p->m_plugin_is_enabled) {
-						std::cout << "enabled: " << p->m_plugin_is_enabled << "\n";
-						p->call_enable();
 
-					}else {
-						std::cout << "enabled: " << p->m_plugin_is_enabled << "\n";
-						p->call_disable();
-
+				if ( ! plugin_enabled ) {
+					if( XPLMIsPluginEnabled( x ) ) {
+						XPLMDisablePlugin( x );
 					}
-#endif
+				}
+
+				if ( plugin_enabled ) {
+					if( ! XPLMIsPluginEnabled( x ) ) {
+						XPLMEnablePlugin( x );
+					}
+				}
 
 			}
 
@@ -71,6 +73,21 @@ void GuiPlugins::draw(){
 			//FIXME: need more API calls
 			// ImGui::Text(" working: %s", p->m_workingFolder.c_str());
 			// ImGui::Text("    from: %s", p->m_workingFolder_BeforeContextSwitch.c_str());
+
+
+
+			const int cmd_count = FXPLM_CommandCountForPluginID( x );
+			ImGui::Text(" cmd count: %i", cmd_count);
+
+			char caCmdName[256];
+			char caCmdDesc[256];
+
+			for ( int cmd_x=0; cmd_x<cmd_count; cmd_x++ ) {
+				FXPLM_CommandInfo( x, cmd_x, caCmdName, caCmdDesc );
+				ImGui::Text(" cmd [%s]", caCmdName);
+
+			}
+
 
 #if 0 //FIXME: need apis to query cmd wraps
 			const std::string sLabCmds = "cmds [" + std::to_string(p->m_vecCommands.size()) + "]";
