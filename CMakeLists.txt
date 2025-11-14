@@ -183,8 +183,8 @@ set( XP_SHIM_SRC
 
         src/GuiShaderTest.h
 
-        src/imgui_common.h 
-        src/FBO.h
+        src/imgui_common.h
+        #src/dep_FBO.h
         src/FXPLM.cpp
         src/FXPLM.h
 

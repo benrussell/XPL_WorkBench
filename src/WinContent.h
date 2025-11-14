@@ -31,7 +31,7 @@
 
 #include <sstream>
 
-// #include "GuiAvionicsDevice.h"
+#include "GuiAvionicsDevice.h"
 
 
 

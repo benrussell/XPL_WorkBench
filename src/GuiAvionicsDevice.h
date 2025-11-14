@@ -14,7 +14,7 @@
 #include "imgui_impl_opengl2.h"
 
 //#include "Plugin.h" //cant include this here, breaks compile
-//FIXME: FXPLM: #include "AvionicsHost.h"
+#include <glue_AvionicsHost.hpp>
 
 //FIXME: FXPLM: #include "shim/shim_XPLMDisplay.h"
 
@@ -387,7 +387,7 @@ public:
 
 	size_t m_randInst;
 
-	// AvionicsHost* m_dev; //FIXME:
+	AvionicsHost* m_dev;
 
 	// Plugin* m_plugin;
 

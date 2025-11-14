@@ -17,7 +17,7 @@
 
 #include <gz_shader.h>
 
-#include "FBO.h" //FIXME: port to gz_core
+#include "glue_FBO.hpp" //FIXME: port to gz_core
 
 
 class GuiShaderTest {
