@@ -17,7 +17,7 @@
 
 
 class xp_dref;
-#include "deprecated_shim/xp_dref.h"
+#include "xp_dref.hpp"
 
 
 class GuiPlugins;
