@@ -6,6 +6,9 @@
 
 #include <XPLMPlugin.h>
 #include <XPLMUtilities.h>
+#include <glue_CmdCustom.hpp>
+
+#include <glue_Plugin.hpp>
 
 std::function<void(int)> GuiPlugins::openImageInspector;
 
@@ -77,37 +80,23 @@ void GuiPlugins::draw(){
 
 
 			const int cmd_count = FXPLM_CommandCountForPluginID( x );
-			ImGui::Text(" cmd count: %i", cmd_count);
+			char caLabCmds[256];
+			snprintf( caLabCmds, 256, "cmd [%i]", cmd_count );
 
-			char caCmdName[256];
-			char caCmdDesc[256];
-
-			for ( int cmd_x=0; cmd_x<cmd_count; cmd_x++ ) {
-				FXPLM_CommandInfo( x, cmd_x, caCmdName, caCmdDesc );
-				ImGui::Text(" cmd [%s]", caCmdName);
-
-			}
-
-
-#if 0 //FIXME: need apis to query cmd wraps
-			const std::string sLabCmds = "cmds [" + std::to_string(p->m_vecCommands.size()) + "]";
 			int flags_open = ImGuiTreeNodeFlags_DefaultOpen;
 			int flags = 0;
-			if( ImGui::TreeNodeEx(sLabCmds.c_str(), flags) ){
-				for( auto cmd: p->m_vecCommands ){
 
-//					ImGui::SameLine();
+			if( ImGui::TreeNodeEx(caLabCmds, flags) ) {
+
+				for ( int cmd_x=0; cmd_x<cmd_count; cmd_x++ ) {
+					//FIXME: probably shouldnt do this across dylib boundaries. dont care. add version lock between dylib and consumer app.
+					auto cmd = (xpCmdCustom*)FXPLM_CommandInfo( x, cmd_x );
+					// ImGui::Text(" cmd [%s]", caCmdName);
+
 					std::string sBtnLabel_Begin = "Begin##_rnd_" + cmd->m_name;
 					if( ImGui::Button(sBtnLabel_Begin.c_str()) ){
 						cmd->callBegin();
 					}
-
-					// counter intuitive, requires a bunch of extra work. begin/end good enough to build gauges.
-//							if (ImGui::IsItemActive()) {
-//								// Button is being held down
-//								ImGui::Text("Button is being held down!");
-//								cmd->callHold();
-//							}
 
 					ImGui::SameLine();
 					std::string sBtnLabel_End = "End##_rnd_" + cmd->m_name;
@@ -125,15 +114,16 @@ void GuiPlugins::draw(){
 					ImGui::SameLine();
 					ImGui::Text( "%s", cmd->m_name.c_str() );
 
-
-				}
+				} //loop cmds
 
 				ImGui::TreePop();
-			}
-#endif
+			} //cmd tree root
 
 
-#if 0 //FIXME: api to query av devs that a plugin owns
+
+		auto p = (Plugin*)FXPLM_PluginInstPtr(x);
+
+#if 1 //FIXME: api to query av devs that a plugin owns
 			const std::string sLabAvDevs = "av_devs [" + std::to_string(p->m_vecAvionicsHost.size()) + "]";
 			if( ImGui::TreeNode(sLabAvDevs.c_str()) ){
 
@@ -145,7 +135,7 @@ void GuiPlugins::draw(){
 
 					ImGui::Text( "composite offset: %i, %i", dev->m_params->screenOffsetX, dev->m_params->screenOffsetY );
 
-
+#if 1
 					auto lam_drawFboSummaryBranch = [this](const std::string& label, gz_fbo* fbo_h, const float cost ){
 
 						if(ImGui::TreeNode( label.c_str() )){
@@ -168,9 +158,8 @@ void GuiPlugins::draw(){
 
 							ImGui::TreePop();
 						}
-
-
 					};
+#endif
 
 					const float f_dt_bezel = (float)(dev->m_bakeStop_Bezel - dev->m_bakeStart_Bezel);
 					const float f_dt_screen = (float)(dev->m_bakeStop_Screen - dev->m_bakeStart_Screen);
@@ -191,6 +180,7 @@ void GuiPlugins::draw(){
 #endif //av devs
 
 
+			//FIXME: we dont have a concept of an av gui instance on the plugin side?
 #if 0
 			const std::string sLabAvGuis = "av_gui [" + std::to_string(p->m_vecGuiAv.size()) + "]";
 			if( ImGui::TreeNode(sLabAvGuis.c_str()) ){
