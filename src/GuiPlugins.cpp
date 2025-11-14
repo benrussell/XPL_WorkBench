@@ -12,6 +12,7 @@
 
 std::function<void(int)> GuiPlugins::openImageInspector;
 
+std::function<void(AvionicsHost*)> GuiPlugins::openAvionicsInspector;
 
 
 
@@ -25,7 +26,7 @@ void GuiPlugins::draw(){
 	ImGui::SetNextWindowPos(ImVec2(0,30), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(320,360), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plugins", &win_open);
-	ImGui::Text("FXPLM fix needed");
+	// ImGui::Text("FXPLM fix needed");
 
 	const int plugin_count = XPLMCountPlugins();
 
@@ -44,7 +45,7 @@ void GuiPlugins::draw(){
 	for ( int x=1; x<=plugin_count; x++ ) {
 		XPLMGetPluginInfo(x, caName, caPath, caSig, caDesc);
 
-	// for( auto p: XPHost::m_vecPlugins ){
+		auto p = (Plugin*)FXPLM_PluginInstPtr(x);
 
 		const std::string sNodeLabel = std::to_string(x) + ":" + caSig;
 		const std::string sLabPtr = "P: " + std::to_string((size_t)x);
@@ -68,14 +69,14 @@ void GuiPlugins::draw(){
 
 			}
 
-			// ImGui::Text("ptr: %p", (void*)p);
+			ImGui::Text("ptr: %p", (void*)p);
 			ImGui::Text("name: %s", caName);
 			ImGui::Text("desc: %s", caDesc);
 			ImGui::Text(" sig: %s", caSig);
 
-			//FIXME: need more API calls
-			// ImGui::Text(" working: %s", p->m_workingFolder.c_str());
-			// ImGui::Text("    from: %s", p->m_workingFolder_BeforeContextSwitch.c_str());
+			ImGui::Text(" working: %s", p->m_workingFolder.c_str());
+			ImGui::Text("    from: %s", p->m_workingFolder_BeforeContextSwitch.c_str());
+
 
 
 
@@ -121,7 +122,6 @@ void GuiPlugins::draw(){
 
 
 
-		auto p = (Plugin*)FXPLM_PluginInstPtr(x);
 
 #if 1 //FIXME: api to query av devs that a plugin owns
 			const std::string sLabAvDevs = "av_devs [" + std::to_string(p->m_vecAvionicsHost.size()) + "]";
@@ -130,12 +130,19 @@ void GuiPlugins::draw(){
 				for( auto dev: p->m_vecAvionicsHost ){
 					ImGui::Text( "id: %s", dev->m_deviceId.c_str() );
 					ImGui::Text( "name: %s", dev->m_deviceName.c_str() );
+
+					if (ImGui::Button("inspect")) {
+						std::cout<<"XWB/ open avionics inspector...\n";
+						openAvionicsInspector(dev);
+					}
+
+
 					//ImGui::Text( "ptr: %zu", (size_t)dev );
 					//ImGui::Text( "%s", dev->m_deviceId );
 
 					ImGui::Text( "composite offset: %i, %i", dev->m_params->screenOffsetX, dev->m_params->screenOffsetY );
 
-#if 1
+
 					auto lam_drawFboSummaryBranch = [this](const std::string& label, gz_fbo* fbo_h, const float cost ){
 
 						if(ImGui::TreeNode( label.c_str() )){
@@ -159,7 +166,7 @@ void GuiPlugins::draw(){
 							ImGui::TreePop();
 						}
 					};
-#endif
+
 
 					const float f_dt_bezel = (float)(dev->m_bakeStop_Bezel - dev->m_bakeStart_Bezel);
 					const float f_dt_screen = (float)(dev->m_bakeStop_Screen - dev->m_bakeStart_Screen);
@@ -178,6 +185,7 @@ void GuiPlugins::draw(){
 				ImGui::TreePop();
 			}
 #endif //av devs
+
 
 
 			//FIXME: we dont have a concept of an av gui instance on the plugin side?

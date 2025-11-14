@@ -82,6 +82,14 @@ WinBox::WinBox( const int width, const int height ){
         m_texInspector.m_showTexId = tex_id;
     };
 
+
+	GuiPlugins::openAvionicsInspector = [this]( AvionicsHost* av_dev ){
+		m_GuiAvionicsDevice.m_bDraw = true;
+		m_GuiAvionicsDevice.m_dev = av_dev;
+	};
+
+
+
 	std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
 };
 
@@ -721,6 +729,10 @@ void WinBox::OnDraw(){
 		if( m_shaderTest ){
 			m_shaderTest->draw(); //FIXME: vec of instances
 		}
+
+		// this->m_GuiAvionicsDevice
+		this->m_GuiAvionicsDevice.draw();
+
 
 		static bool bDrawLog=true;
 		if( bDrawLog ){

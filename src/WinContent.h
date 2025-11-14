@@ -5,7 +5,7 @@
 #ifndef GLFW_XP_HOST_WINCONTENT_H
 #define GLFW_XP_HOST_WINCONTENT_H
 
-// #include "AvionicsHost.h"
+#include "glue_AvionicsHost.hpp"
 
 #include <GL/glew.h>
 
@@ -106,6 +106,7 @@ public:
 
 	GuiShaderTest* m_shaderTest; //must be a pointer because static init of shaders will CTD
 
+	GuiAvionicsDevice m_GuiAvionicsDevice;
 
 	WinBox( int width, int height );
 	~WinBox();

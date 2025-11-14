@@ -16,6 +16,9 @@
 
 //#include "shim/shim_XPLMDataAccess.h"
 
+#include <glue_Plugin.hpp>
+
+
 
 class GuiPlugins {
 public:
@@ -23,6 +26,8 @@ public:
 	bool win_open=true;
 
 	static std::function<void(int)> openImageInspector;
+
+	static std::function<void(AvionicsHost*)> openAvionicsInspector;
 
 	void draw();
 

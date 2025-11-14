@@ -46,6 +46,11 @@ public:
 
 	void draw_screenFBO(){
 
+		if( ! m_dev ){
+			//std::cout<<"GuiAvoinicsDevice() m_dev is nullptr, ret!\n";
+			return;
+		}
+
 
 		if( m_dev ){
 			//ImGui::Text( "Device ID: %s", m_dev->m_deviceId.c_str() );
@@ -153,6 +158,13 @@ public:
 
 
 	void draw_bezel(){
+
+		if( ! m_dev ){
+			//std::cout<<"GuiAvoinicsDevice() m_dev is nullptr, ret!\n";
+			return;
+		}
+
+
 		ImVec2 size = ImVec2( m_dev->m_bezel_fbo->m_width/2, m_dev->m_bezel_fbo->m_height/2 );
 
 		ImVec2 uv0 = ImVec2(0.0f, 1.0f);
@@ -185,6 +197,13 @@ public:
 
 
 	void draw_composite(){
+
+		if( ! m_dev ){
+			//std::cout<<"GuiAvoinicsDevice() m_dev is nullptr, ret!\n";
+			return;
+		}
+
+
 		ImVec2 size = ImVec2( m_dev->m_composite_fbo->m_width/2, m_dev->m_composite_fbo->m_height/2 );
 
 		ImVec2 uv0 = ImVec2(0.0f, 1.0f);
@@ -345,14 +364,16 @@ public:
 
 	void draw(){
 
-	    if( ! m_dev ){
-			//std::cout<<"GuiAvoinicsDevice() m_dev is nullptr, ret!\n";
-	        return;
-	    }
+		if ( ! m_bDraw ) {
+			return;
+		}
 
+		std::string device_id = "NULL_DEV";
+		if ( m_dev ) {
+			device_id = m_dev->m_deviceId;
+		}
 
-//		const std::string devDesc = "Avionics Device:[" + m_dev->m_deviceId + "]##" + std::to_string(m_randInst);
-		const std::string devDesc = "Avionics Device:[" + m_dev->m_deviceId + "]##";
+		const std::string devDesc = "Avionics Device:[" + device_id + "]##";
 		ImGui::Begin(devDesc.c_str(), &win_open);
 
 
@@ -386,6 +407,8 @@ public:
 
 
 	size_t m_randInst;
+
+	bool m_bDraw=false;
 
 	AvionicsHost* m_dev;
 
