@@ -5,6 +5,8 @@
 
 #include "WinContent.h"
 
+#include <XPLMPlugin.h>
+
 #include "FXPLM.h"
 
 
@@ -120,15 +122,27 @@ void WinBox::set_xp_choice( const std::string& fname ) {
 
 
 void WinBox::load_plugin( const std::string& fname ){
-    //std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
-	// throw std::runtime_error("xwb/ load_plugin: Not Implemented");
+    std::cout << "xwb/ winbox->load_plugin(" << fname << ")\n";
+
+#if 0
+	const auto cwd_before_plugin = std::filesystem::current_path();
+
+	std::string jump_to_folder = std::filesystem::path(fname).parent_path().string();
+	std::filesystem::current_path(jump_to_folder);
+
+	std::cout << "jumping to folder: " << jump_to_folder << "\n";
+#endif
 
 	const int plugin_loaded = FXPLM::call_load_plugin( fname.c_str() );
-
 	if( plugin_loaded ) {
 		XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
 		printf("\nWinBox::load_plugin(): loaded plugin.\n");
 	}
+
+#if 0
+	//jump back to original folder
+	std::filesystem::current_path(cwd_before_plugin);
+#endif
 
 }
 
@@ -174,7 +188,7 @@ void WinBox::load_project( const std::string& filename ){
             std::string cwd = fs::current_path();
 
             //jump to folder, eg, /X-Plane 12/
-            fs::current_path( project_plugin["working_folder"] );
+            fs::current_path( project_plugin["working_folder"] ); //FIXME: this wont work, load_plugin() sets the wd
 
             //load the plugin file, does not need to be in cwd
             //path can be absolute or relative.
@@ -296,6 +310,8 @@ void WinBox::draw_triangle_box(){
 					std::cout << "New working directory: " << newCwd << std::endl;
 					fileDialog_Open.SetPwd(newCwd);
 					#endif
+					std::string newCwd = "/Users/br/Downloads/xp/";
+					fileDialog_Open.SetPwd(newCwd);
 					fileDialog_Open.Open();
 				}
 
@@ -322,12 +338,7 @@ void WinBox::draw_triangle_box(){
                 if(ImGui::MenuItem("Unload all Plugins..", nullptr, false, true)){
                     //unload our plugins!
                     std::cout<<"xwb/ ----- unloading plugins -------\n";
-#if 0 //FIXME: FXPLM
-                    for( const auto p: XPHost::m_vecPlugins ){
-                        delete p;
-                    }
-                    XPHost::m_vecPlugins.clear();
-#endif
+                	FXPLM_UnloadPlugins();
                 }
 
                 ImGui::Separator();
