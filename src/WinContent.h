@@ -9,7 +9,8 @@
 
 #include <GL/glew.h>
 
-#include "deprecated_shim/shim_XPLMDisplay.h"
+#include "XPLMDisplay.h"
+#include "../../glfw/include/GLFW/glfw3.h"
 
 
 #include "imgui.h"

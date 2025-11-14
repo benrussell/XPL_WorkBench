@@ -634,30 +634,9 @@ void WinBox::OnDraw(){
 		}
 
 
-
-		FXPLM::call_draw_cbs();
-#if 0 //FIXME: FXPLM
 		// Render all avionics device FBO surfaces.
-		for( auto p: XPHost::m_vecPlugins ){
-			if ( p->m_plugin_is_enabled ) {
-
-				for( auto dev: p->m_vecAvionicsHost ){
-					// This is an FBO bake loop.
-					// This is NOT imgui calling code.
-					dev->bake();
-				}
-
-				for( auto dev: p->m_vecDrawCallbackHost ){
-					// This is an FBO bake loop.
-					// This is NOT imgui calling code.
-					dev->bake();
-				}
-
-			}
-
-		}
-#endif
-
+		// render all draw callbacks
+		FXPLM::call_draw_cbs();
 
 
 		//draws a grid of textures that should give us
