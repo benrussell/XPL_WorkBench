@@ -36,11 +36,11 @@ void GuiRecentProjects::draw(
 
         ImGui::Text("Recent Plugins");
 
-        if(XPHost::m_vecRecentPlugins.empty()){
+        if(HostApp::m_vecRecentPlugins.empty()){
             ImGui::Text("No recent plugins.");
         }
 
-        for( const auto& fn: XPHost::m_vecRecentPlugins ){
+        for( const auto& fn: HostApp::m_vecRecentPlugins ){
             if( fn.empty() ){
                 continue;
             }
@@ -61,13 +61,13 @@ void GuiRecentProjects::draw(
 
         ImGui::Text("Recent Projects");
 
-        if(XPHost::m_vecRecentProjects.empty()){
+        if(HostApp::m_vecRecentProjects.empty()){
             ImGui::Text("No recent projects.");
         }
 
 
         //FIXME: child region for scroll
-        for( const auto& fn: XPHost::m_vecRecentProjects ){
+        for( const auto& fn: HostApp::m_vecRecentProjects ){
 
             auto tokens = lam_splitString( fn, '/' );
             std::string fn_clean = tokens[ tokens.size() - 1 ];

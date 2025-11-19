@@ -12,7 +12,7 @@
 
 #include "imgui.h"
 
-#include "XPHost.h"
+#include "HostApp.h"
 #include <functional>
 
 class GuiRecentProjects {

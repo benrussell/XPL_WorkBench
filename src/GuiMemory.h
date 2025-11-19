@@ -12,7 +12,7 @@
 
 #include "imgui.h"
 
-#include "XPHost.h"
+#include "HostApp.h"
 #include <functional>
 #include <iomanip>
 
@@ -90,7 +90,7 @@ public:
             ImGui::Text( "%s", chunk.c_str() );
 
 
-            for( const auto& msg: XPHost::m_vecPluginMessages ){
+            for( const auto& msg: HostApp::m_vecPluginMessages ){
                 // if( fn.empty() ){
                 //     continue;
                 // }

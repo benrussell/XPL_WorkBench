@@ -10,7 +10,7 @@
 
 
 // #include "Plugin.h"
-#include "XPHost.h"
+#include "HostApp.h"
 #include "WinContent.h"
 
 
@@ -51,7 +51,7 @@ void load_recent_plugins_list() {
         nlohmann::json data = nlohmann::json::parse(f);
         for (auto pfname: data["recent"]) {
         	if ( map_seen.contains(pfname) == false ) {
-        		XPHost::m_vecRecentPlugins.push_back( pfname );
+        		HostApp::m_vecRecentPlugins.push_back( pfname );
         		map_seen[pfname] = 1;
         	}
         } //loop recents
@@ -66,7 +66,7 @@ void load_recent_projects_list() {
 	if( f ){
 		nlohmann::json data = nlohmann::json::parse(f);
 		for (auto pfname: data["recent"]) {
-			XPHost::m_vecRecentProjects.push_back( pfname );
+			HostApp::m_vecRecentProjects.push_back( pfname );
 		} //loop recents
 	}
 }
@@ -79,7 +79,7 @@ void load_xplane_folder_list() {
 	if( f ){
 		nlohmann::json data = nlohmann::json::parse(f);
 		for (auto pfname: data["xp_folders"]) {
-			XPHost::m_vecXPlaneFolders.push_back( pfname );
+			HostApp::m_vecXPlaneFolders.push_back( pfname );
 			std::cout << "xp folder: ["<< pfname <<"]\n";
 		} //loop recents
 	}
@@ -88,12 +88,12 @@ void load_xplane_folder_list() {
 
 
 void save_recent_plugins(){
-    std::cout << "xwb/ Saving recent plugins list..\n";
+    std::cout << "xwb/ Saving recent plugins list: start\n";
 
     nlohmann::json json;
     nlohmann::json json_arr = nlohmann::json::array();
 
-    for( auto pfname: XPHost::m_vecRecentPlugins ){
+    for( auto pfname: HostApp::m_vecRecentPlugins ){
         json_arr.push_back( pfname );
     }
 
@@ -104,6 +104,9 @@ void save_recent_plugins(){
     myfile.open(glob_recent_plugins_filename);
     myfile << json.dump(1,'\t');
     myfile.close();
+
+	std::cout << "xwb/ Saving recent plugins list: done\n";
+
 }
 
 
@@ -113,7 +116,7 @@ void save_recent_projects(){
 	nlohmann::json json;
 	nlohmann::json json_arr = nlohmann::json::array();
 
-	for( auto pfname: XPHost::m_vecRecentProjects ){
+	for( auto pfname: HostApp::m_vecRecentProjects ){
 		json_arr.push_back( pfname );
 	}
 
@@ -178,6 +181,7 @@ int main(int argc, char** argv)
 
 
 
+#if 0 //FIXME: FXPLM: port dref and cmd loaders
 	auto cmds = CommandsTxtParse("Commands.txt");
 	auto drefs = DataRefsTxtParse("DataRefs.txt");
 
@@ -187,7 +191,7 @@ int main(int argc, char** argv)
 	dref_factory::init(); //dref pool
 
 	std::cout << "xwb/ search penalty: " << dref_factory::search_ctr << "\n";
-
+#endif
 
 	load_recent_projects_list();
     load_recent_plugins_list();
@@ -340,8 +344,12 @@ int main(int argc, char** argv)
 			save_recent_projects();
             save_recent_plugins();
 
+			std::cout<<"call: glfwTerminate()\n";
 			glfwTerminate();
-			exit(0);
+			std::cout<<"done: glfwTerminate()\n";
+
+			std::exit(0);
+			// exit(0);
 		}
 
 

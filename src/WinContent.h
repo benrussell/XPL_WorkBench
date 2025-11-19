@@ -35,7 +35,7 @@
 
 
 
-#include "XPHost.h"
+#include "HostApp.h"
 #include "GuiRecentProjects.h"
 #include "GuiTextures.h"
 #include "GuiTextureInspector.h"

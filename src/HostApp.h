@@ -34,7 +34,7 @@ class GuiDatarefs;
 
 
 
-class XPHost {
+class HostApp {
 public:
 
 	static float fps;

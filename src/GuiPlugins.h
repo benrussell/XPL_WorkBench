@@ -7,7 +7,7 @@
 
 #include <GL/glew.h>
 
-#include "XPHost.h"
+#include "HostApp.h"
 
 #include <string>
 #include <vector>

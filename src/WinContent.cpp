@@ -16,7 +16,7 @@ WinBox::WinBox( const int width, const int height ){
 	// window created by main.cpp is only used for getting a GL context.
     m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", nullptr, nullptr);
 
-	XPHost::m_timer.start();
+	HostApp::m_timer.start();
 
 
     if (!m_winh)
@@ -117,7 +117,7 @@ WinBox::~WinBox(){
 
 void WinBox::set_xp_choice( const std::string& fname ) {
 	std::cout << "xwb/ set_xp_choice: ["<< fname <<"]\n";
-	XPHost::m_active_xp_folder = fname;
+	HostApp::m_active_xp_folder = fname;
 }
 
 
@@ -135,7 +135,7 @@ void WinBox::load_plugin( const std::string& fname ){
 
 	const int plugin_loaded = FXPLM::call_load_plugin( fname.c_str() );
 	if( plugin_loaded ) {
-		XPHost::m_vecRecentPlugins.insert(XPHost::m_vecRecentPlugins.begin(), fname);
+		HostApp::m_vecRecentPlugins.insert(HostApp::m_vecRecentPlugins.begin(), fname);
 		printf("\nWinBox::load_plugin(): loaded plugin.\n");
 	}
 
@@ -156,13 +156,13 @@ void WinBox::load_project( const std::string& filename ){
 
     // this snippet will add the project name to our recents list
     bool store_prj = true;
-    for( const auto& fn: XPHost::m_vecRecentProjects ){
+    for( const auto& fn: HostApp::m_vecRecentProjects ){
         if( fn == filename ){
             store_prj = false;
         }
     }
     if( store_prj ){
-        XPHost::m_vecRecentProjects.insert(XPHost::m_vecRecentProjects.begin(), filename);
+        HostApp::m_vecRecentProjects.insert(HostApp::m_vecRecentProjects.begin(), filename);
     }
 
 
@@ -317,11 +317,11 @@ void WinBox::draw_triangle_box(){
 
 
                 if( ImGui::BeginMenu("Recent Plugins") ){
-                    if(XPHost::m_vecRecentPlugins.empty()){
+                    if(HostApp::m_vecRecentPlugins.empty()){
                         ImGui::Separator();
                     }
 
-                    for( const auto& fn: XPHost::m_vecRecentPlugins ){
+                    for( const auto& fn: HostApp::m_vecRecentPlugins ){
                         if( fn != "" ){
                             if(ImGui::MenuItem(fn.c_str())){
                                 std::cout<<"menu/file/open recent plugin/[" << fn << "]\n";
@@ -351,11 +351,11 @@ void WinBox::draw_triangle_box(){
                 }
 
 				if( ImGui::BeginMenu("Recent Projects") ){
-					if(XPHost::m_vecRecentProjects.empty()){
+					if(HostApp::m_vecRecentProjects.empty()){
 						ImGui::Separator();
 					}
 
-					for( const auto& fn: XPHost::m_vecRecentProjects ){
+					for( const auto& fn: HostApp::m_vecRecentProjects ){
 						if(ImGui::MenuItem(fn.c_str())){
 							std::cout<<"menu/file/open recent/[" << fn << "]\n";
 							load_project( fn );
@@ -374,13 +374,13 @@ void WinBox::draw_triangle_box(){
 
 
 				if( ImGui::BeginMenu("X-Plane Folder") ){
-					if(XPHost::m_vecXPlaneFolders.empty()){
+					if(HostApp::m_vecXPlaneFolders.empty()){
 						ImGui::Separator();
 					}
 
 					bool bActiveMenu = false;
-					for( const auto& fn: XPHost::m_vecXPlaneFolders ){
-						if (XPHost::m_active_xp_folder == fn) {
+					for( const auto& fn: HostApp::m_vecXPlaneFolders ){
+						if (HostApp::m_active_xp_folder == fn) {
 							bActiveMenu = true;
 						}else {
 							bActiveMenu = false;
@@ -469,12 +469,12 @@ void WinBox::draw_triangle_box(){
 					ImGui::EndMenu();
 				}
 
-				if(ImGui::MenuItem("Datarefs", nullptr, XPHost::gui_Datarefs.win_open, true)){
-					XPHost::gui_Datarefs.win_open = !XPHost::gui_Datarefs.win_open;
+				if(ImGui::MenuItem("Datarefs", nullptr, HostApp::gui_Datarefs.win_open, true)){
+					HostApp::gui_Datarefs.win_open = !HostApp::gui_Datarefs.win_open;
 				}
 
-				if(ImGui::MenuItem("Plugins", nullptr, XPHost::gui_Plugins.win_open, true)){
-					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
+				if(ImGui::MenuItem("Plugins", nullptr, HostApp::gui_Plugins.win_open, true)){
+					HostApp::gui_Plugins.win_open = !HostApp::gui_Plugins.win_open;
 				}
 
 				if(ImGui::MenuItem("Plugin Messages", nullptr, GuiPluginMessages::m_bDraw, true)){
@@ -490,8 +490,8 @@ void WinBox::draw_triangle_box(){
 					m_displayErrorMessage = ! m_displayErrorMessage;
 				}
 
-				if(ImGui::MenuItem("XPLMDebugString Log", nullptr, XPHost::gui_Plugins.win_open, true)){
-					XPHost::gui_Plugins.win_open = !XPHost::gui_Plugins.win_open;
+				if(ImGui::MenuItem("XPLMDebugString Log", nullptr, HostApp::gui_Plugins.win_open, true)){
+					HostApp::gui_Plugins.win_open = !HostApp::gui_Plugins.win_open;
 				}
 
 
@@ -532,7 +532,7 @@ void WinBox::draw_triangle_box(){
 
 			const float fps = ImGui::GetIO().Framerate;
 			ImGui::Text("FPS: %.1f", fps);
-			XPHost::fps = fps;
+			HostApp::fps = fps;
 
 
 			auto lam_formatTime = [](double totalSeconds) {
@@ -547,7 +547,7 @@ void WinBox::draw_triangle_box(){
 				return std::string(buf);
 			};
 
-			const std::string runtime = lam_formatTime( XPHost::m_timer.getElapsedTimeInSec() );
+			const std::string runtime = lam_formatTime( HostApp::m_timer.getElapsedTimeInSec() );
 			ImGui::Text("RT: %s", runtime.c_str() );
 
 
@@ -731,9 +731,9 @@ void WinBox::OnDraw(){
 		}
 
 
-		XPHost::gui_Plugins.draw();
+		HostApp::gui_Plugins.draw();
 
-		XPHost::gui_Datarefs.draw();
+		HostApp::gui_Datarefs.draw();
 
 		m_texInspector.draw(); //FIXME: vec of instances
 
@@ -752,7 +752,7 @@ void WinBox::OnDraw(){
 			ImGui::Begin("XPLMDebugString", &bDrawLog);
 			{
 				if( ImGui::Button("Clear") ){
-					XPHost::m_vecLog.clear();
+					HostApp::m_vecLog.clear();
 				}
 
 				// Calculate the size of the child area (10 pixels smaller on each side)
@@ -764,13 +764,13 @@ void WinBox::OnDraw(){
 
 				// Add three text elements inside the child area
 				size_t x=0;
-				if( XPHost::m_vecLog.size() > 50 ){
-					x = XPHost::m_vecLog.size() - 50;
+				if( HostApp::m_vecLog.size() > 50 ){
+					x = HostApp::m_vecLog.size() - 50;
 				}
 
 				//FIXME: pull line wrap from error message dialog.
-				for( ; x < XPHost::m_vecLog.size(); ++x ){
-					const auto& line = XPHost::m_vecLog[x];
+				for( ; x < HostApp::m_vecLog.size(); ++x ){
+					const auto& line = HostApp::m_vecLog[x];
 					const std::string log = std::to_string(x) + ":" + line;
 					ImGui::TextUnformatted( log.c_str() );
 				}

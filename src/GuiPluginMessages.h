@@ -13,7 +13,7 @@
 
 #include "imgui.h"
 
-#include "XPHost.h"
+#include "HostApp.h"
 #include <functional>
 
 
@@ -77,13 +77,13 @@ public:
 
             ImGui::Separator();
 
-            if(XPHost::m_vecPluginMessages.empty()){
+            if(HostApp::m_vecPluginMessages.empty()){
                 ImGui::Text("No messages.");
             }
 
             //FIXME: child region for scroll
 
-            for( const auto& msg: XPHost::m_vecPluginMessages ){
+            for( const auto& msg: HostApp::m_vecPluginMessages ){
                 // if( fn.empty() ){
                 //     continue;
                 // }

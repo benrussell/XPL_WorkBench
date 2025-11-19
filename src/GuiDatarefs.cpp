@@ -26,7 +26,7 @@ void GuiDatarefs::draw(){
     ImGui::Checkbox("All", &bShowAll);
 
 
-    if(XPHost::m_dref_pool.empty()) {
+    if(HostApp::m_dref_pool.empty()) {
         ImGui::Text("Empty DataRefs list.");
     }
 
@@ -52,7 +52,7 @@ void GuiDatarefs::draw(){
 
     size_t wid=0;
     bool bShowThisItem = false;
-    for( auto dr: XPHost::m_dref_pool ) {
+    for( auto dr: HostApp::m_dref_pool ) {
 
         bShowThisItem = (dr->m_vecPluginConsumers.size() > 0) || bShowAll;
 
