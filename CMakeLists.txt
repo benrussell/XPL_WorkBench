@@ -158,7 +158,7 @@ set( XP_SHIM_SRC
 
         src/main.cpp
 
-        src/XPHost.cpp src/XPHost.h
+        src/HostApp.cpp src/HostApp.h
         src/WinContent.cpp src/WinContent.h
 
         third_party/timer/src/Timer.cpp
