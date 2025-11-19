@@ -203,8 +203,21 @@ public:
 			return;
 		}
 
+		int w=m_dev->m_composite_fbo->m_width/2;
+		int h=m_dev->m_composite_fbo->m_height/2;
 
-		ImVec2 size = ImVec2( m_dev->m_composite_fbo->m_width/2, m_dev->m_composite_fbo->m_height/2 );
+		if ( m_dev->m_screen_fbo->m_width/2 > w) {
+			w = m_dev->m_screen_fbo->m_width/2;
+		}
+
+		if ( m_dev->m_screen_fbo->m_height/2 > h) {
+			h = m_dev->m_screen_fbo->m_height/2;
+		}
+
+
+		//ImVec2 size = ImVec2( m_dev->m_composite_fbo->m_width/2, m_dev->m_composite_fbo->m_height/2 );
+		ImVec2 size = ImVec2( w,h );
+
 
 		ImVec2 uv0 = ImVec2(0.0f, 1.0f);
 		ImVec2 uv1 = ImVec2(1.0f, 0.0f);
