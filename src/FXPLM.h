@@ -48,6 +48,42 @@ public:
 
 
 
+
+	static void load_xpwidgets() {
+		std::cout << "xwb/ FXPLM::load_xpwidgets()\n";
+
+		std::string fname = "@executable_path/../../../Resources/plugins/XPWidgets.framework/XPWidgets";
+
+		//works ok on mac
+		std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_GLOBAL\n";
+		std::cout<<"xwb/ --- xplm static init / begin ---\n";
+		dlerror(); //clear errors.
+
+		void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL );
+		FXPLM::m_xplm_dlh = dlh;
+
+		if( dlh == nullptr ){
+			std::string sLoadError = dlerror();
+			throw std::runtime_error( sLoadError ); //we capture this for GUI display
+
+		}else{
+			std::cout<<"xwb/ --- xplm static init / end   ---\n";
+			printf("xwb/  loaded dylib; dlh: %p\n", dlh);
+
+		} //dlopen worked
+
+
+		// char caName[256] = "init_name";
+		// char caSig[256] = "init_sig";
+		// char caDesc[256] = "init_desc";
+		// call_xplm_init( dlh, caName, caSig, caDesc );
+
+
+	}
+
+
+
+
 	static int call_xplm_init( void* dlh, char* name, char* sig, char* desc ) {
 
 		int init_success = 0;
