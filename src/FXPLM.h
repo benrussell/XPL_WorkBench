@@ -39,12 +39,10 @@ public:
 
 		} //dlopen worked
 
-
 		char caName[256] = "init_name";
 		char caSig[256] = "init_sig";
 		char caDesc[256] = "init_desc";
 		call_xplm_init( dlh, caName, caSig, caDesc );
-
 
 	}
 
@@ -57,7 +55,7 @@ public:
 		// this->takeContext();
 		std::cout<<"xwb/ FXPLM::call_xplm_init()\n";
 		int (*fptr_start)(char*,char*,char*);
-		fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "XPLM_Init" ); //FIXME: replace with fn sig typedef
+		fptr_start = (int (*)(char*,char*,char*))dlsym( dlh, "FXPLM_Init" ); //FIXME: replace with fn sig typedef
 		if( fptr_start ) {
 			init_success = (*fptr_start)(name, sig, desc);
 			std::cout << "xwb/ \tret name: " << name << "\n";
@@ -74,13 +72,13 @@ public:
 
 		}else{
 			//this->releaseContext();
-			std::string msg = "Could not find XPLM_Init";
+			std::string msg = "Could not find FXPLM_Init";
 			throw std::runtime_error( msg );
 		}
 
 
 		if( ! init_success ) {
-			throw std::runtime_error( "XPLM_Init failed, ret value is 0\n" );
+			throw std::runtime_error( "FXPLM_Init failed, ret value is 0\n" );
 		}
 
 
@@ -97,22 +95,24 @@ public:
 
 		int init_success = 0;
 
+
+
 		// this->takeContext();
 		// std::cout<<"xwb/ FXPLM::load_plugin()\n";
 		int (*fptr_start)(const char*);
-		fptr_start = (int (*)(const char*))dlsym( dlh, "XPLM_LoadPlugin" ); //FIXME: replace with fn sig typedef
+		fptr_start = (int (*)(const char*))dlsym( dlh, "FXPLM_LoadPlugin" ); //FIXME: replace with fn sig typedef
 		if( fptr_start ) {
 			init_success = (*fptr_start)(fname);
 
 		}else{
 			//this->releaseContext();
-			const std::string msg = "Could not find XPLM_LoadPlugin";
+			const std::string msg = "Could not find FXPLM_LoadPlugin";
 			throw std::runtime_error( msg );
 		}
 
 
 		if( ! init_success ) {
-			throw std::runtime_error( "XPLM_LoadPlugin failed, ret value is 0\n" );
+			throw std::runtime_error( "FXPLM_LoadPlugin failed, ret value is 0\n" );
 		}
 
 
