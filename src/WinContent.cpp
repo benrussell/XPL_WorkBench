@@ -441,26 +441,24 @@ void WinBox::draw_triangle_box(){
 			if(ImGui::BeginMenu("View")){
 
 				if(ImGui::BeginMenu("Avionics Devices")) {
-					ImGui::MenuItem("FXPLM Fix needed.");
 
-#if 0 //FIXME: FXPLM - av_dev menu list
+					const int plugin_count = XPLMCountPlugins();
+					for ( int x=1; x<=plugin_count; x++ ) {
+						auto p = (Plugin*)FXPLM_PluginInstPtr(x);
 
-					if( XPHost::m_vecPlugins.empty() ){
-						ImGui::MenuItem("No plugins.");
-					}
-
-					for( const auto p: XPHost::m_vecPlugins ){
 						if( ! p->m_vecAvionicsHost.empty() ){
-							if(ImGui::BeginMenu( p->m_pluginName.c_str() )) {
+							if(ImGui::BeginMenu( p->m_pluginSig.c_str() )) {
 								for(const auto dev: p->m_vecAvionicsHost ){
-									//FIXME: needs click handler to show window for dev
-									ImGui::MenuItem( dev->m_deviceId.c_str() );
+									if(ImGui::MenuItem( dev->m_deviceId.c_str() )) {
+										this->m_GuiAvionicsDevice.m_dev = dev;
+										this->m_GuiAvionicsDevice.m_bDraw = true;
+									}
 								}
 								ImGui::EndMenu();
 							}
-						}
-					}
-#endif
+						}	//loop av_devs
+					} //loop all plugins
+
 					ImGui::EndMenu();
 				}
 
