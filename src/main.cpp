@@ -44,11 +44,12 @@ const char* glob_xp_list_filename = "xp_list.json";
 void load_recent_plugins_list() {
     std::cout << "xwb/ Loading recent plugins list.. \n";
 
-	std::map<std::string, int> map_seen;
 
     std::ifstream f(glob_recent_plugins_filename);
     if( f ){
         nlohmann::json data = nlohmann::json::parse(f);
+    	std::map<std::string, int> map_seen;
+
         for (auto pfname: data["recent"]) {
         	if ( map_seen.contains(pfname) == false ) {
         		HostApp::m_vecRecentPlugins.push_back( pfname );
@@ -90,6 +91,10 @@ void load_xplane_folder_list() {
 void save_recent_plugins(){
     std::cout << "xwb/ Saving recent plugins list: start\n";
 
+	namespace fs = std::filesystem;
+	const std::string cwd = fs::current_path();
+	std::cout << "xwb/ working folder: [" << cwd << "]\n";
+
     nlohmann::json json;
     nlohmann::json json_arr = nlohmann::json::array();
 
@@ -112,6 +117,10 @@ void save_recent_plugins(){
 
 void save_recent_projects(){
 	std::cout << "xwb/ Saving recent projects list..\n";
+
+	namespace fs = std::filesystem;
+	const std::string cwd = fs::current_path();
+	std::cout << "xwb/ working folder: [" << cwd << "]\n";
 
 	nlohmann::json json;
 	nlohmann::json json_arr = nlohmann::json::array();
@@ -153,7 +162,7 @@ int main(int argc, char** argv)
 				return -1;
 			}
 			const std::string folder = std::string(home_env) + "/.XPL_WorkBench";
-			// std::cout << "xwb/ folder: ["<< folder <<"]\n";
+			//std::cout << "xwb/ folder: ["<< folder <<"]\n";
 
 			fs::current_path(folder);
 			//std::cout << "Changed working directory to: " << folder << std::endl;
@@ -232,7 +241,7 @@ int main(int argc, char** argv)
 
 	int width=640;
 	int height=480;
-	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench GL Context", NULL, NULL);
+	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench GL Context", nullptr, nullptr);
 
 		if (!mwinh)
 		{
@@ -254,6 +263,7 @@ int main(int argc, char** argv)
 	//must be after glew init?
 	FXPLM::load_xplm();
 
+	FXPLM::load_xpwidgets();
 
 
 	//we have created a GL context, we can drop this now.
@@ -344,16 +354,15 @@ int main(int argc, char** argv)
 			save_recent_projects();
             save_recent_plugins();
 
-			std::cout<<"call: glfwTerminate()\n";
+			//std::cout<<"call: glfwTerminate()\n";
 			glfwTerminate();
-			std::cout<<"done: glfwTerminate()\n";
+			//std::cout<<"done: glfwTerminate()\n";
 
-			std::exit(0);
+			// std::exit(0);
 			// exit(0);
+			return 0;
 		}
 
-
 	} //event loop - never exits.
-
 
 } //main

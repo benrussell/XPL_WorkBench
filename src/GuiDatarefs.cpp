@@ -68,7 +68,7 @@ void GuiDatarefs::draw(){
             if (ImGui::TreeNode(caLabel)) {
 
                 char buff[512];
-#if 0 //FIXME: FXPLM
+#if 0 //FIXME: FXPLM: Datarefs list
                 snprintf( buff, 512, "consumers[%li]", dr->m_vecPluginConsumers.size() );
                 if (ImGui::TreeNode(buff)) {
                     for ( auto plugin: dr->m_vecPluginConsumers ) {

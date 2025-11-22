@@ -37,7 +37,7 @@ void GuiPlugins::draw(){
 
 
 
-#if 1 //FIXME: FXPLM
+#if 1 // render plugin list
 	if( plugin_count == 0 ){
 		ImGui::Text("No plugins loaded.");
 	}
@@ -123,7 +123,7 @@ void GuiPlugins::draw(){
 
 
 
-#if 1 //FIXME: api to query av devs that a plugin owns
+#if 1 // render a list of av_devs that a plugin owns
 			const std::string sLabAvDevs = "av_devs [" + std::to_string(p->m_vecAvionicsHost.size()) + "]";
 			if( ImGui::TreeNode(sLabAvDevs.c_str()) ){
 
@@ -184,11 +184,13 @@ void GuiPlugins::draw(){
 
 				ImGui::TreePop();
 			}
-#endif //av devs
+#endif //av devs list per plugin
 
 
 
-			//FIXME: we dont have a concept of an av gui instance on the plugin side?
+			//FIXME: FXPLM: we dont have a concept of an av gui instance on the plugin side?
+			// we could do a ptr compare and match agaisnt the infocus av_dev gui and then
+			// display stats for that if !null
 #if 0
 			const std::string sLabAvGuis = "av_gui [" + std::to_string(p->m_vecGuiAv.size()) + "]";
 			if( ImGui::TreeNode(sLabAvGuis.c_str()) ){

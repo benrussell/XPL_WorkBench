@@ -13,10 +13,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
 
-//#include "Plugin.h" //cant include this here, breaks compile
 #include <glue_AvionicsHost.hpp>
 
-//FIXME: FXPLM: #include "shim/shim_XPLMDisplay.h"
 
 
 

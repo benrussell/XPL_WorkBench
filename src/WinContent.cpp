@@ -168,12 +168,7 @@ void WinBox::load_project( const std::string& filename ){
 
     //unload our plugins!
     std::cout<<"xwb/ ----- unloading plugins -------\n";
-#if 0 //FIXME: FXPLM
-    for(const  auto p: XPHost::m_vecPlugins ){
-        delete p;
-    }
-    XPHost::m_vecPlugins.clear();
-#endif
+	FXPLM_UnloadPlugins();
 
 
     std::ifstream f( filename );
@@ -188,7 +183,7 @@ void WinBox::load_project( const std::string& filename ){
             std::string cwd = fs::current_path();
 
             //jump to folder, eg, /X-Plane 12/
-            fs::current_path( project_plugin["working_folder"] ); //FIXME: this wont work, load_plugin() sets the wd
+            fs::current_path( project_plugin["working_folder"] ); //FIXME: load_project(); this wont work, load_plugin() sets the wd
 
             //load the plugin file, does not need to be in cwd
             //path can be absolute or relative.
@@ -448,7 +443,7 @@ void WinBox::draw_triangle_box(){
 				if(ImGui::BeginMenu("Avionics Devices")) {
 					ImGui::MenuItem("FXPLM Fix needed.");
 
-#if 0 //FIXME: FXPLM
+#if 0 //FIXME: FXPLM - av_dev menu list
 
 					if( XPHost::m_vecPlugins.empty() ){
 						ImGui::MenuItem("No plugins.");
@@ -699,7 +694,7 @@ void WinBox::OnDraw(){
 		} //deal with plugin open dialog
 
 
-#if 0 //FIXME: FXPLM
+#if 0 //FIXME: FXPLM - av_dev GUI instance loop
 		//loop over all avionics-device gui instances and call their imgui draw code.
 		for( auto p: XPHost::m_vecPlugins ){
 			for( auto gui: p->m_vecGuiAv ){
@@ -721,7 +716,7 @@ void WinBox::OnDraw(){
 				// Set the width for wrapping
 				const float wrap_width = ImGui::GetWindowWidth() - 30.f;
 
-				//FIXME: put something red on this dialog for attention grab
+				//FIXME: msg dialog: put something red on this dialog for attention grab
 
 				ImGui::PushTextWrapPos(wrap_width);
 				ImGui::Text("%s", m_sErrorMessage.c_str());
@@ -735,10 +730,10 @@ void WinBox::OnDraw(){
 
 		HostApp::gui_Datarefs.draw();
 
-		m_texInspector.draw(); //FIXME: vec of instances
+		m_texInspector.draw(); //FIXME: upgrade: vec of instances
 
 		if( m_shaderTest ){
-			m_shaderTest->draw(); //FIXME: vec of instances
+			m_shaderTest->draw(); //FIXME: upgrade: vec of instances
 		}
 
 		// this->m_GuiAvionicsDevice
@@ -768,7 +763,7 @@ void WinBox::OnDraw(){
 					x = HostApp::m_vecLog.size() - 50;
 				}
 
-				//FIXME: pull line wrap from error message dialog.
+				//FIXME:GUI XPLMDebugString log:  pull line wrap from error message dialog.
 				for( ; x < HostApp::m_vecLog.size(); ++x ){
 					const auto& line = HostApp::m_vecLog[x];
 					const std::string log = std::to_string(x) + ":" + line;
@@ -872,7 +867,7 @@ void WinBox::OnCallDraw(){
 	glfwGetWindowSize(m_winh, &width, &height);
 
 	//FIXME: this code to set the viewport px
-	// fails on linux.
+	// fails on linux. does it really fail?
 	{
 		// Set up orthographic projection to map OpenGL coordinates to window pixels
 		glMatrixMode(GL_PROJECTION);
