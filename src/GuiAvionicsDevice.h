@@ -25,7 +25,7 @@ static int avio_dev_ctr=0;
 class GuiAvionicsDevice {
 public:
 
-	bool win_open=true;
+	// bool win_open=true;
 
 
 	GuiAvionicsDevice(){
@@ -385,7 +385,7 @@ public:
 		}
 
 		const std::string devDesc = "Avionics Device:[" + device_id + "]##";
-		ImGui::Begin(devDesc.c_str(), &win_open);
+		ImGui::Begin(devDesc.c_str(), &m_bDraw);
 
 
 		if (ImGui::BeginTabBar("MyTabBar")) {

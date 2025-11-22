@@ -23,7 +23,7 @@
 class GuiPlugins {
 public:
 
-	bool win_open=true;
+	bool win_open=true; //FIXME: rename unify
 
 	static std::function<void(int)> openImageInspector;
 

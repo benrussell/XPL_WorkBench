@@ -36,7 +36,6 @@ void GuiPlugins::draw(){
 	char caDesc[256]{};
 
 
-
 #if 1 // render plugin list
 	if( plugin_count == 0 ){
 		ImGui::Text("No plugins loaded.");
