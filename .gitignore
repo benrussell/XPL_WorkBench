@@ -1,0 +1,15 @@
+/cmake-build-debug/
+
+/third_party/imgui-docking
+/third_party/glew-2.2.0
+/third_party/imgui-filebrowser-master
+/third_party/json-develop
+
+/third_party/timer/
+
+/.idea/
+
+/build_lin/
+/build/
+
+/src/gz_deps
