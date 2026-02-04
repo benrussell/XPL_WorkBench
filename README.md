@@ -1,5 +1,5 @@
 XPL_WorkBench - An X-Plane Plugin host.
-Copyright (C) 2025,2026 Ben Russell - br@x-plugins.com
+Copyright (C) 2024-2026 Ben Russell - br@x-plugins.com
 
 This is an experimental hack that has grown into something useful.
 

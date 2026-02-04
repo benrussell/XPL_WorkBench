@@ -1,3 +1,6 @@
+.DS_Store
+
+
 /cmake-build-debug/
 
 /third_party/imgui-docking
@@ -13,3 +16,4 @@
 /build/
 
 /src/gz_deps
+
