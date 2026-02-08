@@ -117,6 +117,11 @@ public:
 		std::filesystem::current_path("../..");
 		std::cout << "xwb/ cwd now: " << std::filesystem::current_path() << "\n";
 
+		//FIXME: need to tweak the build so that we can dlopen from the current folder or
+		// some other useful search path.
+		// apparently i want this: gcc main.c -Wl,-rpath,'.' -ldl
+		// Note: Using '.' works for the literal CWD. Using '$ORIGIN' is generally better practice as it refers to the folder containing the library/executable, regardless of where you launch it from.
+
 	}
 
 
