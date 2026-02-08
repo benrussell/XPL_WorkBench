@@ -77,7 +77,17 @@ public:
 	static void load_xpwidgets() {
 		std::cout << "xwb/ FXPLM::load_xpwidgets()\n";
 
+
+		std::cout << "xwb/ cwd:[" << std::filesystem::current_path() << "]\n";
+
+#if APL
 		std::string fname = "@executable_path/../../../Resources/plugins/XPWidgets.framework/XPWidgets";
+#elif LIN
+		std::filesystem::current_path("Dev/XPL_WorkBench/cmake-build-debug/Resources/plugins");
+		std::cout << "xwb/ cwd2:[" << std::filesystem::current_path() << "]\n";
+
+		std::string fname = "XPWidgets_64.so";
+#endif
 
 		//works ok on mac
 		std::cout<<"xwb/ calling dlopen(" << fname << ") RTLD_NOW | RTLD_GLOBAL\n";
@@ -103,6 +113,9 @@ public:
 		// char caDesc[256] = "init_desc";
 		// call_xplm_init( dlh, caName, caSig, caDesc );
 
+		std::cout << "xwb/ cwd back to base app folder..\n";
+		std::filesystem::current_path("../..");
+		std::cout << "xwb/ cwd now: " << std::filesystem::current_path() << "\n";
 
 	}
 

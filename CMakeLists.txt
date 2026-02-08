@@ -114,11 +114,18 @@ ENDIF( APPLE )
 
 
 IF(CMAKE_SYSTEM_NAME STREQUAL Linux)
+
+    add_definitions( -DLIN=1 )
+
+    LINK_DIRECTORIES(
+            "../FXPLM/cmake-build-debug/"
+    )
 SET( LIBS_LIN
         GLU
         glut
         glfw
         GL
+        XPLM
         )
 ENDIF(CMAKE_SYSTEM_NAME STREQUAL Linux)
 

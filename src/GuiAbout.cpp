@@ -48,25 +48,25 @@ void GuiAbout::draw( const std::string& startup_folder ){
 	{
 		ImGui::Text("XPL WorkBench v0.1.125.12.03.0520");
 		ImGui::Text("             built: 25.12.29.0225");
-		ImGui::Text("");
+		ImGui::Text("%s","");
 		ImGui::Text("(C) 2024-2025, Ben Russell - br@x-plugins.com");
-		ImGui::Text("");
+		ImGui::Text("%s","");
 
 		ImGui::Text("This is an open source freeware project.");
 		if (ImGui::Button("Open project on github")) {
 			system("open https://github.com/benrussell/XPL_WorkBench");
 		}
-		ImGui::Text("");
+		ImGui::Text("%s","");
 
 		if (ImGui::Button("Follow along on Patreon")) {
 			system("open https://patreon.com/benrussell/");
 		}
-		ImGui::Text("");
+		ImGui::Text("%s","");
 
 		if (ImGui::Button("Tip me on ko-fi")) {
 			system("open https://ko-fi.com/benr/");
 		}
-		ImGui::Text("");
+		ImGui::Text("%s","");
 
 		ImGui::Text("Startup Folder:");
 		ImGui::Text("[%s]", startup_folder.c_str());

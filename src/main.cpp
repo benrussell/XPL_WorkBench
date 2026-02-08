@@ -184,7 +184,7 @@ void save_recent_projects(){
 
 
 
-
+#if APL
 #include <CoreFoundation/CoreFoundation.h>
 #include <string>
 
@@ -204,7 +204,7 @@ std::string GetBundleResourcePath() {
 
 	return {path};
 }
-
+#endif
 
 
 
