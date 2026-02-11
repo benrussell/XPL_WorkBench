@@ -992,7 +992,7 @@ void WinBox::Display(){
 
 		// Render all avionics device FBO surfaces.
 		// render all draw callbacks
-		FXPLM::call_draw_cbs();
+		FXPLM_DrawCBS();
 
 
 

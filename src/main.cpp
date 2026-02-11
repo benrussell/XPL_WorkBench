@@ -315,7 +315,7 @@ int main(int argc, char** argv)
 	char sig[256]="foo_sig";
 	char desc[256]="foo_desc";
 
-	FXPLM::call_xplm_init(nullptr,name,sig,desc);
+	FXPLM_Init(name,sig,desc);
 
 	FXPLM::load_xpwidgets();
 
@@ -377,7 +377,7 @@ int main(int argc, char** argv)
 	//loop will exit when all windows are closed.
 	while(true){
 
-		FXPLM::call_run_flcbs();
+		FXPLM_RunFLCBS();
 
 
 		//loop over child windows and drive their events
