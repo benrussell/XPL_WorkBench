@@ -113,9 +113,12 @@ public:
 		// char caDesc[256] = "init_desc";
 		// call_xplm_init( dlh, caName, caSig, caDesc );
 
+#if APL
+#elif LIN
 		std::cout << "xwb/ cwd back to base app folder..\n";
 		std::filesystem::current_path("../..");
 		std::cout << "xwb/ cwd now: " << std::filesystem::current_path() << "\n";
+#endif
 
 		//FIXME: need to tweak the build so that we can dlopen from the current folder or
 		// some other useful search path.

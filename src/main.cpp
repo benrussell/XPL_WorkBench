@@ -211,6 +211,9 @@ std::string GetBundleResourcePath() {
 int main(int argc, char** argv)
 {
 
+	srand(1);
+
+
 	{
 		namespace fs = std::filesystem;
 
