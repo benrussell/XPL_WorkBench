@@ -125,7 +125,7 @@ SET( LIBS_LIN
         glut
         glfw
         GL
-        XPLM
+        ":XPLM_64.so"
         )
 ENDIF(CMAKE_SYSTEM_NAME STREQUAL Linux)
 
