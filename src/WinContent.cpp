@@ -48,7 +48,7 @@ WinBox::WinBox( const int width, const int height ){
     /* Create a windowed mode window and its OpenGL context */
 	// create a window that belongs to a member var
 	// window created by main.cpp is only used for getting a GL context.
-    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", nullptr, nullptr);
+    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench_WinBox", nullptr, nullptr);
 
 	HostApp::m_timer.start();
 
@@ -131,9 +131,9 @@ WinBox::WinBox( const int width, const int height ){
 
 
 	std::cout<<"xwb/ Creating basic host drefs.\n";
-	m_dr_network_time = XPLMFindDataRef("sim/network/misc/network_time_sec");
-	m_dr_running_time = XPLMFindDataRef("sim/time/total_running_time_sec");
-	m_dr_frp = XPLMFindDataRef("sim/operation/misc/frame_rate_period");
+	m_dr_network_time = FXPLM_DrefCreate("sim/network/misc/network_time_sec");
+	m_dr_running_time = FXPLM_DrefCreate("sim/time/total_running_time_sec");
+	m_dr_frp = FXPLM_DrefCreate("sim/operation/misc/frame_rate_period");
 
 
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";

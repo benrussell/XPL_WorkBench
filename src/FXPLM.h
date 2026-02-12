@@ -44,7 +44,7 @@ public:
 #if APL
 		std::string fname = "@executable_path/../../../Resources/plugins/XPWidgets.framework/XPWidgets";
 #elif LIN
-		std::filesystem::current_path("Dev/XPL_WorkBench/cmake-build-debug/Resources/plugins");
+		std::filesystem::current_path("Resources/plugins");
 		std::cout << "xwb/ cwd2:[" << std::filesystem::current_path() << "]\n";
 
 		std::string fname = "XPWidgets_64.so";
