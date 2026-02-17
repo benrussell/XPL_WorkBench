@@ -188,9 +188,13 @@ void GuiDatarefs::draw() {
                                                          dr->typeName().c_str() // the XWB logical type name, affects code in host app
                                                 );
     #else
-                            snprintf(caLabel, max_label, "%s  '%s'",
+                            snprintf(caLabel, max_label, "%s  r'%s'  %s  %li  %li",
                                                          dr->drefName.c_str(), // "sim/foo/name"
-                                                         dr->drefTypeName.c_str() //data type: "int", "float", "float[4]", "byte", etc.
+                                                         dr->drefTypeName_Raw.c_str(), //data type: "int", "float", "float[4]", "byte", etc.
+                                                         dr->drefTypeName.c_str(),
+                                                         dr->m_elements,
+                                                         dr->m_blob_size
+
                                                          //dr->typeName().c_str() // the XWB logical type name, affects code in host app
                                                 );
     #endif
@@ -200,15 +204,34 @@ void GuiDatarefs::draw() {
                                     // value edit
                                     char buff[max_label];
                                     if ( dr->drefTypeName == "float" ) {
-                                        float fTmp = dr->getFloat();
-                                        std::string widget_id = "##_slider_" + std::to_string(wid);
-                                        ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
 
-                                        ImGui::SameLine();
-                                        std::string widget_id_txt = "##_text_" + std::to_string(wid);
-                                        ImGui::InputFloat(widget_id_txt.c_str(), &fTmp);
 
-                                        dr->setFloat(fTmp);
+                                        if ( dr->m_elements > 0 ) {
+                                            float* fptr;
+                                            for ( size_t ex=0; ex<dr->m_elements; ++ex ) {
+                                                fptr = (float*)(dr->m_blob) + ex;
+                                                std::string widget_id = "##_slider_" + std::to_string(wid) + "_" + std::to_string(ex);
+                                                ImGui::SliderFloat(widget_id.c_str(), fptr, -360, 360);
+
+                                                ImGui::SameLine();
+                                                std::string widget_id_txt = "##_text_" + std::to_string(wid) + "_" + std::to_string(ex);
+                                                ImGui::InputFloat(widget_id_txt.c_str(), fptr);
+
+                                                //no call to dr->set because we're editing the blob store directly.
+                                            }
+                                        }else {
+                                            //single element
+                                            float fTmp = dr->getFloat();
+                                            std::string widget_id = "##_slider_" + std::to_string(wid);
+                                            ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
+
+                                            ImGui::SameLine();
+                                            std::string widget_id_txt = "##_text_" + std::to_string(wid);
+                                            ImGui::InputFloat(widget_id_txt.c_str(), &fTmp);
+
+                                            dr->setFloat(fTmp);
+                                        }
+
 
                                     }else if ( dr->drefTypeName == "int" ) {
                                         int iTmp = dr->getInt();
