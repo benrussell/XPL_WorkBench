@@ -22,6 +22,7 @@
 #ifndef GLFW_XP_HOST_GUIAVIONICSDEVICE_H
 #define GLFW_XP_HOST_GUIAVIONICSDEVICE_H
 
+#include <iostream>
 
 #include "imgui.h"
 #include "imgui_internal.h"
