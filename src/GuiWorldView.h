@@ -87,8 +87,8 @@ public:
 
 		if (m_bDraw) {
 			ImGui::SetNextWindowSize(ImVec2(640, 600), ImGuiCond_FirstUseEver);
-//			ImGui::Begin("World View", &m_bDraw, ImGuiWindowFlags_MenuBar);
-			ImGui::Begin("World View", &m_bDraw);
+			ImGui::Begin("World View", &m_bDraw, ImGuiWindowFlags_MenuBar);
+			//ImGui::Begin("World View", &m_bDraw);
 
 			if( ImGui::BeginMenuBar() ) {
 				if(ImGui::BeginMenu("Aircraft")){
@@ -106,6 +106,24 @@ public:
 				}
 
 
+				if(ImGui::BeginMenu("View")){
+					if(ImGui::MenuItem("Debug Triangle..", nullptr, false, true)) {
+						//		m_GuiAbout.win_open = true;
+					}
+
+					if(ImGui::MenuItem("Debug Cubes..", nullptr, false, true)) {
+						//		m_GuiAbout.win_open = true;
+					}
+
+					if(ImGui::MenuItem("Debug Overlay..", nullptr, false, true)) {
+						//		m_GuiAbout.win_open = true;
+					}
+
+					ImGui::EndMenu();
+				}
+
+
+
 				ImGui::EndMenuBar();
 			}
 
@@ -115,7 +133,7 @@ public:
 			int m_width = 1024;
 			int m_height = 768;
 
-			int m_tex = 3;
+			int m_tex = 3; //FIXME: hard coded fbo texture id
 
 //			ImVec2 size = ImVec2( m_width/2, m_height/2 );
 			ImVec2 size = ImVec2( m_width, m_height );

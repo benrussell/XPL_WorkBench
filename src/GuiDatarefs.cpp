@@ -211,7 +211,7 @@ void GuiDatarefs::draw() {
                                             for ( size_t ex=0; ex<dr->m_elements; ++ex ) {
                                                 fptr = (float*)(dr->m_blob) + ex;
                                                 std::string widget_id = "##_slider_" + std::to_string(wid) + "_" + std::to_string(ex);
-                                                ImGui::SliderFloat(widget_id.c_str(), fptr, -360, 360);
+                                                ImGui::SliderFloat(widget_id.c_str(), fptr, -10, 10);
 
                                                 ImGui::SameLine();
                                                 std::string widget_id_txt = "##_text_" + std::to_string(wid) + "_" + std::to_string(ex);
@@ -223,7 +223,7 @@ void GuiDatarefs::draw() {
                                             //single element
                                             float fTmp = dr->getFloat();
                                             std::string widget_id = "##_slider_" + std::to_string(wid);
-                                            ImGui::SliderFloat(widget_id.c_str(), &fTmp, -360, 360);
+                                            ImGui::SliderFloat(widget_id.c_str(), &fTmp, -10, 10);
 
                                             ImGui::SameLine();
                                             std::string widget_id_txt = "##_text_" + std::to_string(wid);

@@ -136,6 +136,18 @@ WinBox::WinBox( const int width, const int height ){
 	m_dr_frp = FXPLM_DrefCreate("sim/operation/misc/frame_rate_period");
 
 
+	m_dr_view_x = FXPLM_DrefCreate("sim/graphics/view/view_x");
+	m_dr_view_y = FXPLM_DrefCreate("sim/graphics/view/view_y");
+	m_dr_view_z = FXPLM_DrefCreate("sim/graphics/view/view_z");
+
+	m_dr_view_z->setFloat( -5.f );
+
+	m_dr_view_pitch = FXPLM_DrefCreate("sim/graphics/view/view_pitch");
+	m_dr_view_roll = FXPLM_DrefCreate("sim/graphics/view/view_roll");
+	m_dr_view_heading = FXPLM_DrefCreate("sim/graphics/view/view_heading");
+
+
+
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
 };
 
@@ -403,7 +415,7 @@ void WinBox::draw_triangle_box( double dt ){
     r += (30.0f * dt);
 
     //we want a 100pix base size on the triangle so its easy to see.
-    constexpr float base_size = 1000.f;
+    constexpr float base_size = 200.f;
     constexpr float half = base_size / 2.2f;
 
     glPushMatrix();
@@ -412,6 +424,7 @@ void WinBox::draw_triangle_box( double dt ){
     glTranslatef( half/2, half/2, 0 );
     //glTranslatef( -half, -half, 0 );
     glRotatef( r, 0,0,-1 );
+	//glRotatef( r*0.75, 0,1,0 );
 
     glBegin(GL_TRIANGLES);
     glColor3f( 1.f, 0.f, 0.f );
@@ -1008,15 +1021,172 @@ void WinBox::Display(){
 			m_fboCanvas->push_fbo();
 			glPushMatrix();
 			{
+				// --- 1. Distinct 3D Drawing Phase ---
+				{
+
+
+
+
+					glEnable(GL_LIGHTING);
+					glEnable(GL_LIGHT0); // OpenGL supports at least 8 lights (LIGHT0-7)
+
+					// Position of the light: (x, y, z, w)
+					// w=1.0 makes it a point light; w=0.0 makes it directional
+					GLfloat light_pos[] = { 5.0f, 5.0f, 5.0f, 1.0f };
+					glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+
+					// Optional: Set light color (White)
+					GLfloat white_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+					glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+
+
+
+
+
+					// Material properties
+					GLfloat blue_mat[] = { 0.0f, 0.0f, 1.0f, 1.0f };
+					glMaterialfv(GL_FRONT, GL_DIFFUSE, blue_mat);
+
+					// Optional: Add a subtle ambient reflection so shadows aren't pitch black
+					GLfloat dark_blue[] = { 0.0f, 0.0f, 0.2f, 1.0f };
+					glMaterialfv(GL_FRONT, GL_AMBIENT, dark_blue);
+
+
+
+					glShadeModel(GL_SMOOTH);
+
+
+
+					glEnable(GL_DEPTH_TEST);
+					glMatrixMode(GL_PROJECTION);
+					glPushMatrix();
+					glLoadIdentity();
+					// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
+					gluPerspective(45.0, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 100.0);
+
+					glMatrixMode(GL_MODELVIEW);
+					glPushMatrix();
+					glLoadIdentity();
+
+
+
+					glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
+					glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
+					glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
+
+					glTranslatef(
+								m_dr_view_x->getFloat(), // 0,
+								m_dr_view_y->getFloat(), //0,
+								m_dr_view_z->getFloat() // -5.0f
+								); // Move camera back 5 meters
+
+
+
+					// Lambda for a simple cube
+					auto drawCube = [](float size) {
+						float s = size / 2.0f;
+						glBegin(GL_QUADS);
+
+						// Front Face (z = s)
+						glNormal3f(0.0f, 0.0f, 1.0f);
+						glVertex3f(-s, -s,  s);
+						glVertex3f( s, -s,  s);
+						glVertex3f( s,  s,  s);
+						glVertex3f(-s,  s,  s);
+
+						// Back Face (z = -s)
+						glNormal3f(0.0f, 0.0f, -1.0f);
+						glVertex3f(-s, -s, -s);
+						glVertex3f(-s,  s, -s);
+						glVertex3f( s,  s, -s);
+						glVertex3f( s, -s, -s);
+
+						// Top Face (y = s)
+						glNormal3f(0.0f, 1.0f, 0.0f);
+						glVertex3f(-s,  s, -s);
+						glVertex3f(-s,  s,  s);
+						glVertex3f( s,  s,  s);
+						glVertex3f( s,  s, -s);
+
+						// Bottom Face (y = -s)
+						glNormal3f(0.0f, -1.0f, 0.0f);
+						glVertex3f(-s, -s, -s);
+						glVertex3f( s, -s, -s);
+						glVertex3f( s, -s,  s);
+						glVertex3f(-s, -s,  s);
+
+						// Right Face (x = s)
+						glNormal3f(1.0f, 0.0f, 0.0f);
+						glVertex3f( s, -s, -s);
+						glVertex3f( s,  s, -s);
+						glVertex3f( s,  s,  s);
+						glVertex3f( s, -s,  s);
+
+						// Left Face (x = -s)
+						glNormal3f(-1.0f, 0.0f, 0.0f);
+						glVertex3f(-s, -s, -s);
+						glVertex3f(-s, -s,  s);
+						glVertex3f(-s,  s,  s);
+						glVertex3f(-s,  s, -s);
+
+						glEnd();
+					};
+
+
+
+					// draw the cube - this is also the time to run any 3d drawing callbacks that
+					// plugins have registered.
+					{
+						static float f_rot=0.f;
+						f_rot += dt * 10.f;
+
+						glPushMatrix();
+						glScalef( 0.5, 0.5, 0.5 );
+						drawCube(1.0f);
+						glPopMatrix();
+
+
+						glPushMatrix();
+						glTranslatef( 2.f, 0.f, 0.f );
+						glRotatef( 30.f, 1, 0, 0 );
+						glRotatef( f_rot, 0, 1, 0 );
+						drawCube(1.0f);
+						glPopMatrix();
+
+
+					}
+
+
+
+					glPopMatrix(); // Restore Modelview
+					glMatrixMode(GL_PROJECTION);
+					glPopMatrix(); // Restore Projection
+					glMatrixMode(GL_MODELVIEW);
+					glDisable(GL_DEPTH_TEST);
+				}
+
+
+
+
+				glDisable(GL_LIGHTING);
+
+
+				// --- 2. Existing Drawing Code (2D/UI) ---
 				{
 					glPushMatrix();
 					glTranslatef(128, 128, 0);
 					draw_triangle_box(dt);
 					glPopMatrix();
 				}
-				FXPLM_DrawWindows();
 
-	//			draw_TextureDump(); //this draws into the bg of the main host window
+				// {
+				// 	glPushMatrix();
+				// 	glTranslatef(256, 128, 0);
+				// 	draw_triangle_box(dt);
+				// 	glPopMatrix();
+				// }
+
+				FXPLM_DrawWindows();
 			}
 			glPopMatrix();
 			m_fboCanvas->pop_fbo();
