@@ -1070,9 +1070,9 @@ void WinBox::Display(){
 
 
 
+					glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
 					glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
 					glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
-					glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
 
 					glTranslatef(
 								m_dr_view_x->getFloat(), // 0,
@@ -1148,7 +1148,7 @@ void WinBox::Display(){
 
 						glPushMatrix();
 						glTranslatef( 2.f, 0.f, 0.f );
-						glRotatef( 30.f, 1, 0, 0 );
+						//glRotatef( 30.f, 1, 0, 0 );
 						glRotatef( f_rot, 0, 1, 0 );
 						drawCube(1.0f);
 						glPopMatrix();
