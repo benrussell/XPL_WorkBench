@@ -292,21 +292,25 @@ void GuiPlugins::draw(){
 						ImGui::Text("60fps budget: %0.3f%%", (cb_cost / 16.f) * 100.f );
 
 
-						lam_drawFboSummaryBranch("screen fbo", drawcb->m_screen_fbo, cb_cost);
+						//lam_drawFboSummaryBranch("screen fbo", drawcb->m_screen_fbo, cb_cost);
 
 						ImGui::Text( "before: %i", drawcb->m_before );
 
 						//ImGui::Text( "phase: %i", drawcb->m_phase );
 						std::string phase_label;
 						switch( drawcb->m_phase ){
-							case 25:
+							case xplm_Phase_Objects:
+								phase_label = "Objects"; break;
+							case xplm_Phase_Airplanes:
 								phase_label = "Airplanes"; break;
-							case 40:
+							case xplm_Phase_Gauges:
+								phase_label = "Gauges"; break;
+							case xplm_Phase_Panel:
 								phase_label = "Panel"; break;
-							case 45:
+							case xplm_Phase_Window:
 								phase_label = "Window"; break;
 							default:
-								phase_label = "unk"; break; //FIXME: report numeric
+								phase_label = "unk:" + std::to_string(drawcb->m_phase); break; //FIXME: report numeric
 						};
 						ImGui::Text( "phase: %s", phase_label.c_str() );
 
