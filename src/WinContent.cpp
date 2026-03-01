@@ -48,7 +48,9 @@ WinBox::WinBox( const int width, const int height ){
     /* Create a windowed mode window and its OpenGL context */
 	// create a window that belongs to a member var
 	// window created by main.cpp is only used for getting a GL context.
-    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench_WinBox", nullptr, nullptr);
+
+	// The caption string provided here will be displayed as the window title in Linux and prob windows?
+    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", nullptr, nullptr);
 
 	HostApp::m_timer.start();
 
@@ -106,6 +108,10 @@ WinBox::WinBox( const int width, const int height ){
 
 
 	m_fboCanvas = new gz_fbo(1024,768);
+	m_fboCanvas->m_FboClearColorRGBA[0] = 0.025;
+	m_fboCanvas->m_FboClearColorRGBA[1] = 0.025;
+	m_fboCanvas->m_FboClearColorRGBA[2] = 0.075;
+	//m_fboCanvas->m_FboClearColorRGBA[4];
 
 
     //setup the texture inspector on click handler
@@ -140,13 +146,15 @@ WinBox::WinBox( const int width, const int height ){
 	m_dr_view_y = FXPLM_DrefCreate("sim/graphics/view/view_y");
 	m_dr_view_z = FXPLM_DrefCreate("sim/graphics/view/view_z");
 
-	m_dr_view_z->setFloat( -5.f );
+	m_dr_view_x->setFloat( -0.f );
+	m_dr_view_y->setFloat( -2.5f );
+	m_dr_view_z->setFloat( -7.5f );
 
 	m_dr_view_pitch = FXPLM_DrefCreate("sim/graphics/view/view_pitch");
 	m_dr_view_roll = FXPLM_DrefCreate("sim/graphics/view/view_roll");
 	m_dr_view_heading = FXPLM_DrefCreate("sim/graphics/view/view_heading");
 
-
+	m_dr_view_pitch->setFloat( 20.f );
 
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
 };
@@ -1003,9 +1011,9 @@ void WinBox::Display(){
 //		}
 
 
-		// Render all avionics device FBO surfaces.
-		// render all draw callbacks
-		FXPLM_DrawCBS();
+	// Render all avionics device FBO surfaces.
+	// This can be called outside of the GL matrix transforms below.
+	FXPLM_Draw_AvionicsDevices();
 
 
 
@@ -1021,11 +1029,10 @@ void WinBox::Display(){
 			m_fboCanvas->push_fbo();
 			glPushMatrix();
 			{
+
+
 				// --- 1. Distinct 3D Drawing Phase ---
 				{
-
-
-
 
 					glEnable(GL_LIGHTING);
 					glEnable(GL_LIGHT0); // OpenGL supports at least 8 lights (LIGHT0-7)
@@ -1041,22 +1048,6 @@ void WinBox::Display(){
 
 
 
-
-
-					// Material properties
-					GLfloat blue_mat[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-					glMaterialfv(GL_FRONT, GL_DIFFUSE, blue_mat);
-
-					// Optional: Add a subtle ambient reflection so shadows aren't pitch black
-					GLfloat dark_blue[] = { 0.0f, 0.0f, 0.2f, 1.0f };
-					glMaterialfv(GL_FRONT, GL_AMBIENT, dark_blue);
-
-
-
-					glShadeModel(GL_SMOOTH);
-
-
-
 					glEnable(GL_DEPTH_TEST);
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();
@@ -1069,93 +1060,42 @@ void WinBox::Display(){
 					glLoadIdentity();
 
 
-
+					// shift to the camera location
 					glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
 					glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
 					glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
 
 					glTranslatef(
-								m_dr_view_x->getFloat(), // 0,
-								m_dr_view_y->getFloat(), //0,
-								m_dr_view_z->getFloat() // -5.0f
-								); // Move camera back 5 meters
+								m_dr_view_x->getFloat(),
+								m_dr_view_y->getFloat(),
+								m_dr_view_z->getFloat()
+								);
 
 
 
-					// Lambda for a simple cube
-					auto drawCube = [](float size) {
-						float s = size / 2.0f;
-						glBegin(GL_QUADS);
-
-						// Front Face (z = s)
-						glNormal3f(0.0f, 0.0f, 1.0f);
-						glVertex3f(-s, -s,  s);
-						glVertex3f( s, -s,  s);
-						glVertex3f( s,  s,  s);
-						glVertex3f(-s,  s,  s);
-
-						// Back Face (z = -s)
-						glNormal3f(0.0f, 0.0f, -1.0f);
-						glVertex3f(-s, -s, -s);
-						glVertex3f(-s,  s, -s);
-						glVertex3f( s,  s, -s);
-						glVertex3f( s, -s, -s);
-
-						// Top Face (y = s)
-						glNormal3f(0.0f, 1.0f, 0.0f);
-						glVertex3f(-s,  s, -s);
-						glVertex3f(-s,  s,  s);
-						glVertex3f( s,  s,  s);
-						glVertex3f( s,  s, -s);
-
-						// Bottom Face (y = -s)
-						glNormal3f(0.0f, -1.0f, 0.0f);
-						glVertex3f(-s, -s, -s);
-						glVertex3f( s, -s, -s);
-						glVertex3f( s, -s,  s);
-						glVertex3f(-s, -s,  s);
-
-						// Right Face (x = s)
-						glNormal3f(1.0f, 0.0f, 0.0f);
-						glVertex3f( s, -s, -s);
-						glVertex3f( s,  s, -s);
-						glVertex3f( s,  s,  s);
-						glVertex3f( s, -s,  s);
-
-						// Left Face (x = -s)
-						glNormal3f(-1.0f, 0.0f, 0.0f);
-						glVertex3f(-s, -s, -s);
-						glVertex3f(-s, -s,  s);
-						glVertex3f(-s,  s,  s);
-						glVertex3f(-s,  s, -s);
-
-						glEnd();
-					};
+					// // Material properties
+					// GLfloat blue_mat[] = { 0.0f, 0.0f, 1.0f, 1.0f };
+					// glMaterialfv(GL_FRONT, GL_DIFFUSE, blue_mat);
+					//
+					// // Optional: Add a subtle ambient reflection so shadows aren't pitch black
+					// GLfloat dark_blue[] = { 0.0f, 0.0f, 0.2f, 1.0f };
+					// glMaterialfv(GL_FRONT, GL_AMBIENT, dark_blue);
+					//
+					// glShadeModel(GL_SMOOTH);
 
 
-
-					// draw the cube - this is also the time to run any 3d drawing callbacks that
-					// plugins have registered.
+#if 1
 					{
-						static float f_rot=0.f;
-						f_rot += dt * 10.f;
+						glPushAttrib(GL_ALL_ATTRIB_BITS);
+						glPushMatrix(); // Save transformation matrices
 
-						glPushMatrix();
-						glScalef( 0.5, 0.5, 0.5 );
-						drawCube(1.0f);
+						FXPLM_DrawCBS_3D();
+						//m_fboCanvas->push_fbo(false);
+
 						glPopMatrix();
-
-
-						glPushMatrix();
-						glTranslatef( 2.f, 0.f, 0.f );
-						//glRotatef( 30.f, 1, 0, 0 );
-						glRotatef( f_rot, 0, 1, 0 );
-						drawCube(1.0f);
-						glPopMatrix();
-
-
+						glPopAttrib();
 					}
-
+#endif
 
 
 					glPopMatrix(); // Restore Modelview
@@ -1165,12 +1105,17 @@ void WinBox::Display(){
 					glDisable(GL_DEPTH_TEST);
 				}
 
-
-
-
 				glDisable(GL_LIGHTING);
+				//m_fboCanvas->push_fbo(); //SASL seems to escape the FBO sandbox??
+
+				// -- end of 3d drawing setup
 
 
+
+
+
+
+#if 0 //debug trianle menu?
 				// --- 2. Existing Drawing Code (2D/UI) ---
 				{
 					glPushMatrix();
@@ -1178,15 +1123,14 @@ void WinBox::Display(){
 					draw_triangle_box(dt);
 					glPopMatrix();
 				}
+#endif
 
-				// {
-				// 	glPushMatrix();
-				// 	glTranslatef(256, 128, 0);
-				// 	draw_triangle_box(dt);
-				// 	glPopMatrix();
-				// }
 
+				// FIXME: the windows phase should prob be integrated into the 2D cbs?
 				FXPLM_DrawWindows();
+				FXPLM_DrawCBS();
+
+
 			}
 			glPopMatrix();
 			m_fboCanvas->pop_fbo();
@@ -1367,8 +1311,6 @@ void WinBox::OnCallDraw(){
 	int width, height;
 	glfwGetWindowSize(m_winh, &width, &height);
 
-	//FIXME: this code to set the viewport px
-	// fails on linux. does it really fail?
 	{
 		// Set up orthographic projection to map OpenGL coordinates to window pixels
 		glMatrixMode(GL_PROJECTION);
