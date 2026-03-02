@@ -48,8 +48,7 @@
 
 
 #include "glue_FBO.hpp" //FIXME: port to gz_core
-
-
+#include "GuiWorldControl.h"
 
 
 #if 0
@@ -123,6 +122,8 @@ public:
 	GuiGraph m_GuiGraph;
 
 	gz_fbo* m_fboCanvas;
+
+	GuiWorldControl m_GuiWorldControl;
 
 
 	int m_fps_cap_sleep_delay = 0;

@@ -146,6 +146,19 @@ WinBox::WinBox( const int width, const int height ){
 	m_dr_view_y = FXPLM_DrefCreate("sim/graphics/view/view_y");
 	m_dr_view_z = FXPLM_DrefCreate("sim/graphics/view/view_z");
 
+
+
+#warning eww.
+	//FIXME: this is a nasty hack.
+	m_GuiWorldControl.m_dr_view_x = m_dr_view_x;
+	m_GuiWorldControl.m_dr_view_y = m_dr_view_y;
+	m_GuiWorldControl.m_dr_view_z = m_dr_view_z;
+	m_GuiWorldControl.m_bDraw = true;
+// end: nasty ass hack
+
+
+
+
 	m_dr_view_x->setFloat( -0.f );
 	m_dr_view_y->setFloat( -2.5f );
 	m_dr_view_z->setFloat( -7.5f );
@@ -1229,6 +1242,9 @@ void WinBox::Display(){
 		m_GuiGraph.draw();
 
 		m_GuiWorldView.draw(dt);
+
+
+		m_GuiWorldControl.draw(dt);
 
 
 		if ( m_pluginLoader.m_bDraw ) {
