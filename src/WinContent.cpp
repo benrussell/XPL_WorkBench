@@ -108,9 +108,15 @@ WinBox::WinBox( const int width, const int height ){
 
 
 	m_fboCanvas = new gz_fbo(1024,768);
-	m_fboCanvas->m_FboClearColorRGBA[0] = 0.025;
-	m_fboCanvas->m_FboClearColorRGBA[1] = 0.025;
-	m_fboCanvas->m_FboClearColorRGBA[2] = 0.075;
+
+	// m_fboCanvas->m_FboClearColorRGBA[0] = 0.025;
+	// m_fboCanvas->m_FboClearColorRGBA[1] = 0.025;
+	// m_fboCanvas->m_FboClearColorRGBA[2] = 0.075;
+
+	m_fboCanvas->m_FboClearColorRGBA[0] = 0.2;
+	m_fboCanvas->m_FboClearColorRGBA[1] = 0.3;
+	m_fboCanvas->m_FboClearColorRGBA[2] = 0.2;
+
 	//m_fboCanvas->m_FboClearColorRGBA[4];
 
 
