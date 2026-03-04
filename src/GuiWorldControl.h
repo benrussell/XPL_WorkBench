@@ -67,6 +67,21 @@ public:
 			ImGui::SliderFloat("z", &fTmp, -10, 10);
 			m_dr_view_z->setFloat(fTmp);
 
+
+			fTmp = m_dr_view_pitch->getFloat();
+			ImGui::SliderFloat("p", &fTmp, -90, 90);
+			m_dr_view_pitch->setFloat(fTmp);
+
+			fTmp = m_dr_view_roll->getFloat();
+			ImGui::SliderFloat("r", &fTmp, -180, 180);
+			m_dr_view_roll->setFloat(fTmp);
+
+			fTmp = m_dr_view_heading->getFloat();
+			ImGui::SliderFloat("h", &fTmp, -180, 180);
+			m_dr_view_heading->setFloat(fTmp);
+
+
+
 			ImGui::End();
 		}//m_bDraw?
 	}

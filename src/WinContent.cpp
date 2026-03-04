@@ -152,6 +152,10 @@ WinBox::WinBox( const int width, const int height ){
 	m_dr_view_y = FXPLM_DrefCreate("sim/graphics/view/view_y");
 	m_dr_view_z = FXPLM_DrefCreate("sim/graphics/view/view_z");
 
+	m_dr_view_pitch = FXPLM_DrefCreate("sim/graphics/view/view_pitch");
+	m_dr_view_roll = FXPLM_DrefCreate("sim/graphics/view/view_roll");
+	m_dr_view_heading = FXPLM_DrefCreate("sim/graphics/view/view_heading");
+
 
 
 #warning eww.
@@ -159,6 +163,12 @@ WinBox::WinBox( const int width, const int height ){
 	m_GuiWorldControl.m_dr_view_x = m_dr_view_x;
 	m_GuiWorldControl.m_dr_view_y = m_dr_view_y;
 	m_GuiWorldControl.m_dr_view_z = m_dr_view_z;
+
+	m_GuiWorldControl.m_dr_view_pitch = m_dr_view_pitch;
+	m_GuiWorldControl.m_dr_view_roll = m_dr_view_roll;
+	m_GuiWorldControl.m_dr_view_heading = m_dr_view_heading;
+
+
 	m_GuiWorldControl.m_bDraw = true;
 // end: nasty ass hack
 
