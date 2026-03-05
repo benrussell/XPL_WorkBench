@@ -36,7 +36,7 @@
 #include "imfilebrowser.h"
 
 
-#include <XPLM.h>
+#include <FXPLM.h>
 
 
 

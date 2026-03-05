@@ -25,11 +25,11 @@
 #include <thread> //required
 
 
-#include <XPLM.h>
+#include <FXPLM.h>
 #include <XPLMPlugin.h>
 #include <XPLMDataAccess.h>
 
-#include "FXPLM.h"
+#include "glue_FXPLM.h"
 
 #include "GuiPluginMessages.h"
 #include "GuiMemory.h"

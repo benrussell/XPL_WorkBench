@@ -26,9 +26,9 @@
 #include <filesystem>
 
 #include <dlfcn.h>
-#include <XPLM.h>
+#include <FXPLM.h>
 
-class FXPLM {
+class glue_FXPLM {
 public:
 
 
@@ -56,7 +56,7 @@ public:
 		dlerror(); //clear errors.
 
 		void* dlh = dlopen(fname.c_str(), RTLD_NOW | RTLD_GLOBAL );
-		FXPLM::m_xpwidgets_dlh = dlh;
+		glue_FXPLM::m_xpwidgets_dlh = dlh;
 
 		if( dlh == nullptr ){
 			std::string sLoadError = dlerror();

@@ -35,7 +35,7 @@
 #include "imfilebrowser.h"
 
 
-#include <XPLM.h>
+#include <FXPLM.h>
 
 class GuiMessageBox {
 public:

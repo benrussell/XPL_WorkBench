@@ -21,7 +21,7 @@
 
 #include "GuiPlugins.h"
 
-#include <XPLM.h>
+#include <FXPLM.h>
 #include <XPLMPlugin.h>
 #include <XPLMUtilities.h>
 #include <glue_CmdCustom.hpp>

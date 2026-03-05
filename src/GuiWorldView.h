@@ -35,7 +35,7 @@
 
 #include <gz_shader.h>
 
-#include "XPLM.h"
+#include "FXPLM.h"
 
 
 class GuiWorldView {

@@ -194,8 +194,8 @@ set( XP_SHIM_SRC
 
         src/imgui_common.h
         #src/dep_FBO.h
-        src/FXPLM.cpp
-        src/FXPLM.h
+        src/glue_FXPLM.cpp
+        src/glue_FXPLM.h
         src/GuiAbout.cpp
         src/GuiAbout.h
         src/GuiPluginLoader.cpp

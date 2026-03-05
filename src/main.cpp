@@ -35,7 +35,7 @@
 #include "stb_image.h"
 
 
-#include "FXPLM.h"
+#include "glue_FXPLM.h"
 
 //#include <iostream>
 #include <filesystem>
@@ -317,7 +317,7 @@ int main(int argc, char** argv)
 
 	FXPLM_Init(name,sig,desc);
 
-	FXPLM::load_xpwidgets();
+	glue_FXPLM::load_xpwidgets();
 
 
 		namespace fs = std::filesystem;

@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 
-#include <XPLM.h>
+#include <FXPLM.h>
 
 
 #include "imgui.h"

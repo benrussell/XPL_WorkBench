@@ -23,7 +23,7 @@
 
 #include "GuiDatarefs.h"
 
-#include <XPLM.h>
+#include <FXPLM.h>
 
 
 void GuiAbout::draw( const std::string& startup_folder ){

@@ -21,7 +21,7 @@
 
 #include "GuiDatarefs.h"
 
-#include <XPLM.h>
+#include <FXPLM.h>
 
 
 
