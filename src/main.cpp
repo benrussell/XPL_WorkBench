@@ -290,7 +290,10 @@ int main(int argc, char** argv)
 
 	int width=640;
 	int height=480;
+	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	auto mwinh = glfwCreateWindow( width, height, "XPL_WorkBench GL Context", nullptr, nullptr);
+	//glfwHideWindow( mwinh );
+	glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
 		if (!mwinh)
 		{
