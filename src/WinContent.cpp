@@ -142,48 +142,66 @@ WinBox::WinBox( const int width, const int height ){
 	};
 
 
+
+
+	auto p = (Plugin*)FXPLM_PluginInstPtr(0);
+	p->takeContext();
+
+
 	std::cout<<"xwb/ Creating basic host drefs.\n";
-	m_dr_network_time = FXPLM_DrefCreate("sim/network/misc/network_time_sec");
-	m_dr_running_time = FXPLM_DrefCreate("sim/time/total_running_time_sec");
-	m_dr_frp = FXPLM_DrefCreate("sim/operation/misc/frame_rate_period");
+	m_dr_network_time = XPLMFindDataRef("sim/network/misc/network_time_sec");
+	//m_dr_network_time = FXPLM_DrefCreate("sim/network/misc/network_time_sec");
+	m_dr_running_time = XPLMFindDataRef("sim/time/total_running_time_sec");
+	m_dr_frp = XPLMFindDataRef("sim/operation/misc/frame_rate_period");
 
 
-	m_dr_view_x = FXPLM_DrefCreate("sim/graphics/view/view_x");
-	m_dr_view_y = FXPLM_DrefCreate("sim/graphics/view/view_y");
-	m_dr_view_z = FXPLM_DrefCreate("sim/graphics/view/view_z");
+	//FIXME: these are specified as double in XPLMDataRefs.txt
+	// creating them here will create them as floats
+	// *** have appended 2 to dref names to go around problem for now ***
+    {
+    	//FXPLM_DrefCreate()
+    	m_dr_fm_pos_local_x = FXPLM_DrefCreate("sim/flightmodel/position/local_x2");
+    	m_dr_fm_pos_local_y = FXPLM_DrefCreate("sim/flightmodel/position/local_y2");
+    	m_dr_fm_pos_local_z = FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
+    }
 
-	m_dr_view_pitch = FXPLM_DrefCreate("sim/graphics/view/view_pitch");
-	m_dr_view_roll = FXPLM_DrefCreate("sim/graphics/view/view_roll");
-	m_dr_view_heading = FXPLM_DrefCreate("sim/graphics/view/view_heading");
 
+	//these are needed for the world control gui
+    {
+    	m_dr_view_x = XPLMFindDataRef("sim/graphics/view/view_x");
+    	m_dr_view_y = XPLMFindDataRef("sim/graphics/view/view_y");
+    	m_dr_view_z = XPLMFindDataRef("sim/graphics/view/view_z");
 
+    	m_dr_view_pitch = XPLMFindDataRef("sim/graphics/view/view_pitch");
+    	m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
+    	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
 
 #warning eww.
-	//FIXME: this is a nasty hack.
-	m_GuiWorldControl.m_dr_view_x = m_dr_view_x;
-	m_GuiWorldControl.m_dr_view_y = m_dr_view_y;
-	m_GuiWorldControl.m_dr_view_z = m_dr_view_z;
+    	//FIXME: this is a nasty hack.
+    	m_GuiWorldControl.m_dr_view_x = m_dr_view_x;
+    	m_GuiWorldControl.m_dr_view_y = m_dr_view_y;
+    	m_GuiWorldControl.m_dr_view_z = m_dr_view_z;
 
-	m_GuiWorldControl.m_dr_view_pitch = m_dr_view_pitch;
-	m_GuiWorldControl.m_dr_view_roll = m_dr_view_roll;
-	m_GuiWorldControl.m_dr_view_heading = m_dr_view_heading;
+    	m_GuiWorldControl.m_dr_view_pitch = m_dr_view_pitch;
+    	m_GuiWorldControl.m_dr_view_roll = m_dr_view_roll;
+    	m_GuiWorldControl.m_dr_view_heading = m_dr_view_heading;
 
-
-	m_GuiWorldControl.m_bDraw = true;
+    	m_GuiWorldControl.m_bDraw = true;
+    }
 // end: nasty ass hack
 
 
+	p->releaseContext();
 
 
+
+	//default view pos
 	m_dr_view_x->setFloat( -0.f );
 	m_dr_view_y->setFloat( -2.5f );
 	m_dr_view_z->setFloat( -7.5f );
 
-	m_dr_view_pitch = FXPLM_DrefCreate("sim/graphics/view/view_pitch");
-	m_dr_view_roll = FXPLM_DrefCreate("sim/graphics/view/view_roll");
-	m_dr_view_heading = FXPLM_DrefCreate("sim/graphics/view/view_heading");
-
 	m_dr_view_pitch->setFloat( 20.f );
+
 
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
 };
@@ -1059,92 +1077,67 @@ void WinBox::Display(){
 			glPushMatrix();
 			{
 
-
 				// --- 1. Distinct 3D Drawing Phase ---
 				{
 
-					glEnable(GL_LIGHTING);
-					glEnable(GL_LIGHT0); // OpenGL supports at least 8 lights (LIGHT0-7)
+					//glEnable(GL_DEPTH_TEST); //this will likely be toggled for skybox so just leave it dead.
 
-					// Position of the light: (x, y, z, w)
-					// w=1.0 makes it a point light; w=0.0 makes it directional
-					GLfloat light_pos[] = { 5.0f, 5.0f, 5.0f, 1.0f };
-					glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-
-					// Optional: Set light color (White)
-					GLfloat white_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-					glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-
-
-
-					glEnable(GL_DEPTH_TEST);
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();
 					glLoadIdentity();
+
+					//FIXME: wire this to datarefs.
 					// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
-					gluPerspective(45.0, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 100.0);
+					gluPerspective(45.0, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
 
 					glMatrixMode(GL_MODELVIEW);
 					glPushMatrix();
 					glLoadIdentity();
 
 
-					// shift to the camera location
-					glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
-					glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
-					glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
+						// shift to the camera location
+						glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
+						glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
+						glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
 
-					glTranslatef(
-								m_dr_view_x->getFloat(),
-								m_dr_view_y->getFloat(),
-								m_dr_view_z->getFloat()
-								);
+						glTranslatef(
+									m_dr_view_x->getFloat(),
+									m_dr_view_y->getFloat(),
+									m_dr_view_z->getFloat()
+									);
 
+	#if 1
+						{
+							glPushAttrib(GL_ALL_ATTRIB_BITS);
+							glPushMatrix(); // Save transformation matrices
 
+							FXPLM_DrawCBS_3D();
+							//m_fboCanvas->push_fbo(false);
 
-					// // Material properties
-					// GLfloat blue_mat[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-					// glMaterialfv(GL_FRONT, GL_DIFFUSE, blue_mat);
-					//
-					// // Optional: Add a subtle ambient reflection so shadows aren't pitch black
-					// GLfloat dark_blue[] = { 0.0f, 0.0f, 0.2f, 1.0f };
-					// glMaterialfv(GL_FRONT, GL_AMBIENT, dark_blue);
-					//
-					// glShadeModel(GL_SMOOTH);
-
-
-#if 1
-					{
-						glPushAttrib(GL_ALL_ATTRIB_BITS);
-						glPushMatrix(); // Save transformation matrices
-
-						FXPLM_DrawCBS_3D();
-						//m_fboCanvas->push_fbo(false);
-
-						glPopMatrix();
-						glPopAttrib();
-					}
-#endif
-
+							glPopMatrix();
+							glPopAttrib();
+						}
+	#endif
 
 					glPopMatrix(); // Restore Modelview
 					glMatrixMode(GL_PROJECTION);
 					glPopMatrix(); // Restore Projection
 					glMatrixMode(GL_MODELVIEW);
-					glDisable(GL_DEPTH_TEST);
+					//glDisable(GL_DEPTH_TEST);
 				}
-
-				glDisable(GL_LIGHTING);
-				//m_fboCanvas->push_fbo(); //SASL seems to escape the FBO sandbox??
 
 				// -- end of 3d drawing setup
 
 
+				glPushAttrib(GL_ALL_ATTRIB_BITS);
+				// FIXME: the windows phase should prob be integrated into the 2D cbs?
+				FXPLM_DrawCBS();
+
+				FXPLM_DrawWindows();
+				glPopAttrib();
 
 
-
-
-#if 0 //debug trianle menu?
+#if 1 //debug trianle menu?
 				// --- 2. Existing Drawing Code (2D/UI) ---
 				{
 					glPushMatrix();
@@ -1154,10 +1147,6 @@ void WinBox::Display(){
 				}
 #endif
 
-
-				// FIXME: the windows phase should prob be integrated into the 2D cbs?
-				FXPLM_DrawWindows();
-				FXPLM_DrawCBS();
 
 
 			}

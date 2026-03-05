@@ -50,6 +50,7 @@
 #include "glue_FBO.hpp" //FIXME: port to gz_core
 #include "GuiWorldControl.h"
 
+#include "XPLMDataAccess.h"
 
 #if 0
 
@@ -132,6 +133,11 @@ public:
 	XPLMDataRef m_dr_network_time;
 	XPLMDataRef m_dr_running_time;
 	XPLMDataRef m_dr_frp;
+
+	XPLMDataRef m_dr_fm_pos_local_x;
+	XPLMDataRef m_dr_fm_pos_local_y;
+	XPLMDataRef m_dr_fm_pos_local_z;
+
 
 
 	XPLMDataRef m_dr_view_x;
