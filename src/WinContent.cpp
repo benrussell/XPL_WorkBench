@@ -674,12 +674,15 @@ void WinBox::draw_triangle_box( double dt ){
 				switch( m_fps_cap_sleep_delay ){
 				case 0:
 					b_Unlimited = true;
+					glfwSwapInterval(0);
 					break;
 				case 10:
 					b_fps_60 = true;
+					glfwSwapInterval(1);
 					break;
 				case 20:
 					b_fps_30 = true;
+					glfwSwapInterval(2);
 					break;
 				};
 
