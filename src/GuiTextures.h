@@ -80,7 +80,7 @@ public:
 					ImGui::GetWindowDrawList()->AddRect(
 							pos,
 							ImVec2(pos.x + borderSize.x, pos.y + borderSize.y),
-							IM_COL32(0, 0, 255, 255) // Blue color (RGBA)
+							IM_COL32(64, 64, 128, 255) // Blue color (RGBA)
 					);
 
 					// Draw the image inside the border
