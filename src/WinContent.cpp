@@ -50,7 +50,7 @@ WinBox::WinBox( const int width, const int height ){
 	// window created by main.cpp is only used for getting a GL context.
 
 	// The caption string provided here will be displayed as the window title in Linux and prob windows?
-    m_winh = glfwCreateWindow( width, height, "XPL_WorkBench", nullptr, nullptr);
+    m_winh = glfwCreateWindow( width, height, "XWB", nullptr, nullptr);
 
 	HostApp::m_timer.start();
 
@@ -107,6 +107,7 @@ WinBox::WinBox( const int width, const int height ){
 #endif
 
 
+	// this is the fbo that we draw any plugin callbacks into, its effective the world canvas
 	m_fboCanvas = new gz_fbo(1024,768);
 
 	// m_fboCanvas->m_FboClearColorRGBA[0] = 0.025;
@@ -143,14 +144,13 @@ WinBox::WinBox( const int width, const int height ){
 
 
 
-
+	//this gets the "XWB" host plugin id:0 so we can setup for FXPLM log id context
 	auto p = (Plugin*)FXPLM_PluginInstPtr(0);
 	p->takeContext();
 
 
 	std::cout<<"xwb/ Creating basic host drefs.\n";
 	m_dr_network_time = XPLMFindDataRef("sim/network/misc/network_time_sec");
-	//m_dr_network_time = FXPLM_DrefCreate("sim/network/misc/network_time_sec");
 	m_dr_running_time = XPLMFindDataRef("sim/time/total_running_time_sec");
 	m_dr_frp = XPLMFindDataRef("sim/operation/misc/frame_rate_period");
 
@@ -165,9 +165,8 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_fm_pos_local_z = FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
     }
 
-
-	//these are needed for the world control gui
-    {
+	{
+    	//these view location and orientation drefs ARE used during the GL setup for 3D callback
     	m_dr_view_x = XPLMFindDataRef("sim/graphics/view/view_x");
     	m_dr_view_y = XPLMFindDataRef("sim/graphics/view/view_y");
     	m_dr_view_z = XPLMFindDataRef("sim/graphics/view/view_z");
@@ -175,17 +174,21 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_view_pitch = XPLMFindDataRef("sim/graphics/view/view_pitch");
     	m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
     	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
+    }
 
-#warning eww.
-    	//FIXME: this is a nasty hack.
-    	m_GuiWorldControl.m_dr_view_x = m_dr_view_x;
-    	m_GuiWorldControl.m_dr_view_y = m_dr_view_y;
-    	m_GuiWorldControl.m_dr_view_z = m_dr_view_z;
+	{
+    	//FIXME: move dref create to world control?
 
-    	m_GuiWorldControl.m_dr_view_pitch = m_dr_view_pitch;
-    	m_GuiWorldControl.m_dr_view_roll = m_dr_view_roll;
-    	m_GuiWorldControl.m_dr_view_heading = m_dr_view_heading;
+    	m_dr_LightX = FXPLM_DrefCreate("art/light/pos_x");
+    	m_dr_LightY = FXPLM_DrefCreate("art/light/pos_y");
+    	m_dr_LightZ = FXPLM_DrefCreate("art/light/pos_z");
 
+    	m_dr_LightR = FXPLM_DrefCreate("art/light/col_r");
+    	m_dr_LightG = FXPLM_DrefCreate("art/light/col_g");
+    	m_dr_LightB = FXPLM_DrefCreate("art/light/col_b");
+    	m_dr_LightA = FXPLM_DrefCreate("art/light/col_a");
+
+    	m_GuiWorldControl.dref_bind();
     	m_GuiWorldControl.m_bDraw = true;
     }
 // end: nasty ass hack
@@ -194,13 +197,15 @@ WinBox::WinBox( const int width, const int height ){
 	p->releaseContext();
 
 
+	//FIXME: camera setup is contained in our 3D setup code???
 
-	//default view pos
-	m_dr_view_x->setFloat( -0.f );
-	m_dr_view_y->setFloat( -2.5f );
-	m_dr_view_z->setFloat( -7.5f );
-
-	m_dr_view_pitch->setFloat( 20.f );
+	// FIXME: move to plugin??
+	// //default view pos
+	// m_dr_view_x->setFloat( -0.f );
+	// m_dr_view_y->setFloat( -2.5f );
+	// m_dr_view_z->setFloat( -7.5f );
+	//
+	// m_dr_view_pitch->setFloat( 20.f );
 
 
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
@@ -1137,17 +1142,13 @@ void WinBox::Display(){
 				glPopAttrib();
 
 
-#if 1 //debug trianle menu?
 				// --- 2. Existing Drawing Code (2D/UI) ---
-				{
+				if( m_GuiWorldView.m_bDisplayDebugTriangle ){
 					glPushMatrix();
 					glTranslatef(128, 128, 0);
 					draw_triangle_box(dt);
 					glPopMatrix();
 				}
-#endif
-
-
 
 			}
 			glPopMatrix();

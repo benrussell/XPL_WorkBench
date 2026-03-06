@@ -139,6 +139,15 @@ public:
 	XPLMDataRef m_dr_fm_pos_local_z;
 
 
+	XPLMDataRef m_dr_LightX;
+	XPLMDataRef m_dr_LightY;
+	XPLMDataRef m_dr_LightZ;
+
+	XPLMDataRef m_dr_LightR;
+	XPLMDataRef m_dr_LightG;
+	XPLMDataRef m_dr_LightB;
+	XPLMDataRef m_dr_LightA;
+
 
 	XPLMDataRef m_dr_view_x;
 	XPLMDataRef m_dr_view_y;

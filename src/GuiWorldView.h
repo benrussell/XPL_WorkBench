@@ -43,6 +43,8 @@ public:
 
 	gz::shader* m_shader;
 
+	bool m_bDisplayDebugTriangle=false;
+
 	bool m_FlipVert=true;
 	bool m_FlipHoriz=false;
 
@@ -107,8 +109,9 @@ public:
 
 
 				if(ImGui::BeginMenu("View")){
-					if(ImGui::MenuItem("Debug Triangle..", nullptr, false, true)) {
+					if(ImGui::MenuItem("Debug Triangle..", nullptr, m_bDisplayDebugTriangle, true)) {
 						//		m_GuiAbout.win_open = true;
+						m_bDisplayDebugTriangle = ! m_bDisplayDebugTriangle;
 					}
 
 					if(ImGui::MenuItem("Debug Cubes..", nullptr, false, true)) {
@@ -133,7 +136,8 @@ public:
 			int m_width = 1024;
 			int m_height = 768;
 
-			int m_tex = 3; //FIXME: hard coded fbo texture id
+#warning eww - hard coded texture id
+			int m_tex = 2; //FIXME: hard coded fbo texture id
 
 //			ImVec2 size = ImVec2( m_width/2, m_height/2 );
 			ImVec2 size = ImVec2( m_width, m_height );
