@@ -6,6 +6,7 @@
 #define GUIWORLDCONTROL_H
 
 
+#include <FXPLM.h>
 #include <XPLMDataAccess.h>
 
 #include "imgui.h"
@@ -17,6 +18,12 @@ class GuiWorldControl {
 public:
 
 	bool m_bDraw=false;
+
+
+	XPLMDataRef m_dr_acf_p;
+	XPLMDataRef m_dr_acf_h;
+	XPLMDataRef m_dr_acf_r;
+	XPLMDataRef m_dr_acf_speed;
 
 
 	XPLMDataRef m_dr_view_x;
@@ -63,6 +70,13 @@ public:
 		m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
 		m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
 
+
+		m_dr_acf_p = XPLMFindDataRef("sim/flightmodel/position/true_phi");
+		m_dr_acf_h = XPLMFindDataRef("sim/cockpit/autopilot/heading_mag2");
+		m_dr_acf_r = XPLMFindDataRef("sim/flightmodel/position/true_theta");
+		m_dr_acf_speed = FXPLM_DrefCreate("xwb/hacks/acf_speed");
+
+
 	}
 
 
@@ -79,68 +93,109 @@ public:
 			//ImGui::Begin("World View", &m_bDraw, ImGuiWindowFlags_MenuBar);
 			ImGui::Begin("World Control", &m_bDraw);
 
+
+
 			//ImGui::Text("rat: %0.2f,%0.2f", 1.f, 2.f );
 			float fTmp;
 
-			fTmp = m_dr_view_x->getFloat();
-			ImGui::SliderFloat("x", &fTmp, -10, 10);
-			m_dr_view_x->setFloat(fTmp);
 
-			fTmp = m_dr_view_y->getFloat();
-			ImGui::SliderFloat("y", &fTmp, -10, 10);
-			m_dr_view_y->setFloat(fTmp);
+			auto tree_options = ImGuiTreeNodeFlags_DefaultOpen;
+			std::string sNodeLabel = "View";
+			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
 
-			fTmp = m_dr_view_z->getFloat();
-			ImGui::SliderFloat("z", &fTmp, -10, 10);
-			m_dr_view_z->setFloat(fTmp);
+				fTmp = m_dr_view_x->getFloat();
+				ImGui::SliderFloat("x", &fTmp, -10, 10);
+				m_dr_view_x->setFloat(fTmp);
+
+				fTmp = m_dr_view_y->getFloat();
+				ImGui::SliderFloat("y", &fTmp, -10, 10);
+				m_dr_view_y->setFloat(fTmp);
+
+				fTmp = m_dr_view_z->getFloat();
+				ImGui::SliderFloat("z", &fTmp, -10, 10);
+				m_dr_view_z->setFloat(fTmp);
 
 
-			fTmp = m_dr_view_pitch->getFloat();
-			ImGui::SliderFloat("p", &fTmp, -90, 90);
-			m_dr_view_pitch->setFloat(fTmp);
+				fTmp = m_dr_view_pitch->getFloat();
+				ImGui::SliderFloat("p", &fTmp, -90, 90);
+				m_dr_view_pitch->setFloat(fTmp);
 
-			fTmp = m_dr_view_roll->getFloat();
-			ImGui::SliderFloat("r", &fTmp, -180, 180);
-			m_dr_view_roll->setFloat(fTmp);
+				fTmp = m_dr_view_roll->getFloat();
+				ImGui::SliderFloat("r", &fTmp, -180, 180);
+				m_dr_view_roll->setFloat(fTmp);
 
-			fTmp = m_dr_view_heading->getFloat();
-			ImGui::SliderFloat("h", &fTmp, -180, 180);
-			m_dr_view_heading->setFloat(fTmp);
+				fTmp = m_dr_view_heading->getFloat();
+				ImGui::SliderFloat("h", &fTmp, -180, 180);
+				m_dr_view_heading->setFloat(fTmp);
 
-			{
-				float myColor[4] = {
-					m_dr_light_x->getFloat() / 10.f,
-					m_dr_light_y->getFloat() / 10.f,
-					m_dr_light_z->getFloat() / 10.f,
-					1.f
-				};
-				// 2. Render the widget
-				ImGui::ColorEdit4("pos", myColor);
 
-				m_dr_light_x->setFloat(myColor[0] * 10.f);
-				m_dr_light_y->setFloat(myColor[1] * 10.f);
-				m_dr_light_z->setFloat(myColor[2] * 10.f);
-
+				ImGui::TreePop();
 			}
 
 
-			float myColor[4] = {
-				m_dr_light_r->getFloat(),
-				m_dr_light_g->getFloat(),
-				m_dr_light_b->getFloat(),
-				m_dr_light_a->getFloat()
-				};
-			// 2. Render the widget
-			ImGui::ColorEdit4("light", myColor);
+			sNodeLabel = "Light";
+			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
 
-			m_dr_light_r->setFloat(myColor[0]);
-			m_dr_light_g->setFloat(myColor[1]);
-			m_dr_light_b->setFloat(myColor[2]);
-			m_dr_light_a->setFloat(myColor[3]);
+				{
+					float myColor[4] = {
+						m_dr_light_x->getFloat() / 10.f,
+						m_dr_light_y->getFloat() / 10.f,
+						m_dr_light_z->getFloat() / 10.f,
+						1.f
+					};
+					// 2. Render the widget
+					ImGui::ColorEdit4("pos", myColor);
+
+					m_dr_light_x->setFloat(myColor[0] * 10.f);
+					m_dr_light_y->setFloat(myColor[1] * 10.f);
+					m_dr_light_z->setFloat(myColor[2] * 10.f);
+
+				}
 
 
+				float myColor[4] = {
+					m_dr_light_r->getFloat(),
+					m_dr_light_g->getFloat(),
+					m_dr_light_b->getFloat(),
+					m_dr_light_a->getFloat()
+					};
+				// 2. Render the widget
+				ImGui::ColorEdit4("light", myColor);
+
+				m_dr_light_r->setFloat(myColor[0]);
+				m_dr_light_g->setFloat(myColor[1]);
+				m_dr_light_b->setFloat(myColor[2]);
+				m_dr_light_a->setFloat(myColor[3]);
 
 
+				ImGui::TreePop();
+			}
+
+
+			sNodeLabel = "Vehicle";
+			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
+				// pitch
+				fTmp = m_dr_acf_p->getFloat();
+				ImGui::SliderFloat("p", &fTmp, -90, 90);
+				m_dr_acf_p->setFloat( fTmp );
+
+				// heading
+				fTmp = m_dr_acf_h->getFloat();
+				ImGui::SliderFloat("h", &fTmp, -180, 180);
+				m_dr_acf_h->setFloat( fTmp );
+
+				// roll
+				fTmp = m_dr_acf_r->getFloat();
+				ImGui::SliderFloat("r", &fTmp, -90, 90);
+				m_dr_acf_r->setFloat( fTmp );
+
+				// speed
+				fTmp = m_dr_acf_speed->getFloat();
+				ImGui::SliderFloat("speed", &fTmp, -1, 1);
+				m_dr_acf_speed->setFloat( fTmp );
+
+				ImGui::TreePop();
+			}
 
 
 
