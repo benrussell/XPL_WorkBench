@@ -40,6 +40,8 @@ void GuiPlugins::draw(){
 	}
 
 
+	Plugin* plugin_ptr_unload_target=nullptr;
+
 
 	ImGui::SetNextWindowPos(ImVec2(0,30), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(ImVec2(320,360), ImGuiCond_FirstUseEver);
@@ -92,6 +94,13 @@ void GuiPlugins::draw(){
 						}
 					}
 				}
+
+				ImGui::SameLine();
+				if( ImGui::Button("unload##") ) {
+					plugin_ptr_unload_target = p;
+				}
+
+
 
 			}else {
 				//the plugin refused to start and cannot be enable/disabled
@@ -452,6 +461,16 @@ void GuiPlugins::draw(){
 
 #endif
 	ImGui::End(); //plugins gui
+
+
+
+
+
+	// no more imgui after this so we can call for plugin unload
+
+	if(plugin_ptr_unload_target) {
+		FXPLM_UnloadPlugin( plugin_ptr_unload_target );
+	}
 
 
 
