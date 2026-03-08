@@ -25,6 +25,10 @@ public:
 	XPLMDataRef m_dr_acf_r;
 	XPLMDataRef m_dr_acf_speed;
 
+	XPLMDataRef m_dr_acf_x;
+	XPLMDataRef m_dr_acf_y;
+	XPLMDataRef m_dr_acf_z;
+
 
 	XPLMDataRef m_dr_view_x;
 	XPLMDataRef m_dr_view_y;
@@ -35,6 +39,7 @@ public:
 	XPLMDataRef m_dr_view_heading;
 
 	XPLMDataRef m_dr_view_fov;
+	XPLMDataRef m_dr_view_is_external;
 
 
 	XPLMDataRef m_dr_light_x;
@@ -70,11 +75,21 @@ public:
 		m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
 		m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
 
+		m_dr_view_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
+		m_dr_view_is_external = XPLMFindDataRef("sim/graphics/view/view_is_external");
+
+
+
 
 		m_dr_acf_p = XPLMFindDataRef("sim/flightmodel/position/true_phi");
 		m_dr_acf_h = XPLMFindDataRef("sim/cockpit/autopilot/heading_mag2");
 		m_dr_acf_r = XPLMFindDataRef("sim/flightmodel/position/true_theta");
 		m_dr_acf_speed = FXPLM_DrefCreate("xwb/hacks/acf_speed");
+
+
+		m_dr_acf_x = XPLMFindDataRef("sim/flightmodel/position/local_x2");
+		m_dr_acf_y = XPLMFindDataRef("sim/flightmodel/position/local_y2");
+		m_dr_acf_z = XPLMFindDataRef("sim/flightmodel/position/local_z2");
 
 
 	}
@@ -100,7 +115,7 @@ public:
 
 
 			auto tree_options = ImGuiTreeNodeFlags_DefaultOpen;
-			std::string sNodeLabel = "View";
+			std::string sNodeLabel = "Camera";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
 
 				fTmp = m_dr_view_x->getFloat();
@@ -127,6 +142,16 @@ public:
 				fTmp = m_dr_view_heading->getFloat();
 				ImGui::SliderFloat("h", &fTmp, -180, 180);
 				m_dr_view_heading->setFloat(fTmp);
+
+
+				fTmp = m_dr_view_fov->getFloat();
+				ImGui::SliderFloat("fov", &fTmp, 10, 180);
+				m_dr_view_fov->setFloat(fTmp);
+
+
+				int iTmp = m_dr_view_is_external->getInt();
+				ImGui::SliderInt("external", &iTmp, 0, 1);
+				m_dr_view_is_external->setInt(iTmp);
 
 
 				ImGui::TreePop();
@@ -174,25 +199,44 @@ public:
 
 			sNodeLabel = "Vehicle";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
+
+				// x
+				fTmp = m_dr_acf_x->getFloat();
+				ImGui::SliderFloat("x", &fTmp, -90, 90);
+				m_dr_acf_x->setFloat( fTmp );
+
+				// y
+				fTmp = m_dr_acf_y->getFloat();
+				ImGui::SliderFloat("y", &fTmp, -180, 180);
+				m_dr_acf_y->setFloat( fTmp );
+
+				// z
+				fTmp = m_dr_acf_z->getFloat();
+				ImGui::SliderFloat("z", &fTmp, -90, 90);
+				m_dr_acf_z->setFloat( fTmp );
+
 				// pitch
 				fTmp = m_dr_acf_p->getFloat();
 				ImGui::SliderFloat("p", &fTmp, -90, 90);
 				m_dr_acf_p->setFloat( fTmp );
-
-				// heading
-				fTmp = m_dr_acf_h->getFloat();
-				ImGui::SliderFloat("h", &fTmp, -180, 180);
-				m_dr_acf_h->setFloat( fTmp );
 
 				// roll
 				fTmp = m_dr_acf_r->getFloat();
 				ImGui::SliderFloat("r", &fTmp, -90, 90);
 				m_dr_acf_r->setFloat( fTmp );
 
+				// heading
+				fTmp = m_dr_acf_h->getFloat();
+				ImGui::SliderFloat("h", &fTmp, -180, 180);
+				m_dr_acf_h->setFloat( fTmp );
+
+
+
 				// speed
 				fTmp = m_dr_acf_speed->getFloat();
 				ImGui::SliderFloat("speed", &fTmp, -1, 1);
 				m_dr_acf_speed->setFloat( fTmp );
+
 
 				ImGui::TreePop();
 			}
