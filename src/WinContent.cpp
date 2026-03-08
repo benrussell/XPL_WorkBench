@@ -174,6 +174,9 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_view_pitch = XPLMFindDataRef("sim/graphics/view/view_pitch");
     	m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
     	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
+
+    	m_dr_view_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
+    	m_dr_view_fov->setFloat( 45.f );
     }
 
 	{
@@ -1094,15 +1097,17 @@ void WinBox::Display(){
 					glPushMatrix();
 					glLoadIdentity();
 
-					//FIXME: wire this to datarefs.
 					// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
-					gluPerspective(45.0, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
+					//FIXME: add drefs for near/far frustum vals?
+					gluPerspective(m_dr_view_fov->getFloat(), (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
 
 					glMatrixMode(GL_MODELVIEW);
 					glPushMatrix();
 					glLoadIdentity();
 
 
+#warning moved the camera setup to the plugin
+#if 0
 						// shift to the camera location
 						glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
 						glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
@@ -1113,6 +1118,9 @@ void WinBox::Display(){
 									m_dr_view_y->getFloat(),
 									m_dr_view_z->getFloat()
 									);
+#endif
+
+
 
 	#if 1
 						{

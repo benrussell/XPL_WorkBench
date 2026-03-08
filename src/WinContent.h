@@ -153,6 +153,8 @@ public:
 	XPLMDataRef m_dr_view_y;
 	XPLMDataRef m_dr_view_z;
 
+	XPLMDataRef m_dr_view_fov;
+
 	XPLMDataRef m_dr_view_pitch;
 	XPLMDataRef m_dr_view_roll;
 	XPLMDataRef m_dr_view_heading;
