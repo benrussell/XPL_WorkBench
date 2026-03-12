@@ -136,9 +136,6 @@ public:
 			int m_width = 1024;
 			int m_height = 768;
 
-#warning eww - hard coded texture id
-			int m_tex = 2; //FIXME: hard coded fbo texture id
-
 //			ImVec2 size = ImVec2( m_width/2, m_height/2 );
 			ImVec2 size = ImVec2( m_width, m_height );
 
@@ -160,7 +157,7 @@ public:
 			// Draw the image inside the border
 			ImGui::SetCursorScreenPos(ImVec2(pos.x + 1, pos.y + 1)); // Offset by 1px to fit within the border
 
-			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(m_tex)),
+			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(m_showTexId)),
 						 size, //ImVec2(64, 64), //viewport size
 						 uv0,
 						 uv1

@@ -176,7 +176,7 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
 
     	m_dr_view_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
-    	m_dr_view_fov->setFloat( 45.f );
+    	m_dr_view_fov->setFloat( 45.f ); //FIXME: leave as 0?
     }
 
 	{
@@ -193,22 +193,15 @@ WinBox::WinBox( const int width, const int height ){
 
     	m_GuiWorldControl.dref_bind();
     	m_GuiWorldControl.m_bDraw = true;
+
+    	m_GuiWorldView.m_showTexId = m_fboCanvas->m_tex;
+		//std::cout << "- WorldView texture is: " << m_GuiWorldView.m_showTexId << "\n";
     }
 // end: nasty ass hack
 
 
 	p->releaseContext();
 
-
-	//FIXME: camera setup is contained in our 3D setup code???
-
-	// FIXME: move to plugin??
-	// //default view pos
-	// m_dr_view_x->setFloat( -0.f );
-	// m_dr_view_y->setFloat( -2.5f );
-	// m_dr_view_z->setFloat( -7.5f );
-	//
-	// m_dr_view_pitch->setFloat( 20.f );
 
 
     std::cout<<"xwb/ WinBox ctor finished, waiting for user input..\n";
