@@ -20,31 +20,23 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <dlfcn.h>
-
-
+#include <filesystem>
 
 #include "HostApp.h"
 #include "WinContent.h"
+#include "glue_FXPLM.h"
+#include "CommandsTxtParse.h"
 
 
 #define STB_IMAGE_IMPLEMENTATION
+// the order or include for this matters
 #include "stb_image.h"
-
-
-#include "glue_FXPLM.h"
-
-//#include <iostream>
-#include <filesystem>
-
-#include "CommandsTxtParse.h"
 
 
 
 std::vector<WinBox*> window_pool;
 
 std::string global_path_when_started;
-
 
 
 
@@ -244,7 +236,7 @@ int main(int argc, char** argv)
 #endif
 
 
-	}//scope for working folder jumps
+	}//scope for working-folder jumps
 
 
 	load_recent_projects_list();
@@ -307,15 +299,8 @@ int main(int argc, char** argv)
 		}
 
 
-	// std::cout<<"xwb/ FXPLM init called after first glewInit(); **************\n";
-	//must be after glew init?
-	//FXPLM::load_xplm();
-	char name[256]="foo_name";
-	char sig[256]="foo_sig";
-	char desc[256]="foo_desc";
 
-	FXPLM_Init(name,sig,desc);
-
+	FXPLM_Init();
 	{
 		glue_FXPLM::load_xpwidgets();
 
@@ -341,7 +326,7 @@ int main(int argc, char** argv)
 
 	}
 
-	FXPLM_TestGL();
+	FXPLM_InitGL();
 
 
 	{
@@ -378,15 +363,8 @@ int main(int argc, char** argv)
 	std::vector<WinBox*> keepers;
 	while(true){ // ------ this is our main loop ----
 
-
-
-
-
+		// logic here will affect drefs
 		FXPLM_RunFLCBS();
-
-
-
-
 
 		FXPLM_Draw_AvionicsDevices();
 
@@ -396,8 +374,6 @@ int main(int argc, char** argv)
 
 				window->OnCallDraw(); //FIXME: this event call sig is meh.
 				// this will result in the FXPLM draw callback subsys being called?
-
-
 
 			{
 				const double now = HostApp::m_timer.getElapsedTimeInSec();
