@@ -1122,6 +1122,7 @@ void WinBox::Display(){
 		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 	}
 
+
 		XPLMSetDataf(m_dr_running_time, HostApp::m_timer.getElapsedTimeInSec());
 		XPLMSetDataf(m_dr_network_time, HostApp::m_timer.getElapsedTimeInSec());
 
@@ -1147,13 +1148,14 @@ void WinBox::Display(){
 //		}
 
 
-
+#if 0
 	render_world(
 			m_fboCanvas,
 			m_dr_view_fov->getFloat(),
 			m_GuiWorldView.m_bDisplayDebugTriangle,
 			dt
 			);
+#endif
 
 
 

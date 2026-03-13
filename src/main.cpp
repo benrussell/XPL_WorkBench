@@ -379,7 +379,15 @@ int main(int argc, char** argv)
 	while(true){ // ------ this is our main loop ----
 
 
+
+
+
 		FXPLM_RunFLCBS();
+
+
+
+
+
 		FXPLM_Draw_AvionicsDevices();
 
 		//loop over child windows and drive their events
@@ -388,6 +396,24 @@ int main(int argc, char** argv)
 
 				window->OnCallDraw(); //FIXME: this event call sig is meh.
 				// this will result in the FXPLM draw callback subsys being called?
+
+
+
+			{
+				const double now = HostApp::m_timer.getElapsedTimeInSec();
+				static double sd_last_draw = now;
+				const double dt = now - sd_last_draw;
+				sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
+
+				window->render_world(
+						window->m_fboCanvas,
+						window->m_dr_view_fov->getFloat(),
+						window->m_GuiWorldView.m_bDisplayDebugTriangle,
+						dt
+				);
+			}
+
+
 
 			/* Poll for and process events */
 			glfwPollEvents();
