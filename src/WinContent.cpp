@@ -110,20 +110,6 @@ WinBox::WinBox( const int width, const int height ){
 
     m_worldView = new WorldView( 1024,768 );
 
-#if 0 // moved to WorldView class
-	// this is the fbo that we draw any plugin callbacks into, its effective the world canvas
-	m_fboCanvas = new gz_fbo(1024,768);
-
-	// m_fboCanvas->m_FboClearColorRGBA[0] = 0.025;
-	// m_fboCanvas->m_FboClearColorRGBA[1] = 0.025;
-	// m_fboCanvas->m_FboClearColorRGBA[2] = 0.075;
-
-	m_fboCanvas->m_FboClearColorRGBA[0] = 0.2;
-	m_fboCanvas->m_FboClearColorRGBA[1] = 0.3;
-	m_fboCanvas->m_FboClearColorRGBA[2] = 0.2;
-
-	//m_fboCanvas->m_FboClearColorRGBA[4];
-#endif
 
 
 
@@ -166,12 +152,13 @@ WinBox::WinBox( const int width, const int height ){
 	// *** have appended 2 to dref names to go around problem for now ***
     {
     	//FXPLM_DrefCreate()
-    	m_dr_fm_pos_local_x = FXPLM_DrefCreate("sim/flightmodel/position/local_x2");
-    	m_dr_fm_pos_local_y = FXPLM_DrefCreate("sim/flightmodel/position/local_y2");
-    	m_dr_fm_pos_local_z = FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
+    	auto m_dr_fm_pos_local_x = FXPLM_DrefCreate("sim/flightmodel/position/local_x2");
+    	auto m_dr_fm_pos_local_y = FXPLM_DrefCreate("sim/flightmodel/position/local_y2");
+    	auto m_dr_fm_pos_local_z = FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
     }
 
 	{
+#if 0
     	//these view location and orientation drefs ARE used during the GL setup for 3D callback
     	m_dr_view_x = XPLMFindDataRef("sim/graphics/view/view_x");
     	m_dr_view_y = XPLMFindDataRef("sim/graphics/view/view_y");
@@ -180,6 +167,7 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_view_pitch = XPLMFindDataRef("sim/graphics/view/view_pitch");
     	m_dr_view_roll = XPLMFindDataRef("sim/graphics/view/view_roll");
     	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
+#endif
 
     	m_dr_view_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
     	XPLMSetDataf( m_dr_view_fov, 45.f );
@@ -189,14 +177,14 @@ WinBox::WinBox( const int width, const int height ){
 	{
     	//FIXME: move dref create to world control?
 
-    	m_dr_LightX = FXPLM_DrefCreate("art/light/pos_x");
-    	m_dr_LightY = FXPLM_DrefCreate("art/light/pos_y");
-    	m_dr_LightZ = FXPLM_DrefCreate("art/light/pos_z");
+    	auto m_dr_LightX = FXPLM_DrefCreate("art/light/pos_x");
+    	auto m_dr_LightY = FXPLM_DrefCreate("art/light/pos_y");
+    	auto m_dr_LightZ = FXPLM_DrefCreate("art/light/pos_z");
 
-    	m_dr_LightR = FXPLM_DrefCreate("art/light/col_r");
-    	m_dr_LightG = FXPLM_DrefCreate("art/light/col_g");
-    	m_dr_LightB = FXPLM_DrefCreate("art/light/col_b");
-    	m_dr_LightA = FXPLM_DrefCreate("art/light/col_a");
+    	auto m_dr_LightR = FXPLM_DrefCreate("art/light/col_r");
+    	auto m_dr_LightG = FXPLM_DrefCreate("art/light/col_g");
+    	auto m_dr_LightB = FXPLM_DrefCreate("art/light/col_b");
+    	auto m_dr_LightA = FXPLM_DrefCreate("art/light/col_a");
 
     	m_GuiWorldControl.dref_bind();
     	m_GuiWorldControl.m_bDraw = true;
@@ -994,6 +982,9 @@ void WinBox::CreateDockSpace() {
 
 
 void WinBox::draw_WorldView( int tex_id ){
+	// This draws the world view texture to the bg of the main
+	// large window.
+	// it does NOT bake the texture, it just splats it.
 
 	auto lam_drawBox = [this]( int tex, float size ){
 
@@ -1098,88 +1089,6 @@ void WinBox::draw_TextureDump(){
 
 
 
-#if 0
-void WinBox::render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt ){
-
-	//FIXME: hoist this function into its own container class
-	// so we have a "WorldRender" that we can multi instance if needed
-	// can contain the FBO, drefs, run our callback loops, etc.
-	// gives us a cleaner interface with main.cpp loops too
-
-
-	gz_fbo* m_fboCanvas = (gz_fbo*)target_fbo;
-
-	// switch to an FBO target so we can
-	// render the FXPLM 2D layers
-	if( m_fboCanvas ) {
-#if 1
-		m_fboCanvas->push_fbo();
-		glPushMatrix();
-		{
-
-			// --- 1. Distinct 3D Drawing Phase ---
-			{
-				//glEnable(GL_DEPTH_TEST); //this will likely be toggled for skybox so just leave it dead.
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-
-				// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
-				//FIXME: add drefs for near/far frustum vals?
-				gluPerspective(fov, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
-
-				glMatrixMode(GL_MODELVIEW);
-				glPushMatrix();
-				glLoadIdentity();
-
-
-#if 1
-				{
-					glPushAttrib(GL_ALL_ATTRIB_BITS);
-					glPushMatrix(); // Save transformation matrices
-
-					FXPLM_DrawCBS_3D();
-
-					glPopMatrix();
-					glPopAttrib();
-				}
-#endif
-
-				glPopMatrix(); // Restore Modelview
-				glMatrixMode(GL_PROJECTION);
-				glPopMatrix(); // Restore Projection
-				glMatrixMode(GL_MODELVIEW);
-				//glDisable(GL_DEPTH_TEST);
-			}
-
-			// -- end of 3d drawing setup
-
-
-			glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-			FXPLM_DrawCBS(); //this will also call for window drawing
-
-			glPopAttrib();
-
-
-			// --- optional debug triangle 2D ---
-			if( dbg_tri ){
-				glPushMatrix();
-				glTranslatef(128, 128, 0);
-				draw_triangle_box(dt);
-				glPopMatrix();
-			}
-
-		}
-		glPopMatrix();
-		m_fboCanvas->pop_fbo();
-#endif
-		//HostApp::gui_Plugins.m_fbo = m_fboCanvas;
-	}
-
-}
-#endif
-
 
 void WinBox::Display(){
 
@@ -1201,26 +1110,6 @@ void WinBox::Display(){
 	static double sd_last_draw = now;
 	const double dt = now - sd_last_draw;
 	sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
-
-
-
-//		if( m_bDrawTriangle ){
-//			glPushMatrix();
-//			//		glTranslatef( 150, 150, 0 );
-//			draw_triangle_box(dt);
-//			glPopMatrix();
-//		}
-
-
-#if 0
-	render_world(
-			m_fboCanvas,
-			m_dr_view_fov->getFloat(),
-			m_GuiWorldView.m_bDisplayDebugTriangle,
-			dt
-			);
-#endif
-
 
 
 //draws a grid of textures that should give us

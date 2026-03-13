@@ -389,14 +389,6 @@ int main(int argc, char** argv)
 						window->m_GuiWorldView.m_bDisplayDebugTriangle,
 						dt
 				);
-#if 0
-				window->render_world(
-						window->m_fboCanvas,
-						window->m_dr_view_fov->getFloat(),
-						window->m_GuiWorldView.m_bDisplayDebugTriangle,
-						dt
-				);
-#endif
 
 			}
 

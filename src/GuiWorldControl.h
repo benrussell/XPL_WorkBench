@@ -54,7 +54,8 @@ public:
 
 
 	void dref_bind() {
-		std::cout << "world control dref_bind()\n";
+		std::cout << "XWB/ GuiWorldControl.dref_bind()\n";
+
 		m_dr_light_x = XPLMFindDataRef("art/light/pos_x");
 		m_dr_light_y = XPLMFindDataRef("art/light/pos_y");
 		m_dr_light_z = XPLMFindDataRef("art/light/pos_z");
@@ -63,7 +64,6 @@ public:
 		m_dr_light_g = XPLMFindDataRef("art/light/col_g");
 		m_dr_light_b = XPLMFindDataRef("art/light/col_b");
 		m_dr_light_a = XPLMFindDataRef("art/light/col_a");
-
 
 
 		//these view location and orientation drefs ARE used during the GL setup for 3D callback
@@ -79,28 +79,19 @@ public:
 		m_dr_view_is_external = XPLMFindDataRef("sim/graphics/view/view_is_external");
 
 
-
-
-		m_dr_acf_p = XPLMFindDataRef("sim/flightmodel/position/true_phi");
-		m_dr_acf_h = XPLMFindDataRef("sim/cockpit/autopilot/heading_mag2");
-		m_dr_acf_r = XPLMFindDataRef("sim/flightmodel/position/true_theta");
-		m_dr_acf_speed = FXPLM_DrefCreate("xwb/hacks/acf_speed");
-
-
 		m_dr_acf_x = XPLMFindDataRef("sim/flightmodel/position/local_x2");
 		m_dr_acf_y = XPLMFindDataRef("sim/flightmodel/position/local_y2");
 		m_dr_acf_z = XPLMFindDataRef("sim/flightmodel/position/local_z2");
 
+		m_dr_acf_p = XPLMFindDataRef("sim/flightmodel/position/true_phi");
+		m_dr_acf_r = XPLMFindDataRef("sim/flightmodel/position/true_theta");
+		m_dr_acf_h = XPLMFindDataRef("sim/flightmodel/position/true_psi");
+		m_dr_acf_speed = FXPLM_DrefCreate("xwb/hacks/acf_speed");
 
 	}
 
 
 	void draw( double dt ) {
-		// if( ! m_dr_view_x ) {
-		// 	m_dr_view_x = XPLMFindDataRef("sim/graphics/view/view_x");
-		// 	m_dr_view_y = XPLMFindDataRef("sim/graphics/view/view_y");
-		// 	m_dr_view_z = XPLMFindDataRef("sim/graphics/view/view_z");
-		// }
 
 
 		if (m_bDraw) {

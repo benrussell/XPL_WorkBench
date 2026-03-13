@@ -139,6 +139,9 @@ public:
 	XPLMDataRef m_dr_running_time;
 	XPLMDataRef m_dr_frp;
 
+	XPLMDataRef m_dr_view_fov;
+
+#if 0
 	XPLMDataRef m_dr_fm_pos_local_x;
 	XPLMDataRef m_dr_fm_pos_local_y;
 	XPLMDataRef m_dr_fm_pos_local_z;
@@ -158,12 +161,11 @@ public:
 	XPLMDataRef m_dr_view_y;
 	XPLMDataRef m_dr_view_z;
 
-	XPLMDataRef m_dr_view_fov;
 
 	XPLMDataRef m_dr_view_pitch;
 	XPLMDataRef m_dr_view_roll;
 	XPLMDataRef m_dr_view_heading;
-
+#endif
 
 	WinBox( int width, int height );
 	virtual ~WinBox();
@@ -178,8 +180,6 @@ public:
 	void load_fmod_studio();
 
 	void draw_WorldView( int tex_id );
-//	void draw_triangle_box( double dt );
-//	void render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt );
 
 	void menu_TitlebarMenu();
 	void menu_File();
