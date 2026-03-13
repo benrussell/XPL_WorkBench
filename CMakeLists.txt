@@ -207,7 +207,7 @@ set( XP_SHIM_SRC
 
         src/GuiWorldView.cpp src/GuiWorldView.h
         src/GuiGraph.cpp src/GuiGraph.h
-        )
+        src/WorldView.cpp src/WorldView.h)
 
 
 

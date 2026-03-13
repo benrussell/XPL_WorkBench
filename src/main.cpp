@@ -383,12 +383,21 @@ int main(int argc, char** argv)
 				const double dt = now - sd_last_draw;
 				sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
 
+				window->m_worldView->render_world(
+						window->m_worldView->m_fboCanvas,
+						window->m_dr_view_fov->getFloat(),
+						window->m_GuiWorldView.m_bDisplayDebugTriangle,
+						dt
+				);
+#if 0
 				window->render_world(
 						window->m_fboCanvas,
 						window->m_dr_view_fov->getFloat(),
 						window->m_GuiWorldView.m_bDisplayDebugTriangle,
 						dt
 				);
+#endif
+
 			}
 
 

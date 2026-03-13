@@ -107,6 +107,10 @@ WinBox::WinBox( const int width, const int height ){
 #endif
 
 
+
+    m_worldView = new WorldView( 1024,768 );
+
+#if 0 // moved to WorldView class
 	// this is the fbo that we draw any plugin callbacks into, its effective the world canvas
 	m_fboCanvas = new gz_fbo(1024,768);
 
@@ -119,6 +123,8 @@ WinBox::WinBox( const int width, const int height ){
 	m_fboCanvas->m_FboClearColorRGBA[2] = 0.2;
 
 	//m_fboCanvas->m_FboClearColorRGBA[4];
+#endif
+
 
 
     //setup the texture inspector on click handler
@@ -195,8 +201,8 @@ WinBox::WinBox( const int width, const int height ){
     	m_GuiWorldControl.dref_bind();
     	m_GuiWorldControl.m_bDraw = true;
 
-    	m_GuiWorldView.m_showTexId = m_fboCanvas->m_tex;
-		//std::cout << "- WorldView texture is: " << m_GuiWorldView.m_showTexId << "\n";
+		m_GuiWorldView.m_showTexId = m_worldView->m_fboCanvas->m_tex;
+
     }
 // end: nasty ass hack
 
@@ -213,7 +219,9 @@ WinBox::WinBox( const int width, const int height ){
 
 WinBox::~WinBox(){
 
-	delete m_fboCanvas;
+	delete m_worldView;
+
+//	delete m_fboCanvas;
 
 	delete fileDialog_SaveProject;
 
@@ -464,7 +472,7 @@ void WinBox::load_fmod_studio() {
 
 
 
-
+#if 0
 void WinBox::draw_triangle_box( double dt ){
     /* Render here */
 
@@ -497,7 +505,7 @@ void WinBox::draw_triangle_box( double dt ){
     glPopMatrix();
 
 }
-
+#endif
 
 
 	void WinBox::menu_File() {
@@ -985,6 +993,59 @@ void WinBox::CreateDockSpace() {
 
 
 
+void WinBox::draw_WorldView( int tex_id ){
+
+	auto lam_drawBox = [this]( int tex, float size ){
+
+		glColor3f( 1,1,1 );
+
+		glBindTexture(GL_TEXTURE_2D, tex);
+
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(-size, -size);
+		glTexCoord2f(1.0f, 0.0f); glVertex2f( size, -size);
+		glTexCoord2f(1.0f, 1.0f); glVertex2f( size,  size);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(-size,  size);
+		glEnd();
+
+	};
+
+	if( true )
+	{
+		glPushMatrix();
+
+		glEnable(GL_TEXTURE_2D);
+
+		glTranslatef(200, 200, 0.0);
+		//glScalef( 0.2, 0.2, 0.2 );
+
+		size_t grid_count = 2;
+
+		constexpr float size = 200.0f;
+		const float margin = size + 10.f;
+		const float shift = size + margin;
+		const float cr = shift * (grid_count * -1.f);
+		int tx = tex_id;
+		for (int x = 0; x < grid_count; ++x) {
+			for (int y = 0; y < grid_count; ++y) {
+				lam_drawBox(tx, size);
+//				++tx;
+				glTranslatef(shift, 0.0, 0.0);
+			}
+			glTranslatef(cr, 0.0, 0.0);
+			glTranslatef(0.f, shift, 0.0);
+		}
+
+		glDisable(GL_TEXTURE_2D);
+
+		glPopMatrix();
+	}
+
+}
+
+
+
+
 
 void WinBox::draw_TextureDump(){
 	auto lam_drawBox = [this]( int tex, float size ){
@@ -1037,7 +1098,7 @@ void WinBox::draw_TextureDump(){
 
 
 
-
+#if 0
 void WinBox::render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt ){
 
 	//FIXME: hoist this function into its own container class
@@ -1117,7 +1178,7 @@ void WinBox::render_world( void* target_fbo, const float fov, const bool dbg_tri
 	}
 
 }
-
+#endif
 
 
 void WinBox::Display(){
@@ -1166,6 +1227,7 @@ void WinBox::Display(){
 	//an FBO debug channel.
 	draw_TextureDump(); //this draws into the bg of the main host window
 
+	draw_WorldView( 3 );
 
 
 //turn the imgui code on and off easily

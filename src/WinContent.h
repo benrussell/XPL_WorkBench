@@ -47,10 +47,12 @@
 #include "GuiGraph.h"
 
 
-#include "glue_FBO.hpp" //FIXME: copy to gz_core
+//#include "glue_FBO.hpp" //FIXME: copy to gz_core
 #include "GuiWorldControl.h"
 
 #include "XPLMDataAccess.h"
+
+#include "WorldView.h"
 
 #if 0
 
@@ -122,7 +124,10 @@ public:
 
 	GuiGraph m_GuiGraph;
 
-	gz_fbo* m_fboCanvas;
+
+//	gz_fbo* m_fboCanvas; // <---
+	WorldView* m_worldView;
+
 
 	GuiWorldControl m_GuiWorldControl;
 
@@ -172,8 +177,9 @@ public:
 	void load_fmod();
 	void load_fmod_studio();
 
-	void draw_triangle_box( double dt );
-	void render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt );
+	void draw_WorldView( int tex_id );
+//	void draw_triangle_box( double dt );
+//	void render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt );
 
 	void menu_TitlebarMenu();
 	void menu_File();
