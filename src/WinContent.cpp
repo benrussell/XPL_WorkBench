@@ -176,7 +176,8 @@ WinBox::WinBox( const int width, const int height ){
     	m_dr_view_heading = XPLMFindDataRef("sim/graphics/view/view_heading");
 
     	m_dr_view_fov = XPLMFindDataRef("sim/graphics/view/field_of_view_deg");
-    	m_dr_view_fov->setFloat( 45.f ); //FIXME: leave as 0?
+    	XPLMSetDataf( m_dr_view_fov, 45.f );
+
     }
 
 	{
@@ -1037,6 +1038,80 @@ void WinBox::draw_TextureDump(){
 
 
 
+void WinBox::render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt ){
+
+	gz_fbo* m_fboCanvas = (gz_fbo*)target_fbo;
+
+	// switch to an FBO target so we can
+	// render the FXPLM 2D layers
+	if( m_fboCanvas ) {
+#if 1
+		m_fboCanvas->push_fbo();
+		glPushMatrix();
+		{
+
+			// --- 1. Distinct 3D Drawing Phase ---
+			{
+				//glEnable(GL_DEPTH_TEST); //this will likely be toggled for skybox so just leave it dead.
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+
+				// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
+				//FIXME: add drefs for near/far frustum vals?
+				gluPerspective(fov, (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
+
+				glMatrixMode(GL_MODELVIEW);
+				glPushMatrix();
+				glLoadIdentity();
+
+
+#if 1
+				{
+					glPushAttrib(GL_ALL_ATTRIB_BITS);
+					glPushMatrix(); // Save transformation matrices
+
+					FXPLM_DrawCBS_3D();
+
+					glPopMatrix();
+					glPopAttrib();
+				}
+#endif
+
+				glPopMatrix(); // Restore Modelview
+				glMatrixMode(GL_PROJECTION);
+				glPopMatrix(); // Restore Projection
+				glMatrixMode(GL_MODELVIEW);
+				//glDisable(GL_DEPTH_TEST);
+			}
+
+			// -- end of 3d drawing setup
+
+
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+			FXPLM_DrawCBS(); //this will also call for window drawing
+
+			glPopAttrib();
+
+
+			// --- optional debug triangle 2D ---
+			if( dbg_tri ){
+				glPushMatrix();
+				glTranslatef(128, 128, 0);
+				draw_triangle_box(dt);
+				glPopMatrix();
+			}
+
+		}
+		glPopMatrix();
+		m_fboCanvas->pop_fbo();
+#endif
+		//HostApp::gui_Plugins.m_fbo = m_fboCanvas;
+	}
+
+}
+
 
 
 void WinBox::Display(){
@@ -1054,6 +1129,16 @@ void WinBox::Display(){
 
 
 
+	const double now = HostApp::m_timer.getElapsedTimeInSec();
+	static double sd_last_draw = now;
+	const double dt = now - sd_last_draw;
+	sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
+
+
+
+
+
+
 //		if( m_bDrawTriangle ){
 //			glPushMatrix();
 //			//		glTranslatef( 150, 150, 0 );
@@ -1062,113 +1147,19 @@ void WinBox::Display(){
 //		}
 
 
-	// Render all avionics device FBO surfaces.
-	// This can be called outside of the GL matrix transforms below.
-	FXPLM_Draw_AvionicsDevices();
 
+	render_world(
+			m_fboCanvas,
+			m_dr_view_fov->getFloat(),
+			m_GuiWorldView.m_bDisplayDebugTriangle,
+			dt
+			);
 
-
-	const double now = HostApp::m_timer.getElapsedTimeInSec();
-	static double s_last_draw = now;
-	const double dt = now - s_last_draw;
-	s_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
-
-	// switch to an FBO target so we can
-		// render the FXPLM 2D layers
-		if( m_fboCanvas ) {
-#if 1
-			m_fboCanvas->push_fbo();
-			glPushMatrix();
-			{
-
-				// --- 1. Distinct 3D Drawing Phase ---
-				{
-
-					//glEnable(GL_DEPTH_TEST); //this will likely be toggled for skybox so just leave it dead.
-
-					glMatrixMode(GL_PROJECTION);
-					glPushMatrix();
-					glLoadIdentity();
-
-					// Simple perspective: FOV, Aspect, Near, Far (Values in meters)
-					//FIXME: add drefs for near/far frustum vals?
-					gluPerspective(m_dr_view_fov->getFloat(), (float)m_fboCanvas->m_width / m_fboCanvas->m_height, 0.1, 1000.0);
-
-					glMatrixMode(GL_MODELVIEW);
-					glPushMatrix();
-					glLoadIdentity();
-
-
-#warning moved the camera setup to the plugin
-#if 0
-						// shift to the camera location
-						glRotatef( m_dr_view_roll->getFloat(), 0,0,1 );
-						glRotatef( m_dr_view_pitch->getFloat(), 1,0,0 );
-						glRotatef( m_dr_view_heading->getFloat(), 0,1,0 );
-
-						glTranslatef(
-									m_dr_view_x->getFloat(),
-									m_dr_view_y->getFloat(),
-									m_dr_view_z->getFloat()
-									);
-#endif
-
-
-
-	#if 1
-						{
-							glPushAttrib(GL_ALL_ATTRIB_BITS);
-							glPushMatrix(); // Save transformation matrices
-
-							FXPLM_DrawCBS_3D();
-							//m_fboCanvas->push_fbo(false);
-
-							glPopMatrix();
-							glPopAttrib();
-						}
-	#endif
-
-					glPopMatrix(); // Restore Modelview
-					glMatrixMode(GL_PROJECTION);
-					glPopMatrix(); // Restore Projection
-					glMatrixMode(GL_MODELVIEW);
-					//glDisable(GL_DEPTH_TEST);
-				}
-
-				// -- end of 3d drawing setup
-
-
-				glPushAttrib(GL_ALL_ATTRIB_BITS);
-				// FIXME: the windows phase should prob be integrated into the 2D cbs?
-				FXPLM_DrawCBS();
-
-				FXPLM_DrawWindows();
-				glPopAttrib();
-
-
-				// --- 2. Existing Drawing Code (2D/UI) ---
-				if( m_GuiWorldView.m_bDisplayDebugTriangle ){
-					glPushMatrix();
-					glTranslatef(128, 128, 0);
-					draw_triangle_box(dt);
-					glPopMatrix();
-				}
-
-			}
-			glPopMatrix();
-			m_fboCanvas->pop_fbo();
-#endif
-			//HostApp::gui_Plugins.m_fbo = m_fboCanvas;
-		}
 
 
 	//draws a grid of textures that should give us
 		//an FBO debug channel.
 		draw_TextureDump(); //this draws into the bg of the main host window
-
-
-
-
 
 
 
@@ -1253,7 +1244,6 @@ void WinBox::Display(){
 
 		m_GuiWorldView.draw(dt);
 
-
 		m_GuiWorldControl.draw(dt);
 
 
@@ -1325,10 +1315,14 @@ void WinBox::Display(){
 
 
 void WinBox::OnCallDraw(){
+	//base glfw canvas setup function
+	// affects bg of main window
+	// gets ready to draw with imgui?
 
 	glfwMakeContextCurrent(m_winh);
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);  // Set clear color to red
+	//bg color of main XWB window
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the color and depth buffer
 
 	glPushMatrix();
@@ -1348,6 +1342,7 @@ void WinBox::OnCallDraw(){
 		glLoadIdentity();
 
 		// Apply the scaling transformation
+		// this does not affect imgui but it _does_ affect immediate GL
 		glScalef(1.0f, 1.0f, 1.0f);
 	}
 
@@ -1355,8 +1350,6 @@ void WinBox::OnCallDraw(){
 	// render the core of the window area
 	Display();
 
-
-	//viewport reset here?
 
 	glPopMatrix();
 

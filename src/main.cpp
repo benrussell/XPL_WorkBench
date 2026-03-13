@@ -22,11 +22,8 @@
 #include <iostream>
 #include <dlfcn.h>
 
-// #include "shim/xp_sdk_shim.h"
-// #include "shim/shim_XPLMDataAccess.h"
 
 
-// #include "Plugin.h"
 #include "HostApp.h"
 #include "WinContent.h"
 
@@ -41,7 +38,6 @@
 #include <filesystem>
 
 #include "CommandsTxtParse.h"
-//#include "DataRefsTxtParse.h"
 
 
 
@@ -320,52 +316,56 @@ int main(int argc, char** argv)
 
 	FXPLM_Init(name,sig,desc);
 
-	glue_FXPLM::load_xpwidgets();
-
+	{
+		glue_FXPLM::load_xpwidgets();
 
 		namespace fs = std::filesystem;
-    	// report and store the cwd where we loaded from.
-    	const std::string folder_now = fs::current_path();
-    	std::cout << "xwb/ wd after load_xpwidgets: " << folder_now << std::endl;
+		// report and store the cwd where we loaded from.
+		const std::string folder_now = fs::current_path();
+		std::cout << "xwb/ wd after load_xpwidgets: " << folder_now << std::endl;
+	}
 
 
 	//this must be called AFTER FXPLM_Init()
-	//we have created a GL context, we can drop this now.
+	// because we have created a GL context, we can drop this now.
 	glfwDestroyWindow( mwinh );
 
+	// README: using the GL stack will not work until this block runs
+	{
+		// create the main gui window
+		// this MUST be after GL init.
+		auto box = new WinBox(os_win_width, os_win_height);
+		box->m_globalStartupFolder = global_path_when_started;
+		// multiple windows can be created.
+		window_pool.push_back(box);
 
-
-
-
-	// this MUST be after GL init.
-	auto box = new WinBox(os_win_width,os_win_height);
-	box->m_globalStartupFolder = global_path_when_started;
-	// multiple windows can be created.
-	window_pool.push_back(box);
-
-
-
-	// Pull argv into a vector<string>
-	std::vector<std::string> args;
-	args.resize(argc);
-	for (int i = 0; i < argc; ++i) {
-		args.emplace_back(argv[i]);
 	}
-
-#if 0
-	// we review our args list after we have loaded all our gui and assets, etc
-	if( args.size() > 1 ){
-		std::cout << "argc: " << args.size() << std::endl;
-		// loop all args and print to cout
-		for ( int x=0; x < args.size(); x++ ) {
-			std::cout << "[" << x << "] [" << args[x] << "]\n";
-		}
-		std::cout << "xwb/ cmd line xpl: " << args[1] << "\n";
-		box->load_plugin( args[1] );
-	}
-#endif
 
 	FXPLM_TestGL();
+
+
+	{
+		// Pull argv into a vector<string>
+		std::vector<std::string> args;
+		args.resize(argc);
+		for (int i = 0; i < argc; ++i) {
+			args.emplace_back(argv[i]);
+		}
+
+#if 0
+		// we review our args list after we have loaded all our gui and assets, etc
+		if( args.size() > 1 ){
+			std::cout << "argc: " << args.size() << std::endl;
+			// loop all args and print to cout
+			for ( int x=0; x < args.size(); x++ ) {
+				std::cout << "[" << x << "] [" << args[x] << "]\n";
+			}
+			std::cout << "xwb/ cmd line xpl: " << args[1] << "\n";
+			box->load_plugin( args[1] );
+		}
+#endif
+
+	}
 
 	
 	//nanovg doesnt load yet........ does this app use it? plugins?
@@ -375,25 +375,28 @@ int main(int argc, char** argv)
 	//glfwSwapInterval(0);
 
 
-	//windows that dont get closed get put into this vector
 	std::vector<WinBox*> keepers;
-	//loop will exit when all windows are closed.
-	while(true){
+	while(true){ // ------ this is our main loop ----
+
 
 		FXPLM_RunFLCBS();
-
+		FXPLM_Draw_AvionicsDevices();
 
 		//loop over child windows and drive their events
 		for( auto window: window_pool ){
 			auto win_h = window->m_winh;
 
 				window->OnCallDraw(); //FIXME: this event call sig is meh.
+				// this will result in the FXPLM draw callback subsys being called?
 
 			/* Poll for and process events */
 			glfwPollEvents();
 
 			//detect window close
 			if( glfwWindowShouldClose(win_h) ){
+
+				//FIXME: tidy up / send XPLM message?
+
 				glfwDestroyWindow(win_h);
 			}else{
 				keepers.push_back(window);

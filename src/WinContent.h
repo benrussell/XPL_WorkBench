@@ -47,7 +47,7 @@
 #include "GuiGraph.h"
 
 
-#include "glue_FBO.hpp" //FIXME: port to gz_core
+#include "glue_FBO.hpp" //FIXME: copy to gz_core
 #include "GuiWorldControl.h"
 
 #include "XPLMDataAccess.h"
@@ -173,6 +173,7 @@ public:
 	void load_fmod_studio();
 
 	void draw_triangle_box( double dt );
+	void render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt );
 
 	void menu_TitlebarMenu();
 	void menu_File();
