@@ -1040,6 +1040,12 @@ void WinBox::draw_TextureDump(){
 
 void WinBox::render_world( void* target_fbo, const float fov, const bool dbg_tri, const double dt ){
 
+	//FIXME: hoist this function into its own container class
+	// so we have a "WorldRender" that we can multi instance if needed
+	// can contain the FBO, drefs, run our callback loops, etc.
+	// gives us a cleaner interface with main.cpp loops too
+
+
 	gz_fbo* m_fboCanvas = (gz_fbo*)target_fbo;
 
 	// switch to an FBO target so we can
@@ -1123,10 +1129,10 @@ void WinBox::Display(){
 	}
 
 
-		XPLMSetDataf(m_dr_running_time, HostApp::m_timer.getElapsedTimeInSec());
-		XPLMSetDataf(m_dr_network_time, HostApp::m_timer.getElapsedTimeInSec());
+	XPLMSetDataf(m_dr_running_time, HostApp::m_timer.getElapsedTimeInSec());
+	XPLMSetDataf(m_dr_network_time, HostApp::m_timer.getElapsedTimeInSec());
 
-		XPLMSetDataf(m_dr_frp, 1.f / HostApp::fps);
+	XPLMSetDataf(m_dr_frp, 1.f / HostApp::fps);
 
 
 
@@ -1134,9 +1140,6 @@ void WinBox::Display(){
 	static double sd_last_draw = now;
 	const double dt = now - sd_last_draw;
 	sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
-
-
-
 
 
 
@@ -1159,120 +1162,120 @@ void WinBox::Display(){
 
 
 
-	//draws a grid of textures that should give us
-		//an FBO debug channel.
-		draw_TextureDump(); //this draws into the bg of the main host window
+//draws a grid of textures that should give us
+	//an FBO debug channel.
+	draw_TextureDump(); //this draws into the bg of the main host window
 
 
 
 //turn the imgui code on and off easily
 #define XPLWB_USE_IMGUI 1
 #if XPLWB_USE_IMGUI
-		ImGui::SetCurrentContext(imguiContext);
+	ImGui::SetCurrentContext(imguiContext);
 
-		ImGui_ImplOpenGL2_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
 
-		menu_TitlebarMenu();
+	menu_TitlebarMenu();
 
-		//CreateDockSpace();
-
-
-		fileDialog_OpenProject.Display();
-		if( fileDialog_OpenProject.HasSelected() ){
-			const std::string fname = fileDialog_OpenProject.GetSelected().string();
-			fileDialog_OpenProject.ClearSelected();
-			std::cout << "fileDialog_OpenProject: " << fname << std::endl;
-
-			load_project( fname );
-
-		} //deal with plugin open dialog
+	//CreateDockSpace();
 
 
-		fileDialog_Open.Display();
-		if( fileDialog_Open.HasSelected() ){
-			const std::string fname = fileDialog_Open.GetSelected().string();
-			fileDialog_Open.ClearSelected();
-			std::cout << "file/open_plugin://[" << fname << "]\n";
-			load_plugin( fname );
+	fileDialog_OpenProject.Display();
+	if( fileDialog_OpenProject.HasSelected() ){
+		const std::string fname = fileDialog_OpenProject.GetSelected().string();
+		fileDialog_OpenProject.ClearSelected();
+		std::cout << "fileDialog_OpenProject: " << fname << std::endl;
 
-		} //deal with plugin open dialog
+		load_project( fname );
+
+	} //deal with plugin open dialog
 
 
-		fileDialog_SaveProject->Display();
-		if ( fileDialog_SaveProject->HasSelected() ) {
-			const std::string fname = fileDialog_SaveProject->GetSelected().string();
-			fileDialog_SaveProject->ClearSelected();
+	fileDialog_Open.Display();
+	if( fileDialog_Open.HasSelected() ){
+		const std::string fname = fileDialog_Open.GetSelected().string();
+		fileDialog_Open.ClearSelected();
+		std::cout << "file/open_plugin://[" << fname << "]\n";
+		load_plugin( fname );
 
-			//std::cout << "file/ save project/ target file["<< fname <<"]\n";
-			save_project( fname );
+	} //deal with plugin open dialog
+
+
+	fileDialog_SaveProject->Display();
+	if ( fileDialog_SaveProject->HasSelected() ) {
+		const std::string fname = fileDialog_SaveProject->GetSelected().string();
+		fileDialog_SaveProject->ClearSelected();
+
+		//std::cout << "file/ save project/ target file["<< fname <<"]\n";
+		save_project( fname );
+	}
+
+
+#if 0 //FIXME: FXPLM - av_dev GUI instance loop - we have multiple devices but we need multiple inspector instances
+	//loop over all avionics-device gui instances and call their imgui draw code.
+	for( auto p: XPHost::m_vecPlugins ){
+		for( auto gui: p->m_vecGuiAv ){
+			gui->draw();
 		}
-
-
-#if 0 //FIXME: FXPLM - av_dev GUI instance loop
-		//loop over all avionics-device gui instances and call their imgui draw code.
-		for( auto p: XPHost::m_vecPlugins ){
-			for( auto gui: p->m_vecGuiAv ){
-				gui->draw();
-			}
-		}
+	}
 #endif
 
 
-		GuiMessageBox::draw();
+	GuiMessageBox::draw();
 
-		HostApp::gui_Plugins.draw();
+	HostApp::gui_Plugins.draw();
 
-		HostApp::gui_Datarefs.draw();
+	HostApp::gui_Datarefs.draw();
 
-		m_texInspector.draw(); //FIXME: upgrade: vec of instances
+	m_texInspector.draw(); //FIXME: upgrade: vec of instances
 
-		m_shaderTest->draw(); //FIXME: upgrade: vec of instances
+	m_shaderTest->draw(); //FIXME: upgrade: vec of instances
 
-		m_GuiAvionicsDevice.draw();
+	m_GuiAvionicsDevice.draw();
 
-		m_GuiAbout.draw(m_globalStartupFolder);
+	m_GuiAbout.draw(m_globalStartupFolder);
 
-		GuiPluginMessages::draw();
+	GuiPluginMessages::draw();
 
-		GuiXPLMLog::draw();
+	GuiXPLMLog::draw();
 
-		GuiTextures::draw();
+	GuiTextures::draw();
 
-		GuiMemory::draw();
+	GuiMemory::draw();
 
-		m_GuiGraph.draw();
+	m_GuiGraph.draw();
 
-		m_GuiWorldView.draw(dt);
+	m_GuiWorldView.draw(dt);
 
-		m_GuiWorldControl.draw(dt);
-
-
-		if ( m_pluginLoader.m_bDraw ) {
-			auto lam_plugin_loader = [this]( std::string filename ){
-				load_plugin( filename );
-			};
-
-			m_pluginLoader.draw(lam_plugin_loader);
-
-		}
-
-		if( GuiRecentProjects::m_bDraw ){
-			auto lam_project_loader = [this]( std::string filename ){
-				load_project( filename );
-			};
-
-			auto lam_plugin_loader = [this]( std::string filename ){
-				load_plugin( filename );
-			};
-
-			GuiRecentProjects::draw( lam_project_loader, lam_plugin_loader );
-		}
+	m_GuiWorldControl.draw(dt);
 
 
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	if ( m_pluginLoader.m_bDraw ) {
+		auto lam_plugin_loader = [this]( std::string filename ){
+			load_plugin( filename );
+		};
+
+		m_pluginLoader.draw(lam_plugin_loader);
+
+	}
+
+	if( GuiRecentProjects::m_bDraw ){
+		auto lam_project_loader = [this]( std::string filename ){
+			load_project( filename );
+		};
+
+		auto lam_plugin_loader = [this]( std::string filename ){
+			load_plugin( filename );
+		};
+
+		GuiRecentProjects::draw( lam_project_loader, lam_plugin_loader );
+	}
+
+
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 #endif ///imgui render block
 
@@ -1281,36 +1284,36 @@ void WinBox::Display(){
 //this code is attempting to stuff an XP SDK window inside a glfw canvas
 #if XPHO_RENDER_SDK_WIN_CANVAS
 
-		void* raw_params = glfwGetWindowUserPointer( m_winh );
-		if( raw_params ){
+	void* raw_params = glfwGetWindowUserPointer( m_winh );
+	if( raw_params ){
 //			ImGui::Text("Boxes in boxes in boxes.");
 
-			auto params = (XPLMCreateWindow_t*)raw_params;
-			if( sizeof(XPLMCreateWindow_t) != params->structSize ){
-				std::cout << " params struct size mismatch/unknown\n";
+		auto params = (XPLMCreateWindow_t*)raw_params;
+		if( sizeof(XPLMCreateWindow_t) != params->structSize ){
+			std::cout << " params struct size mismatch/unknown\n";
 
-			}else{
-				if( params->drawWindowFunc ){
+		}else{
+			if( params->drawWindowFunc ){
 //					ImGui::Text("drawWindowFUnc");
 //							draw_triangle();
 
 
-					glDisable( GL_CULL_FACE );
+				glDisable( GL_CULL_FACE );
 
 //					std::cout<<"draw cb addr: " << std::to_string((size_t)params->drawWindowFunc) << "\n";
-					(*params->drawWindowFunc)(this,params->refcon);
+				(*params->drawWindowFunc)(this,params->refcon);
 
-					glEnable( GL_CULL_FACE );
-				}else{
+				glEnable( GL_CULL_FACE );
+			}else{
 //					ImGui::Text("no drawWIndowFUnc");
-				}
 			}
-
 		}
+
+	}
 #endif
 
 
-	} //OnDraw()
+} //Display()
 
 
 

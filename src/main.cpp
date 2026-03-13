@@ -376,6 +376,8 @@ int main(int argc, char** argv)
 				// this will result in the FXPLM draw callback subsys being called?
 
 			{
+				//FIXME: this is our world render call
+				// it needs to be encap inside its own class wrapper
 				const double now = HostApp::m_timer.getElapsedTimeInSec();
 				static double sd_last_draw = now;
 				const double dt = now - sd_last_draw;
