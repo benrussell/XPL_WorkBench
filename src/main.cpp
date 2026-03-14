@@ -385,7 +385,7 @@ int main(int argc, char** argv)
 
 				window->m_worldView->render_world(
 						window->m_worldView->m_fboCanvas,
-						window->m_dr_view_fov->getFloat(),
+						XPLMGetDataf(window->m_dr_view_fov),
 						window->m_GuiWorldView.m_bDisplayDebugTriangle,
 						dt
 				);

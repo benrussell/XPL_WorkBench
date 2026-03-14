@@ -109,40 +109,40 @@ public:
 			std::string sNodeLabel = "Camera";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
 
-				fTmp = m_dr_view_x->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_x);
 				ImGui::SliderFloat("x", &fTmp, -10, 10);
-				m_dr_view_x->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_x, fTmp);
 
-				fTmp = m_dr_view_y->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_y);
 				ImGui::SliderFloat("y", &fTmp, -10, 10);
-				m_dr_view_y->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_y, fTmp);
 
-				fTmp = m_dr_view_z->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_z);
 				ImGui::SliderFloat("z", &fTmp, -10, 10);
-				m_dr_view_z->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_z, fTmp);
 
 
-				fTmp = m_dr_view_pitch->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_pitch);
 				ImGui::SliderFloat("p", &fTmp, -90, 90);
-				m_dr_view_pitch->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_pitch, fTmp);
 
-				fTmp = m_dr_view_roll->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_roll);
 				ImGui::SliderFloat("r", &fTmp, -180, 180);
-				m_dr_view_roll->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_roll, fTmp);
 
-				fTmp = m_dr_view_heading->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_heading);
 				ImGui::SliderFloat("h", &fTmp, -180, 180);
-				m_dr_view_heading->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_heading, fTmp);
 
 
-				fTmp = m_dr_view_fov->getFloat();
+				fTmp = XPLMGetDataf(m_dr_view_fov);
 				ImGui::SliderFloat("fov", &fTmp, 10, 180);
-				m_dr_view_fov->setFloat(fTmp);
+				XPLMSetDataf(m_dr_view_fov, fTmp);
 
 
-				int iTmp = m_dr_view_is_external->getInt();
+				int iTmp = XPLMGetDatai(m_dr_view_is_external);
 				ImGui::SliderInt("external", &iTmp, 0, 1);
-				m_dr_view_is_external->setInt(iTmp);
+				XPLMSetDatai(m_dr_view_is_external, iTmp);
 
 
 				ImGui::TreePop();
@@ -151,38 +151,34 @@ public:
 
 			sNodeLabel = "Light";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
-
 				{
 					float myColor[4] = {
-						m_dr_light_x->getFloat() / 10.f,
-						m_dr_light_y->getFloat() / 10.f,
-						m_dr_light_z->getFloat() / 10.f,
-						1.f
+							XPLMGetDataf(m_dr_light_x) / 10.f,
+							XPLMGetDataf(m_dr_light_y) / 10.f,
+							XPLMGetDataf(m_dr_light_z) / 10.f,
+							1.f
 					};
 					// 2. Render the widget
 					ImGui::ColorEdit4("pos", myColor);
 
-					m_dr_light_x->setFloat(myColor[0] * 10.f);
-					m_dr_light_y->setFloat(myColor[1] * 10.f);
-					m_dr_light_z->setFloat(myColor[2] * 10.f);
-
+					XPLMSetDataf(m_dr_light_x, myColor[0] * 10.f);
+					XPLMSetDataf(m_dr_light_y, myColor[1] * 10.f);
+					XPLMSetDataf(m_dr_light_z, myColor[2] * 10.f);
 				}
 
-
 				float myColor[4] = {
-					m_dr_light_r->getFloat(),
-					m_dr_light_g->getFloat(),
-					m_dr_light_b->getFloat(),
-					m_dr_light_a->getFloat()
-					};
+						XPLMGetDataf(m_dr_light_r),
+						XPLMGetDataf(m_dr_light_g),
+						XPLMGetDataf(m_dr_light_b),
+						XPLMGetDataf(m_dr_light_a)
+				};
 				// 2. Render the widget
 				ImGui::ColorEdit4("light", myColor);
 
-				m_dr_light_r->setFloat(myColor[0]);
-				m_dr_light_g->setFloat(myColor[1]);
-				m_dr_light_b->setFloat(myColor[2]);
-				m_dr_light_a->setFloat(myColor[3]);
-
+				XPLMSetDataf(m_dr_light_r, myColor[0]);
+				XPLMSetDataf(m_dr_light_g, myColor[1]);
+				XPLMSetDataf(m_dr_light_b, myColor[2]);
+				XPLMSetDataf(m_dr_light_a, myColor[3]);
 
 				ImGui::TreePop();
 			}
@@ -190,44 +186,40 @@ public:
 
 			sNodeLabel = "Vehicle";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
-
 				// x
-				fTmp = m_dr_acf_x->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_x);
 				ImGui::SliderFloat("x", &fTmp, -90, 90);
-				m_dr_acf_x->setFloat( fTmp );
+				XPLMSetDataf(m_dr_acf_x, fTmp);
 
 				// y
-				fTmp = m_dr_acf_y->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_y);
 				ImGui::SliderFloat("y", &fTmp, -180, 180);
-				m_dr_acf_y->setFloat( fTmp );
+				XPLMSetDataf(m_dr_acf_y, fTmp);
 
 				// z
-				fTmp = m_dr_acf_z->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_z);
 				ImGui::SliderFloat("z", &fTmp, -90, 90);
-				m_dr_acf_z->setFloat( fTmp );
+				XPLMSetDataf(m_dr_acf_z, fTmp);
 
 				// pitch
-				fTmp = m_dr_acf_p->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_p);
 				ImGui::SliderFloat("p", &fTmp, -90, 90);
-				m_dr_acf_p->setFloat( fTmp );
+				XPLMSetDataf(m_dr_acf_p, fTmp);
 
 				// roll
-				fTmp = m_dr_acf_r->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_r);
 				ImGui::SliderFloat("r", &fTmp, -90, 90);
-				m_dr_acf_r->setFloat( fTmp );
+				XPLMSetDataf(m_dr_acf_r, fTmp);
 
 				// heading
-				fTmp = m_dr_acf_h->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_h);
 				ImGui::SliderFloat("h", &fTmp, -180, 180);
-				m_dr_acf_h->setFloat( fTmp );
-
-
+				XPLMSetDataf(m_dr_acf_h, fTmp);
 
 				// speed
-				fTmp = m_dr_acf_speed->getFloat();
+				fTmp = XPLMGetDataf(m_dr_acf_speed);
 				ImGui::SliderFloat("speed", &fTmp, -1, 1);
-				m_dr_acf_speed->setFloat( fTmp );
-
+				XPLMSetDataf(m_dr_acf_speed, fTmp);
 
 				ImGui::TreePop();
 			}
