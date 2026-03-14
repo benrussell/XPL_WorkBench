@@ -45,28 +45,20 @@
 
 
 WinBox::WinBox( const int width, const int height ){
+
+	// This window is create AFTER XPLM_Init() but BEOFRE XPLM_InitGL()
+
     /* Create a windowed mode window and its OpenGL context */
 	// create a window that belongs to a member var
 	// window created by main.cpp is only used for getting a GL context.
 
 	// The caption string provided here will be displayed as the window title in Linux and prob windows?
     m_winh = glfwCreateWindow( width, height, "XWB", nullptr, nullptr);
-
-	HostApp::m_timer.start();
-
-	fileDialog_SaveProject = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
-
-
-    if (!m_winh)
-    {
+    if (!m_winh){
         glfwTerminate();
         throw std::runtime_error("xwb/ WinBox/ glfw Window Create Failed.");
     }
-
     glfwMakeContextCurrent( m_winh );
-
-
-    m_shaderTest = new GuiShaderTest();
 
 
 #if 1
@@ -108,27 +100,28 @@ WinBox::WinBox( const int width, const int height ){
 
 
 
-    m_worldView = new WorldView( 1024,768 );
+	fileDialog_SaveProject = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
+
+	m_shaderTest = new GuiShaderTest();
+
+	m_worldView = new WorldView( 1024,768 );
 
 
-
-
-    //setup the texture inspector on click handler
-    //so it opens the tex inspector and focus' the clicked
-    //tex_id
+    //setup the texture inspector on-click handler so it opens the tex inspector
+    // and focus' the clicked tex_id
     //uses a lambda to capture [this]
     GuiTextures::openImageInspector = [this]( int tex_id ){
         m_texInspector.m_bDraw = true;
         m_texInspector.m_showTexId = tex_id;
     };
 
-
+	// this is probably a tree branch helper
     GuiPlugins::openImageInspector = [this]( int tex_id ){
         m_texInspector.m_bDraw = true;
         m_texInspector.m_showTexId = tex_id;
     };
 
-
+	// this is probably a tree branch helper
 	GuiPlugins::openAvionicsInspector = [this]( AvionicsHost* av_dev ){
 		m_GuiAvionicsDevice.m_bDraw = true;
 		m_GuiAvionicsDevice.m_dev = av_dev;
@@ -152,9 +145,9 @@ WinBox::WinBox( const int width, const int height ){
 	// *** have appended 2 to dref names to go around problem for now ***
     {
     	//FXPLM_DrefCreate()
-    	auto m_dr_fm_pos_local_x = FXPLM_DrefCreate("sim/flightmodel/position/local_x2");
-    	auto m_dr_fm_pos_local_y = FXPLM_DrefCreate("sim/flightmodel/position/local_y2");
-    	auto m_dr_fm_pos_local_z = FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
+		FXPLM_DrefCreate("sim/flightmodel/position/local_x2");
+    	FXPLM_DrefCreate("sim/flightmodel/position/local_y2");
+    	FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
     }
 
 	{
@@ -176,15 +169,6 @@ WinBox::WinBox( const int width, const int height ){
 
 	{
     	//FIXME: move dref create to world control?
-
-    	auto m_dr_LightX = FXPLM_DrefCreate("art/light/pos_x");
-    	auto m_dr_LightY = FXPLM_DrefCreate("art/light/pos_y");
-    	auto m_dr_LightZ = FXPLM_DrefCreate("art/light/pos_z");
-
-    	auto m_dr_LightR = FXPLM_DrefCreate("art/light/col_r");
-    	auto m_dr_LightG = FXPLM_DrefCreate("art/light/col_g");
-    	auto m_dr_LightB = FXPLM_DrefCreate("art/light/col_b");
-    	auto m_dr_LightA = FXPLM_DrefCreate("art/light/col_a");
 
     	m_GuiWorldControl.dref_bind();
     	m_GuiWorldControl.m_bDraw = true;

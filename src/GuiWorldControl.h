@@ -52,6 +52,18 @@ public:
 	XPLMDataRef m_dr_light_a;
 
 
+	GuiWorldControl(){
+		auto m_dr_LightX = FXPLM_DrefCreate("art/light/pos_x");
+		auto m_dr_LightY = FXPLM_DrefCreate("art/light/pos_y");
+		auto m_dr_LightZ = FXPLM_DrefCreate("art/light/pos_z");
+
+		auto m_dr_LightR = FXPLM_DrefCreate("art/light/col_r");
+		auto m_dr_LightG = FXPLM_DrefCreate("art/light/col_g");
+		auto m_dr_LightB = FXPLM_DrefCreate("art/light/col_b");
+		auto m_dr_LightA = FXPLM_DrefCreate("art/light/col_a");
+
+	}
+
 
 	void dref_bind() {
 		std::cout << "XWB/ GuiWorldControl.dref_bind()\n";
@@ -151,20 +163,24 @@ public:
 
 			sNodeLabel = "Light";
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
-				{
-					float myColor[4] = {
-							XPLMGetDataf(m_dr_light_x) / 10.f,
-							XPLMGetDataf(m_dr_light_y) / 10.f,
-							XPLMGetDataf(m_dr_light_z) / 10.f,
-							1.f
-					};
-					// 2. Render the widget
-					ImGui::ColorEdit4("pos", myColor);
 
-					XPLMSetDataf(m_dr_light_x, myColor[0] * 10.f);
-					XPLMSetDataf(m_dr_light_y, myColor[1] * 10.f);
-					XPLMSetDataf(m_dr_light_z, myColor[2] * 10.f);
+				{ //position
+					// x
+					fTmp = XPLMGetDataf(m_dr_light_x);
+					ImGui::SliderFloat("x", &fTmp, -20, 20);
+					XPLMSetDataf(m_dr_light_x, fTmp);
+
+					// y
+					fTmp = XPLMGetDataf(m_dr_light_y);
+					ImGui::SliderFloat("y", &fTmp, -10, 10);
+					XPLMSetDataf(m_dr_light_y, fTmp);
+
+					// z
+					fTmp = XPLMGetDataf(m_dr_light_z);
+					ImGui::SliderFloat("z", &fTmp, -20, 20);
+					XPLMSetDataf(m_dr_light_z, fTmp);
 				}
+
 
 				float myColor[4] = {
 						XPLMGetDataf(m_dr_light_r),
@@ -173,7 +189,7 @@ public:
 						XPLMGetDataf(m_dr_light_a)
 				};
 				// 2. Render the widget
-				ImGui::ColorEdit4("light", myColor);
+				ImGui::ColorEdit4("light color", myColor);
 
 				XPLMSetDataf(m_dr_light_r, myColor[0]);
 				XPLMSetDataf(m_dr_light_g, myColor[1]);
@@ -188,17 +204,17 @@ public:
 			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
 				// x
 				fTmp = XPLMGetDataf(m_dr_acf_x);
-				ImGui::SliderFloat("x", &fTmp, -90, 90);
+				ImGui::SliderFloat("x", &fTmp, -20, 20);
 				XPLMSetDataf(m_dr_acf_x, fTmp);
 
 				// y
 				fTmp = XPLMGetDataf(m_dr_acf_y);
-				ImGui::SliderFloat("y", &fTmp, -180, 180);
+				ImGui::SliderFloat("y", &fTmp, -10, 10);
 				XPLMSetDataf(m_dr_acf_y, fTmp);
 
 				// z
 				fTmp = XPLMGetDataf(m_dr_acf_z);
-				ImGui::SliderFloat("z", &fTmp, -90, 90);
+				ImGui::SliderFloat("z", &fTmp, -20, 20);
 				XPLMSetDataf(m_dr_acf_z, fTmp);
 
 				// pitch
@@ -216,10 +232,48 @@ public:
 				ImGui::SliderFloat("h", &fTmp, -180, 180);
 				XPLMSetDataf(m_dr_acf_h, fTmp);
 
-				// speed
-				fTmp = XPLMGetDataf(m_dr_acf_speed);
-				ImGui::SliderFloat("speed", &fTmp, -1, 1);
-				XPLMSetDataf(m_dr_acf_speed, fTmp);
+//				// speed
+//				fTmp = XPLMGetDataf(m_dr_acf_speed);
+//				ImGui::SliderFloat("speed", &fTmp, -1, 1);
+//				XPLMSetDataf(m_dr_acf_speed, fTmp);
+
+				ImGui::TreePop();
+			}
+
+
+
+			tree_options = ImGuiTreeNodeFlags_None;
+			sNodeLabel = "Ground";
+			if( ImGui::TreeNodeEx( sNodeLabel.c_str(), tree_options ) ) {
+				// x
+				fTmp = XPLMGetDataf(m_dr_acf_x);
+				ImGui::SliderFloat("width", &fTmp, -20, 20);
+				XPLMSetDataf(m_dr_acf_x, fTmp);
+
+				// y
+				fTmp = XPLMGetDataf(m_dr_acf_y);
+				ImGui::SliderFloat("height", &fTmp, -10, 10);
+				XPLMSetDataf(m_dr_acf_y, fTmp);
+
+				// z
+				fTmp = XPLMGetDataf(m_dr_acf_z);
+				ImGui::SliderFloat("depth", &fTmp, -20, 20);
+				XPLMSetDataf(m_dr_acf_z, fTmp);
+
+//				// pitch
+//				fTmp = XPLMGetDataf(m_dr_acf_p);
+//				ImGui::SliderFloat("p", &fTmp, -90, 90);
+//				XPLMSetDataf(m_dr_acf_p, fTmp);
+//
+//				// roll
+//				fTmp = XPLMGetDataf(m_dr_acf_r);
+//				ImGui::SliderFloat("r", &fTmp, -90, 90);
+//				XPLMSetDataf(m_dr_acf_r, fTmp);
+//
+//				// heading
+//				fTmp = XPLMGetDataf(m_dr_acf_h);
+//				ImGui::SliderFloat("h", &fTmp, -180, 180);
+//				XPLMSetDataf(m_dr_acf_h, fTmp);
 
 				ImGui::TreePop();
 			}

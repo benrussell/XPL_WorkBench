@@ -200,6 +200,7 @@ int main(int argc, char** argv)
 {
 
 	srand(1);
+	HostApp::m_timer.start();
 
 
 	{
@@ -314,6 +315,9 @@ int main(int argc, char** argv)
 	//this must be called AFTER FXPLM_Init()
 	// because we have created a GL context, we can drop this now.
 	glfwDestroyWindow( mwinh );
+
+
+
 
 	// README: using the GL stack will not work until this block runs
 	{
