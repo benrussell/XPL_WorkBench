@@ -150,6 +150,18 @@ WinBox::WinBox( const int width, const int height ){
     	FXPLM_DrefCreate("sim/flightmodel/position/local_z2");
     }
 
+
+	{
+		auto gx = FXPLM_DrefCreate("art/ground/x");
+		gx->setFloat( 10.f );
+		auto gy = FXPLM_DrefCreate("art/ground/y");
+		gy->setFloat( -0.1f );
+		auto gz = FXPLM_DrefCreate("art/ground/z");
+		gz->setFloat( 20.f );
+	}
+
+
+
 	{
 #if 0
     	//these view location and orientation drefs ARE used during the GL setup for 3D callback
