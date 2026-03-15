@@ -660,31 +660,33 @@ void WinBox::draw_triangle_box( double dt ){
 				bool b_fps_60 = false;
 				bool b_fps_30 = false;
 
+				//this code determines bool state flags by looking at the sleep delay val
+				//fps cap requires a sleep delay
 				switch( m_fps_cap_sleep_delay ){
 				case 0:
 					b_Unlimited = true;
-					glfwSwapInterval(0);
 					break;
 				case 10:
 					b_fps_60 = true;
-					glfwSwapInterval(1);
 					break;
 				case 20:
 					b_fps_30 = true;
-					glfwSwapInterval(2);
 					break;
 				};
 
 				if(ImGui::MenuItem("No limit", nullptr, b_Unlimited, true)){
 					m_fps_cap_sleep_delay = 0;
+					glfwSwapInterval(0);
 				}
 
 				if(ImGui::MenuItem("60", nullptr, b_fps_60, true)){
 					m_fps_cap_sleep_delay = 10;
+					glfwSwapInterval(1);
 				}
 
 				if(ImGui::MenuItem("30", nullptr, b_fps_30, true)){
 					m_fps_cap_sleep_delay = 20;
+					glfwSwapInterval(2);
 				}
 
 				ImGui::EndMenu();
@@ -800,7 +802,7 @@ void WinBox::draw_triangle_box( double dt ){
 #include <functional>
 
 void WinBox::menu_SimMenus(){
-	if(ImGui::BeginMenu("Sim Menus")){
+	if(ImGui::BeginMenu("Plugins")){
 
 		static glue_MenuNode* mnu_PluginsRoot = nullptr;
 		static glue_MenuNode* mnu_AircraftRoot = nullptr;
@@ -1108,11 +1110,15 @@ void WinBox::Display(){
 	sd_last_draw = now; //HostApp::m_timer.getElapsedTimeInSec();
 
 
-//draws a grid of textures that should give us
-	//an FBO debug channel.
-	draw_TextureDump(); //this draws into the bg of the main host window
+	//this draws into the bg of the main host window
+	{
 
-	draw_WorldView( 3 );
+		//draws a grid of textures
+		//draw_TextureDump();
+
+		//draws the world view texture - might be better in a dedicated glfw window?
+		//draw_WorldView( 3 );
+	}
 
 
 //turn the imgui code on and off easily
